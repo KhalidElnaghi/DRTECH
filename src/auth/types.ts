@@ -28,6 +28,7 @@ export interface User {
   phoneNumber: string;
   token: string;
   accountStatus: number;
+  modules?: string[]; // Optional modules array for user permissions
 }
 
 export type AuthUserType = null | User;

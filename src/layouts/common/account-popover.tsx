@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 
 import { useRouter } from 'src/routes/hooks';
 
-import { useMockedUser } from 'src/hooks/use-mocked-user';
+// import { useMockedUser } from 'src/hooks/use-mocked-user';
 
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -34,7 +34,7 @@ import { useTranslate } from 'src/locales';
 export default function AccountPopover() {
   const router = useRouter();
 
-  const { userData } = useMockedUser();
+  // const { userData } = useMockedUser();
   const { logout } = useAuthContext();
   const { t } = useTranslate();
 
@@ -76,7 +76,7 @@ export default function AccountPopover() {
       >
         <Avatar
           src="/assets/images/popover/setting.png"
-          alt={userData?.displayName}
+          // alt={userData?.displayName}
           sx={{
             width: 36,
             height: 36,
