@@ -1,4 +1,3 @@
-
 // ----------------------------------------------------------------------
 
 export type IUserTableFilterValue = string | string[];
@@ -108,7 +107,6 @@ export type IUserItem = {
   avatarUrl: string;
   phoneNumber: string;
   isVerified: boolean;
-
 };
 
 export type IUserAccount = {
@@ -122,7 +120,7 @@ export type IUserAccount = {
   address: string | null;
   zipCode: string | null;
   phoneNumber: string | null;
-  photoURL:  string | null;
+  photoURL: string | null;
 };
 
 export type IUserAccountBillingHistory = {
@@ -137,25 +135,3 @@ export type IUserAccountChangePassword = {
   newPassword: string;
   confirmNewPassword: string;
 };
-
-
-
-export interface User {
-  data: Data
-}
-
-export interface Data {
-  user: IUser
-  access_token: string
-}
-
-export interface IUser {
-  id: string
-  username: any
-  email: string
-  email_verified_at: any
-  phone: string
-  phone_verified_at: string
-  userStatus: string
-  roles: string[]
-}

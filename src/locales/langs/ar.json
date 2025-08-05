@@ -43,6 +43,7 @@
   "LABEL": {
     "USER_NAME": "اسم المستخدم",
     "PASSWORD": "كلمة المرور",
+    "KEEP_ME_LOGGED_IN": "تذكرني",
     "CHANGE_PHONE_NUMBER": "تغير رقم الجوال!",
     "EMAIL": "البريد الالكتروني",
     "DASHBOARD": "لوحة تحكم",

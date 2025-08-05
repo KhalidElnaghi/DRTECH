@@ -2,7 +2,7 @@ import { Toaster } from 'sonner';
 
 import 'src/global.css';
 // i18n
-import 'src/locales/i18n';
+import I18nProvider from 'src/locales/i18n-provider';
 // ----------------------------------------------------------------------
 
 import ThemeProvider from 'src/theme';
@@ -43,35 +43,43 @@ type Props = {
 
 export default function RootLayout({ children }: Props) {
   return (
-    <html lang="ar" className={primaryFont.className}>
+    <html lang="en" className={primaryFont.className}>
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>
-        <ReactQueryProvider>
-          <AuthProvider>
-            <LocalizationProvider>
-              <SettingsProvider
-                defaultSettings={{
-                  themeMode: 'light', // 'light' | 'dark'
-                  themeDirection: 'rtl', //  'rtl' | 'ltr'
-                  themeContrast: 'default', // 'default' | 'bold'
-                  themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
-                  themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
-                  themeStretch: false,
-                }}
-              >
-                <ThemeProvider>
-                  <MotionLazy>
-                    <SnackbarProvider>
-                      <SettingsDrawer />
-                      <ProgressBar />
-                      {children}
-                    </SnackbarProvider>
-                  </MotionLazy>
-                </ThemeProvider>
-              </SettingsProvider>
-            </LocalizationProvider>
-          </AuthProvider>
-          <Toaster />
-        </ReactQueryProvider>
+        <I18nProvider>
+          <ReactQueryProvider>
+            <AuthProvider>
+              <LocalizationProvider>
+                <SettingsProvider
+                  defaultSettings={{
+                    themeMode: 'light', // 'light' | 'dark'
+                    themeDirection: 'rtl', //  'rtl' | 'ltr'
+                    themeContrast: 'default', // 'default' | 'bold'
+                    themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
+                    themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
+                    themeStretch: false,
+                  }}
+                >
+                  <ThemeProvider>
+                    <MotionLazy>
+                      <SnackbarProvider>
+                        <SettingsDrawer />
+                        <ProgressBar />
+                        {children}
+                      </SnackbarProvider>
+                    </MotionLazy>
+                  </ThemeProvider>
+                </SettingsProvider>
+              </LocalizationProvider>
+            </AuthProvider>
+            <Toaster />
+          </ReactQueryProvider>
+        </I18nProvider>
       </body>
     </html>
   );

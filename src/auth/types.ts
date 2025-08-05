@@ -13,14 +13,59 @@ export type ActionMapType<M extends { [index: string]: any }> = {
       };
 };
 
-export type AuthUserType = null | Record<string, any>;
+export interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  userName: string;
+  role: number;
+  gender: number;
+  dateOfBirth: string;
+  acceptNewsLetter: boolean;
+  isLogin: boolean;
+  email: string;
+  phoneNumber: string;
+  token: string;
+  accountStatus: number;
+}
+
+export type AuthUserType = null | User;
+
+// API Response Types
+export interface LoginResponse {
+  data: User;
+  isSuccess: boolean;
+  statusCode: number;
+  error: {
+    message: string;
+  };
+}
+
+export interface RegisterResponse {
+  access_token: string;
+  user: User;
+  message?: string;
+  status?: string;
+}
+
+export interface ForgotPasswordResponse {
+  message?: string;
+  status?: string;
+}
+
+export interface VerifyCodeResponse {
+  message?: string;
+  status?: string;
+}
 
 export type AuthStateType = {
   status?: string;
   loading: boolean;
   user: AuthUserType;
-  phone:string;
+  phone: string;
   code: string;
+  error: string | null;
 };
 
 // ----------------------------------------------------------------------
@@ -54,10 +99,12 @@ export type JWTContextType = CanRemove & {
   loading: boolean;
   authenticated: boolean;
   unauthenticated: boolean;
-  login: (phone: string, password: string) => Promise<void>;
-  changePassword: (password:string) => Promise<void>;
-  forgot: (phone:string) => Promise<void>;
-  verify: (code:string) => Promise<void>;
+  error: string | null;
+  clearError: () => void;
+  login: (email: string, password: string) => Promise<void>;
+  changePassword: (password: string) => Promise<void>;
+  forgot: (phone: string) => Promise<void>;
+  verify: (code: string) => Promise<void>;
   register: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
   logout: () => Promise<void>;
 };

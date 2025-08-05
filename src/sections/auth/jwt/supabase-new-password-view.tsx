@@ -31,9 +31,7 @@ import { t } from 'i18next';
 export default function SupabaseNewPasswordView() {
   const router = useRouter();
 
-  const [errorMsg, setErrorMsg] = useState('');
-
-  const { changePassword } = useAuthContext();
+  const { changePassword, error, clearError } = useAuthContext();
 
   const password = useBoolean();
 
@@ -45,7 +43,6 @@ export default function SupabaseNewPasswordView() {
 
   const defaultValues = {
     password: '',
-
   };
 
   const methods = useForm({
@@ -62,13 +59,14 @@ export default function SupabaseNewPasswordView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      clearError(); // Clear any previous errors
       await changePassword?.(data.password);
-      alert('updated success!')
+      alert('updated success!');
       router.push(paths.dashboard.root);
-    } catch (error) {
-      console.error(error);
+    } catch (passwordError) {
+      console.error(passwordError);
       reset();
-      setErrorMsg(typeof error === 'string' ? error : error.message);
+      // Error is now handled by the auth context, no need to set local error state
     }
   });
 
@@ -80,7 +78,7 @@ export default function SupabaseNewPasswordView() {
         <Typography variant="h3"> {t('MESSAGE.NEW_PASSWORD')}</Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-        {t('MESSAGE.SUCCESSFUL_UPDATED_PASSWORD')}
+          {t('MESSAGE.SUCCESSFUL_UPDATED_PASSWORD')}
         </Typography>
       </Stack>
     </>
@@ -110,23 +108,22 @@ export default function SupabaseNewPasswordView() {
         variant="contained"
         loading={isSubmitting}
       >
-         {t('BUTTON.UPDATE_PASSWORD')}
+        {t('BUTTON.UPDATE_PASSWORD')}
       </LoadingButton>
       <Stack alignItems="center">
-      <Link
-        component={RouterLink}
-        href={paths.auth.jwt.login}
-        color="inherit"
-        variant="subtitle2"
-        sx={{
-          alignItems: 'center',
-          display: 'inline-flex',
-        }}
-      >
-        <Iconify icon="eva:arrow-ios-back-fill" width={16} />
-        {t('MESSAGE.RETURN_TO_lOGIN')}
-
-      </Link>
+        <Link
+          component={RouterLink}
+          href={paths.auth.jwt.login}
+          color="inherit"
+          variant="subtitle2"
+          sx={{
+            alignItems: 'center',
+            display: 'inline-flex',
+          }}
+        >
+          <Iconify icon="eva:arrow-ios-back-fill" width={16} />
+          {t('MESSAGE.RETURN_TO_lOGIN')}
+        </Link>
       </Stack>
     </Stack>
   );
@@ -135,9 +132,9 @@ export default function SupabaseNewPasswordView() {
     <>
       {renderHead}
 
-      {!!errorMsg && (
+      {!!error && (
         <Alert severity="error" sx={{ textAlign: 'left', mb: 3 }}>
-          {errorMsg}
+          {error}
         </Alert>
       )}
 

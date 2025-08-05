@@ -13,12 +13,14 @@ export interface Params {
   created_at?: string;
   headers?: { access_token: string };
 }
+console.log(HOST_API);
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: HOST_API,
+
   headers: {
     'Content-Type': 'application/json',
-    /*     'Accept-Language':lang,
-     */ 'Access-Control-Allow-Origin': '*',
+    'Accept-Language': 'en',
+    'Access-Control-Allow-Origin': '*',
     Accept: 'application/json',
     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
     Authorization: `Bearer ${getCookie(ACCESS_TOKEN)}`,
@@ -71,7 +73,7 @@ export const getErrorMessage = (error: unknown): string => {
 export const endpoints = {
   auth: {
     me: '/auth/me',
-    login: '/auth/signin',
+    login: '/auth/login',
     register: '/auth/register',
     forgot: `/auth/send-password-reset-otp`,
     verify: `/auth/verify-otp-and-reset-password`,

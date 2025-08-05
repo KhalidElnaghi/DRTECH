@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import { useTheme } from '@mui/material';
+import { Card, useTheme } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -28,20 +28,18 @@ import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFTextField, RHFCheckbox } from 'src/components/hook-form';
 import RHFAutocomplete from 'src/components/hook-form/rhf-autocomplete';
 
 // ----------------------------------------------------------------------
 
 export default function JwtLoginView() {
   const { t } = useTranslate();
-  const { login } = useAuthContext();
+  const { login, error, clearError } = useAuthContext();
 
   const router = useRouter();
 
   const theme = useTheme();
-
-  const [errorMsg, setErrorMsg] = useState('');
 
   const searchParams = useSearchParams();
 
@@ -50,15 +48,14 @@ export default function JwtLoginView() {
   const password = useBoolean();
 
   const LoginSchema = Yup.object().shape({
-    phone: Yup.string().required(t('phone_is_required')),
-    country: Yup.string().required(t('country_is_required')),
+    email: Yup.string().required(t('phone_is_required')).email('Invalid email. Please try again.'),
     password: Yup.string().required(t('password_is_required')),
   });
 
   const defaultValues = {
-    phone: '',
-    country: 'Saudi Arabia',
-    password: '',
+    email: 'prod-admin@drtech.com',
+    password: 'SecureProductionPassword@456',
+    keepMeLoggedIn: false,
   };
 
   const methods = useForm({
@@ -74,56 +71,71 @@ export default function JwtLoginView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const code = countries?.find((item) => item.label === data?.country);
-      const phone = code?.phone.concat(data?.phone) as string;
-      await login?.(`+${phone}`, data.password);
+      clearError();
+      await login?.(data.email, data.password);
       router.push(returnTo || PATH_AFTER_LOGIN);
-    } catch (error) {
-      console.error(error);
+    } catch (loginError) {
       reset();
-      setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
 
   const renderHead = (
-    <Stack spacing={2} sx={{ mb: 2, mx: 'auto', position: 'relative' }}>
-      <Typography variant="h2" textTransform="capitalize" color="secondary">
-        {t('TITLE.SIGN_IN')}
-      </Typography>
-      <Image
-        src="/assets/images/login/image-7.svg"
-        alt="image"
-        width={75}
-        height={62}
-        style={{
-          position: 'absolute',
-          top: '-20px',
-          left: '-40px',
+    <Stack spacing={1} sx={{ mb: 3, mx: 'auto', position: 'relative', textAlign: 'center' }}>
+      <Box
+        sx={{
+          mx: 'auto',
+          mb: 2,
         }}
-      />
+      >
+        <Image src="/assets/icons/auth/login.svg" alt="Login Icon" width={100} height={100} />
+      </Box>
+      <Typography
+        sx={{
+          color: '#000000',
+          fontFamily: 'Inter Tight',
+          fontWeight: 600,
+          fontStyle: 'normal',
+          fontSize: '24px',
+          lineHeight: '130%',
+          letterSpacing: '0%',
+          textAlign: 'center',
+        }}
+      >
+        Welcome Back
+      </Typography>
+      <Typography
+        sx={{
+          color: '#6B7280', // gray color
+          fontFamily: 'Inter Tight',
+          fontWeight: 400,
+          fontStyle: 'normal',
+          fontSize: '16px',
+          lineHeight: '150%',
+          letterSpacing: '2%',
+          textAlign: 'center',
+        }}
+      >
+        Login to manage your hospital dashboard
+      </Typography>
     </Stack>
   );
 
   const renderForm = (
     <Stack spacing={2.5} sx={{ minWidth: '100%' }}>
-      <RHFAutocomplete
-        name="country"
-        type="country"
-        fullWidth
-        label={t('LABEL.COUNTRY_CODE')}
-        placeholder={t('LABEL.COUNTRY_CODE')}
-        options={countries.map((option) => option.label)}
-        getOptionLabel={(option) => option}
-      />
       <RHFTextField
+        name="email"
+        label={t('LABEL.EMAIL')}
+        error={!!methods.formState.errors.email}
+        helperText={methods.formState.errors.email?.message}
         sx={{
-          color: 'red',
-        }}
-        name="phone"
-        type="tel"
-        label={t('LABEL.PHONE')}
-        InputProps={{
-          startAdornment: InputIcon('ic:round-phone-iphone'),
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-error fieldset': {
+              borderColor: 'red',
+            },
+          },
+          '& .MuiFormHelperText-root.Mui-error': {
+            color: 'red',
+          },
         }}
       />
 
@@ -133,40 +145,39 @@ export default function JwtLoginView() {
         // @ts-ignore
         type={password.value ? 'text' : 'password'}
         InputProps={{
-          startAdornment: InputIcon('solar:lock-password-bold'),
           endAdornment: (
             <InputAdornment position="end">
               <IconButton onClick={password.onToggle}>
                 <Iconify
                   icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
-                  color="secondary.main"
+                  color="primary"
                 />
               </IconButton>
             </InputAdornment>
           ),
-          sx: {
-            paddingLeft: theme.direction === 'rtl' ? 0 : '14px', // Adjust padding for no extra space
-            paddingRight: theme.direction === 'rtl' ? 0 : '5px',
-            '& .MuiInputBase-input': {
-              paddingInline: theme.direction === 'ltr' ? 0 : '14px', // Adjust this value to increase/decrease padding
-            },
-          },
         }}
       />
-
-      <Link
-        variant="body2"
-        color="secondary"
-        underline="always"
-        href={paths.auth.jwt.forgot}
-        component={RouterLink}
-      >
-        {t('BUTTON.FORGOT_PASSWORD')}
-      </Link>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        {' '}
+        <RHFCheckbox
+          name="keepMeLoggedIn"
+          label={t('LABEL.KEEP_ME_LOGGED_IN')}
+          sx={{ alignSelf: 'flex-start' }}
+        />
+        <Link
+          variant="body2"
+          color="primary"
+          underline="always"
+          href={paths.auth.jwt.forgot}
+          component={RouterLink}
+        >
+          {t('BUTTON.FORGOT_PASSWORD')}
+        </Link>
+      </Box>
 
       <LoadingButton
         fullWidth
-        color="secondary"
+        color="primary"
         size="large"
         type="submit"
         variant="contained"
@@ -178,27 +189,29 @@ export default function JwtLoginView() {
   );
 
   return (
-    <Box
+    <Card
       sx={{
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
-        gap: 14,
-        minWidth: '100%',
+        width: '100%',
+        maxWidth: '500px',
         minHeight: '55dvh',
+        bgcolor: 'white',
+        p: 4,
       }}
     >
       {renderHead}
 
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        {!!errorMsg && (
+        {!!error && (
           <Alert severity="error" sx={{ mb: 3 }}>
-            {errorMsg}
+            {error}
           </Alert>
         )}
         {renderForm}
       </FormProvider>
-    </Box>
+    </Card>
   );
 }
 

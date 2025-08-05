@@ -27,11 +27,9 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function JwtRegisterView() {
-  const { register } = useAuthContext();
+  const { register, error, clearError } = useAuthContext();
 
   const router = useRouter();
-
-  const [errorMsg, setErrorMsg] = useState('');
 
   const searchParams = useSearchParams();
 
@@ -66,13 +64,14 @@ export default function JwtRegisterView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      clearError(); // Clear any previous errors
       await register?.(data.email, data.password, data.firstName, data.lastName);
 
       router.push(returnTo || PATH_AFTER_LOGIN);
-    } catch (error) {
-      console.error(error);
+    } catch (registerError) {
+      console.error(registerError);
       reset();
-      setErrorMsg(typeof error === 'string' ? error : error.message);
+      // Error is now handled by the auth context, no need to set local error state
     }
   });
 
@@ -154,9 +153,9 @@ export default function JwtRegisterView() {
     <>
       {renderHead}
 
-      {!!errorMsg && (
+      {!!error && (
         <Alert severity="error" sx={{ m: 3 }}>
-          {errorMsg}
+          {error}
         </Alert>
       )}
 

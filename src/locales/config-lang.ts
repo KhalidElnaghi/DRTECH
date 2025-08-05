@@ -39,7 +39,7 @@ export const allLangs = [
   },
 ];
 
-export const defaultLang = allLangs[1]; // Arabic
+export const defaultLang = allLangs[0]; // Arabic
 
 // GET MORE COUNTRY FLAGS
 // https://icon-sets.iconify.design/flagpack/
