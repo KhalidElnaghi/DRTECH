@@ -9,7 +9,6 @@ import ThemeProvider from 'src/theme';
 import { primaryFont } from 'src/theme/typography';
 import { LocalizationProvider } from 'src/locales';
 import { AuthProvider } from 'src/auth/context/jwt';
-import ReactQueryProvider from 'src/actions/react-query-provider';
 
 import ProgressBar from 'src/components/progress-bar';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
@@ -52,7 +51,6 @@ export default function RootLayout({ children }: Props) {
       </head>
       <body>
         <I18nProvider>
-          <ReactQueryProvider>
             <AuthProvider>
               <LocalizationProvider>
                 <SettingsProvider
@@ -78,7 +76,6 @@ export default function RootLayout({ children }: Props) {
               </LocalizationProvider>
             </AuthProvider>
             <Toaster />
-          </ReactQueryProvider>
         </I18nProvider>
       </body>
     </html>

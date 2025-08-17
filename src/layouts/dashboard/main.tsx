@@ -28,10 +28,10 @@ export default function Main({ children, sx, ...other }: BoxProps) {
           display: 'flex',
           flexDirection: 'column',
           pt: `${HEADER.H_MOBILE + 24}px`,
-          pb: 10,
+          pb: 0,
           ...(lgUp && {
             pt: `${HEADER.H_MOBILE * 2 + 40}px`,
-            pb: 15,
+            pb: 0,
           }),
         }}
       >
@@ -48,10 +48,12 @@ export default function Main({ children, sx, ...other }: BoxProps) {
         minHeight: 1,
         display: 'flex',
         flexDirection: 'column',
-        py: `${HEADER.H_MOBILE + SPACING}px`,
+        pt: `${HEADER.H_MOBILE + SPACING}px`,
+        pb: 0,
         ...(lgUp && {
           px: 2,
-          py: `${HEADER.H_DESKTOP + SPACING}px`,
+          pt: `${HEADER.H_DESKTOP + SPACING}px`,
+          pb: 0,
           width: `calc(100% - ${NAV.W_VERTICAL}px)`,
           ...(isNavMini && {
             width: `calc(100% - ${NAV.W_MINI}px)`,

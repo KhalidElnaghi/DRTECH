@@ -16,9 +16,9 @@ import TableNoData from './table-no-data';
 import { SharedTableProps } from './types';
 import SharedTableRow from './SharedTableRow';
 import TableHeadCustom from './table-head-custom';
-import TablePaginationCustom from './table-pagination-custom';
+import CustomPagination from './custom-pagination';
 // ----------------------------------------------------------------------
-export default function SharedTable<T extends { id: string }>({
+export default function SharedTable<T extends { id: string | number }>({
   data,
   actions,
   tableHead,
@@ -35,28 +35,51 @@ export default function SharedTable<T extends { id: string }>({
   const hasLimit = searchParams.get('limit');
 
   const page = hasPage ? Number(searchParams.get('page')) - 1 : 0;
-  const limit = Number(searchParams.get('limit')) || 5;
+  const limit = Number(searchParams.get('limit')) || 10;
   return (
     <Box>
       <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
         <Scrollbar>
-          <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 400 }}>
-            <TableHeadCustom headLabel={tableHead}headColor={headColor} />
+          <Table
+            size={table.dense ? 'small' : 'medium'}
+            sx={{
+              minWidth: 400,
+              borderCollapse: 'collapse',
+              '& .MuiTableCell-root': {
+                border: '1px solid',
+                borderColor: 'divider',
+                padding: '12px 16px',
+              },
+
+              '& .MuiTableBody-root .MuiTableCell-root': {
+                color: 'black',
+                fontWeight: 500,
+                fontSize: '14px',
+                lineHeight: '150%',
+                letterSpacing: '2%',
+              },
+              '& .MuiTableBody-root .MuiTableRow-root:hover': {
+                backgroundColor: 'action.hover',
+              },
+            }}
+          >
+            <TableHeadCustom headLabel={tableHead} headColor={headColor} />
 
             <TableBody>
-              {data && data?.map((row) => (
-                <SharedTableRow<T>
-                  key={row.id}
-                  row={row}
-                  actions={actions}
-                  customRender={customRender}
-                  headIds={
-                    tableHead
-                      .map((x) => x.id)
-                      .filter((x) => x !== '' && x !== 'rowsActions') as (keyof T)[]
-                  }
-                />
-              ))}
+              {data &&
+                data?.map((row) => (
+                  <SharedTableRow<T>
+                    key={row.id}
+                    row={row}
+                    actions={actions}
+                    customRender={customRender}
+                    headIds={
+                      tableHead
+                        .map((x) => x.id)
+                        .filter((x) => x !== '' && x !== 'rowsActions') as (keyof T)[]
+                    }
+                  />
+                ))}
 
               <TableNoData notFound={!data} />
             </TableBody>
@@ -65,19 +88,11 @@ export default function SharedTable<T extends { id: string }>({
       </TableContainer>
 
       {!disablePagination && (
-        <TablePaginationCustom
+        <CustomPagination
           count={count}
           page={page}
           rowsPerPage={limit}
           onPageChange={table.onChangePage!}
-          onRowsPerPageChange={table.onChangeRowsPerPage!}
-          labelRowsPerPage={t('TABLE.ROWS_PER_PAGE')}
-          labelDisplayedRows={({ from, to, count: rows }) =>
-            `${from}-${to} ${t('TABLE.OF')} ${rows !== -1 ? rows : `${t('TABLE.MORE_THAN')} ${to}`}`
-          }
-          //
-          dense={table.dense!}
-          onChangeDense={table.onChangeDense!}
         />
       )}
     </Box>

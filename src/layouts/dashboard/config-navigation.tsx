@@ -17,7 +17,7 @@ const icon = (name: string) => (
 );
 
 const ICONS = {
-  home: icon('solar:home-bold'),
+  home: icon('mingcute:home-6-fill'),
   sections: icon('lucide:network'),
   categories: icon('bi:grid-fill'),
   subCategories: icon('fluent:list-bar-16-filled'),
@@ -64,6 +64,7 @@ const ICONS = {
   questions: icon('mdi:frequently-asked-questions'),
   city: icon('healthicons:city-outline'),
   banner: icon('solar:bill-linear'),
+  appointments: icon('hugeicons:appointment-02'),
 };
 
 export function useNavData() {
@@ -71,68 +72,11 @@ export function useNavData() {
   const data = useMemo(
     () => [
       {
+        subheader:"Menu",
         items: [
           { title: t('SIDEBAR.MAIN'), path: paths.dashboard.root, icon: ICONS.home },
-          { title: t('SIDEBAR.CENTERS'), path: paths.dashboard.centers, icon: ICONS.building },
-          // { title: t('SIDEBAR.CLIENTS'), path: paths.dashboard.clients, icon: ICONS.clients },
-          // {
-          //   title: t('SIDEBAR.FIELDS_AND_SPECIALTIES'),
-          //   path: paths.dashboard.categories,
-          //   icon: ICONS.cartegries,
-          // },
-          // { title: t('SIDEBAR.COURSES'), path: paths.dashboard.courses, icon: ICONS.bag },
-          // {
-          //   title: t('SIDEBAR.SUPPORT'),
-          //   path: paths.dashboard.supportGroup.root,
-          //   icon: ICONS.support,
-          //   module: 'SUPPORT',
-          //   children: [
-          //     {
-          //       title: t('SIDEBAR.TECHNICAL_SUPPORT'),
-          //       path: paths.dashboard.supportGroup.technical_support,
-          //     },
-          //     {
-          //       title: t('SIDEBAR.CALLS_REASONS'),
-          //       path: paths.dashboard.supportGroup.calls_reasons,
-          //     },
-          //   ],
-          // },
-          // { title: t('SIDEBAR.COUPONS'), path: paths.dashboard.coupons, icon: ICONS.coupon },
-          // {
-          //   title: t('SIDEBAR.PAGES'),
-          //   path: paths.dashboard.pages.root,
-          //   icon: ICONS.pages,
-          //   module: 'PAGES',
-          //   children: [
-          //     {
-          //       title: t('SIDEBAR.ABOUT_APP'),
-          //       path: paths.dashboard.pages.about,
-          //     },
-          //     {
-          //       title: t('SIDEBAR.PRIVACY_POLICY'),
-          //       path: paths.dashboard.pages.privacyPolicy,
-          //     },
-          //     {
-          //       title: t('SIDEBAR.TERMS_AND_CONDITIONS'),
-          //       path: paths.dashboard.pages.termsAndConditions,
-          //     },
-          //     {
-          //       title: t('SIDEBAR.HOME_SCREEN'),
-          //       path: paths.dashboard.pages.homeScreen,
-          //     },
-          //   ],
-          // },
-          // { title: t('SIDEBAR.FAQ'), path: paths.dashboard.faq, icon: ICONS.questions },
-          // {
-          //   title: t('SIDEBAR.CITIES_AND_NEIGHBORHOODS'),
-          //   path: paths.dashboard.citiesAndNeighborhoods,
-          //   icon: ICONS.city,
-          // },
-          // {
-          //   title: t('SIDEBAR.PACKAGES_BANNERS'),
-          //   path: paths.dashboard.banners,
-          //   icon: ICONS.banner,
-          // },
+          { title: t('SIDEBAR.APPOINTMENTS'), path: paths.dashboard.appointments, icon: ICONS.appointments },
+
         ],
       },
     ],

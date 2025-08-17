@@ -7,7 +7,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import { SharedTableRowProps, SxStyle } from './types';
 
-export default function SharedTableRow<T extends { id: string }>({
+export default function SharedTableRow<T extends { id: string | number }>({
   row,
   actions,
   customRender,
@@ -25,7 +25,7 @@ export default function SharedTableRow<T extends { id: string }>({
     <>
       <TableRow hover sx={rowStyle}>
         {headIds.map((x, index) => (
-          <TableCell key={index} sx={{ whiteSpace: 'nowrap', color:"info.dark" }}>
+          <TableCell key={index} sx={{ whiteSpace: 'nowrap', color: 'info.dark' }}>
             {customRender && x in customRender ? customRender[x]!(row) : (row as any)[x]}
           </TableCell>
         ))}
@@ -43,7 +43,7 @@ export default function SharedTableRow<T extends { id: string }>({
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
-        sx={{ width: "fit-content" }}
+        sx={{ width: 'fit-content' }}
       >
         {actions
           ?.filter((action) => (action.hide ? !action.hide(row) : true))

@@ -192,7 +192,6 @@ export function AuthProvider({ children }: Readonly<Props>) {
 
       const user = res.data.data;
       const { token: accessToken } = user;
-      console.log(res);
 
       setSession(accessToken);
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;

@@ -153,7 +153,6 @@ export default function RHFAutocomplete<
 
         field.value = watch(name);
         // delete field.value;
-        // if (name === 'warehouse_id') console.log(field.value);
         return (
           <Autocomplete
             {...field}

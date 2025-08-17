@@ -1,4 +1,5 @@
 import Stack from '@mui/material/Stack';
+import { Divider } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
@@ -15,7 +16,6 @@ import { useSettingsContext } from 'src/components/settings';
 
 import { NAV, HEADER } from '../config-layout';
 import AccountPopover from '../common/account-popover';
-import LanguagePopover from '../common/language-popover';
 
 // ----------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ export default function Header({ onOpenNav }: Props) {
         justifyContent="flex-end"
         spacing={{ xs: 0.5, sm: 1 }}
       >
-        <LanguagePopover />
+        {/* <LanguagePopover /> */}
 
         {/* <NotificationsPopover /> */}
 
@@ -107,6 +107,7 @@ export default function Header({ onOpenNav }: Props) {
       >
         {renderContent}
       </Toolbar>
+      <Divider sx={{ mx: 4.5 }} />
     </AppBar>
   );
 }
