@@ -42,11 +42,12 @@
   },
   "LABEL": {
     "LOGOUT": "تسجيل الخروج",
-    "STATUS":"الحالة",
-    "APPOINTMENT_DATE":"تاريخ المواعيد",
-    "PATIENT_NAME":"اسم المريض",
-    "DOCTOR_NAME":"اسم الطبيب",
-    "NOTES":"الملاحظات"
+    "STATUS": "الحالة",
+    "APPOINTMENT_DATE": "تاريخ المواعيد",
+    "PATIENT_NAME": "اسم المريض",
+    "DOCTOR_NAME": "اسم الطبيب",
+    "NOTES": "الملاحظات",
+    "KEEP_ME_LOGGED_IN": "تذكرني"
   },
   "BUTTON": {
     "LOGIN": "تسجيل الدخول",

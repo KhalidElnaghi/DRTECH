@@ -48,6 +48,67 @@ interface FilterState {
   status: string;
 }
 
+// Status mapping for display purposes
+const STATUS_LABELS: Record<string, string> = {
+  '1': 'Scheduled',
+  '2': 'Completed',
+  '3': 'Cancelled',
+  '4': 'No Show',
+  '5': 'Rescheduled',
+};
+
+// Helper function to get status label
+const getStatusLabel = (statusValue: string): string => STATUS_LABELS[statusValue] || statusValue;
+
+// Helper function to get status colors (matching table styling)
+const getStatusColors = (status: string) => {
+  let textColor = 'text.secondary';
+  let bgColor = 'grey.100';
+  let borderColor = 'grey.100';
+
+  switch (status) {
+    case 'Completed':
+      textColor = '#28806F';
+      bgColor = '#EFFEFA';
+      borderColor = '#DDF3EF';
+      break;
+    case 'Scheduled':
+      textColor = '#116B97';
+      bgColor = '#F0FBFF';
+      borderColor = '#D1F0FA';
+      break;
+    case 'Cancelled':
+      textColor = '#B21634';
+      bgColor = '#FEF3F2';
+      borderColor = '#FECDCA';
+      break;
+    case 'Rescheduled':
+      textColor = '#7C3AED';
+      bgColor = '#F3F4F6';
+      borderColor = '#C4B5FD';
+      break;
+    case 'No Show':
+      textColor = '#6B7280';
+      bgColor = '#F9FAFB';
+      borderColor = '#E5E7EB';
+      break;
+    default:
+      textColor = 'text.secondary';
+      bgColor = 'grey.100';
+      borderColor = '#DDF3EF';
+  }
+
+  return { textColor, bgColor, borderColor };
+};
+
+// Helper function to format date in local timezone (avoiding timezone offset issues)
+const formatDateLocal = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export default function AppointmentsPage({ appointments, totalCount }: IProps) {
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [filterAnchorEl, setFilterAnchorEl] = useState<HTMLElement | null>(null);
@@ -135,6 +196,8 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
   };
 
   const handleFilterChange = (field: keyof FilterState, value: string) => {
+    console.log('field', field);
+    console.log('value', value);
     const newFilters = {
       ...filters,
       [field]: value,
@@ -330,6 +393,13 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
                     value={filters.doctorName}
                     onChange={(e) => handleFilterChange('doctorName', e.target.value)}
                     label="Doctor Name"
+                    placeholder="Select doctor"
+                    sx={{
+                      '& .MuiInputLabel-root': {
+                        backgroundColor: 'background.paper',
+                        px: 0.5,
+                      },
+                    }}
                   >
                     <MenuItem value="">All Doctors</MenuItem>
                     <MenuItem value="Dr. Smith">Dr. Smith</MenuItem>
@@ -340,30 +410,35 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
               </Grid>
 
               <Grid item xs={12}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Appointment Date</InputLabel>
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
-                      value={filters.appointmentDate ? new Date(filters.appointmentDate) : null}
-                      onChange={(newValue) => {
-                        if (newValue) {
-                          handleFilterChange(
-                            'appointmentDate',
-                            newValue.toISOString().split('T')[0]
-                          );
-                        } else {
-                          handleFilterChange('appointmentDate', '');
-                        }
-                      }}
-                      slotProps={{
-                        textField: {
-                          size: 'small',
-                          fullWidth: true,
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    label="Appointment Date"
+                    value={filters.appointmentDate ? new Date(filters.appointmentDate) : null}
+                    onChange={(newValue) => {
+                      if (newValue) {
+                        handleFilterChange('appointmentDate', formatDateLocal(newValue));
+                      } else {
+                        handleFilterChange('appointmentDate', '');
+                      }
+                    }}
+                    slotProps={{
+                      textField: {
+                        size: 'small',
+                        fullWidth: true,
+                        placeholder: 'Select appointment date',
+                        InputLabelProps: {
+                          shrink: true,
                         },
-                      }}
-                    />
-                  </LocalizationProvider>
-                </FormControl>
+                        sx: {
+                          '& .MuiInputLabel-root': {
+                            backgroundColor: 'background.paper',
+                            px: 0.5,
+                          },
+                        },
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
               </Grid>
 
               <Grid item xs={12}>
@@ -372,13 +447,147 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
                   <Select
                     value={filters.status}
                     onChange={(e) => handleFilterChange('status', e.target.value)}
-                    label="Status"
+                    displayEmpty
+                    placeholder="Select status"
                   >
-                    <MenuItem value="">All Statuses</MenuItem>
-                    <MenuItem value="scheduled">Scheduled</MenuItem>
-                    <MenuItem value="completed">Completed</MenuItem>
-                    <MenuItem value="cancelled">Cancelled</MenuItem>
-                    <MenuItem value="rescheduled">Rescheduled</MenuItem>
+                    <MenuItem value="">
+                      <em>All Statuses</em>
+                    </MenuItem>
+                    <MenuItem
+                      value="1"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: getStatusColors('Scheduled').bgColor,
+                          opacity: 0.8,
+                        },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'inline-block',
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          backgroundColor: getStatusColors('Scheduled').bgColor,
+                          color: getStatusColors('Scheduled').textColor,
+                          fontSize: '0.8rem',
+                          fontWeight: 500,
+                          textAlign: 'center',
+                          minWidth: 80,
+                          border: `1px solid ${getStatusColors('Scheduled').borderColor}`,
+                        }}
+                      >
+                        Scheduled
+                      </Box>
+                    </MenuItem>
+                    <MenuItem
+                      value="2"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: getStatusColors('Completed').bgColor,
+                          opacity: 0.8,
+                        },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'inline-block',
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          backgroundColor: getStatusColors('Completed').bgColor,
+                          color: getStatusColors('Completed').textColor,
+                          fontSize: '0.8rem',
+                          fontWeight: 500,
+                          textAlign: 'center',
+                          minWidth: 80,
+                          border: `1px solid ${getStatusColors('Completed').borderColor}`,
+                        }}
+                      >
+                        Completed
+                      </Box>
+                    </MenuItem>
+                    <MenuItem
+                      value="3"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: getStatusColors('Cancelled').bgColor,
+                          opacity: 0.8,
+                        },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'inline-block',
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          backgroundColor: getStatusColors('Cancelled').bgColor,
+                          color: getStatusColors('Cancelled').textColor,
+                          fontSize: '0.8rem',
+                          fontWeight: 500,
+                          textAlign: 'center',
+                          minWidth: 80,
+                          border: `1px solid ${getStatusColors('Cancelled').borderColor}`,
+                        }}
+                      >
+                        Cancelled
+                      </Box>
+                    </MenuItem>
+                    <MenuItem
+                      value="4"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: getStatusColors('No Show').bgColor,
+                          opacity: 0.8,
+                        },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'inline-block',
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          backgroundColor: getStatusColors('No Show').bgColor,
+                          color: getStatusColors('No Show').textColor,
+                          fontSize: '0.8rem',
+                          fontWeight: 500,
+                          textAlign: 'center',
+                          minWidth: 80,
+                          border: `1px solid ${getStatusColors('No Show').borderColor}`,
+                        }}
+                      >
+                        No Show
+                      </Box>
+                    </MenuItem>
+                    <MenuItem
+                      value="5"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: getStatusColors('Rescheduled').bgColor,
+                          opacity: 0.8,
+                        },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'inline-block',
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          backgroundColor: getStatusColors('Rescheduled').bgColor,
+                          color: getStatusColors('Rescheduled').textColor,
+                          fontSize: '0.8rem',
+                          fontWeight: 500,
+                          textAlign: 'center',
+                          minWidth: 80,
+                          border: `1px solid ${getStatusColors('Rescheduled').borderColor}`,
+                        }}
+                      >
+                        Rescheduled
+                      </Box>
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -410,7 +619,7 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
                 )}
                 {filters.status && (
                   <Chip
-                    label={`Status: ${filters.status}`}
+                    label={`Status: ${getStatusLabel(filters.status)}`}
                     onDelete={() => handleFilterChange('status', '')}
                     color="primary"
                     variant="outlined"
@@ -697,16 +906,27 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
                   <DatePicker
                     label="Appointment Date"
                     value={filters.appointmentDate ? new Date(filters.appointmentDate) : null}
-                    onChange={(date) =>
-                      handleFilterChange(
-                        'appointmentDate',
-                        date ? date.toISOString().split('T')[0] : ''
-                      )
-                    }
+                    onChange={(date) => {
+                      if (date) {
+                        handleFilterChange('appointmentDate', formatDateLocal(date));
+                      } else {
+                        handleFilterChange('appointmentDate', '');
+                      }
+                    }}
                     slotProps={{
                       textField: {
                         fullWidth: true,
                         size: 'small',
+                        placeholder: 'Select appointment date',
+                        InputLabelProps: {
+                          shrink: true,
+                        },
+                        sx: {
+                          '& .MuiInputLabel-root': {
+                            backgroundColor: 'background.paper',
+                            px: 0.5,
+                          },
+                        },
                         InputProps: {
                           startAdornment: (
                             <InputAdornment position="start">
@@ -735,11 +955,141 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
                     }
                   >
                     <MenuItem value="">All Statuses</MenuItem>
-                    <MenuItem value="scheduled">Scheduled</MenuItem>
-                    <MenuItem value="confirmed">Confirmed</MenuItem>
-                    <MenuItem value="completed">Completed</MenuItem>
-                    <MenuItem value="cancelled">Cancelled</MenuItem>
-                    <MenuItem value="rescheduled">Rescheduled</MenuItem>
+                    <MenuItem
+                      value="1"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: getStatusColors('Scheduled').bgColor,
+                          opacity: 0.8,
+                        },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'inline-block',
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          backgroundColor: getStatusColors('Scheduled').bgColor,
+                          color: getStatusColors('Scheduled').textColor,
+                          fontSize: '0.8rem',
+                          fontWeight: 500,
+                          textAlign: 'center',
+                          minWidth: 80,
+                          border: `1px solid ${getStatusColors('Scheduled').borderColor}`,
+                        }}
+                      >
+                        Scheduled
+                      </Box>
+                    </MenuItem>
+                    <MenuItem
+                      value="2"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: getStatusColors('Completed').bgColor,
+                          opacity: 0.8,
+                        },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'inline-block',
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          backgroundColor: getStatusColors('Completed').bgColor,
+                          color: getStatusColors('Completed').textColor,
+                          fontSize: '0.8rem',
+                          fontWeight: 500,
+                          textAlign: 'center',
+                          minWidth: 80,
+                          border: `1px solid ${getStatusColors('Completed').borderColor}`,
+                        }}
+                      >
+                        Completed
+                      </Box>
+                    </MenuItem>
+                    <MenuItem
+                      value="3"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: getStatusColors('Cancelled').bgColor,
+                          opacity: 0.8,
+                        },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'inline-block',
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          backgroundColor: getStatusColors('Cancelled').bgColor,
+                          color: getStatusColors('Cancelled').textColor,
+                          fontSize: '0.8rem',
+                          fontWeight: 500,
+                          textAlign: 'center',
+                          minWidth: 80,
+                          border: `1px solid ${getStatusColors('Cancelled').borderColor}`,
+                        }}
+                      >
+                        Cancelled
+                      </Box>
+                    </MenuItem>
+                    <MenuItem
+                      value="4"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: getStatusColors('No Show').bgColor,
+                          opacity: 0.8,
+                        },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'inline-block',
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          backgroundColor: getStatusColors('No Show').bgColor,
+                          color: getStatusColors('No Show').textColor,
+                          fontSize: '0.8rem',
+                          fontWeight: 500,
+                          textAlign: 'center',
+                          minWidth: 80,
+                          border: `1px solid ${getStatusColors('No Show').borderColor}`,
+                        }}
+                      >
+                        No Show
+                      </Box>
+                    </MenuItem>
+                    <MenuItem
+                      value="5"
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: getStatusColors('Rescheduled').bgColor,
+                          opacity: 0.8,
+                        },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'inline-block',
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          backgroundColor: getStatusColors('Rescheduled').bgColor,
+                          color: getStatusColors('Rescheduled').textColor,
+                          fontSize: '0.8rem',
+                          fontWeight: 500,
+                          textAlign: 'center',
+                          minWidth: 80,
+                          border: `1px solid ${getStatusColors('Rescheduled').borderColor}`,
+                        }}
+                      >
+                        Rescheduled
+                      </Box>
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -771,7 +1121,7 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
                 )}
                 {filters.status && (
                   <Chip
-                    label={`Status: ${filters.status}`}
+                    label={`Status: ${getStatusLabel(filters.status)}`}
                     onDelete={() => handleFilterChange('status', '')}
                     color="primary"
                     variant="outlined"
@@ -786,102 +1136,71 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
           count={totalCount}
           data={appointments}
           tableHead={TABLE_HEAD}
-          actions={[
-            // {
-            //   sx: { color: 'info.dark' },
-            //   label: t('LABEL.VIEW'),
-            //   icon: 'lets-icons:view',
-            //   onClick: (item) => {
-            //     router.push(`${paths.dashboard.centers}/${item.id}`);
-            //   },
-            // },
-            // {
-            //   sx: { color: 'error.dark' },
-            //   label: t('LABEL.DELETE'),
-            //   icon: 'material-symbols:delete-outline-rounded',
-            //   onClick: (item: any) => {
-            //     setSelectedId(item.id);
-            //     confirmDelete.onTrue();
-            //   },
-            // },
-            // {
-            //   sx: { color: 'error.dark' },
-            //   label: t('LABEL.BLOCK'),
-            //   icon: 'ic:outline-block',
-            //   onClick: (item: any) => {
-            //     setSelectedId(item.id);
-            //     confirmBlock.onTrue();
-            //   },
-            //   hide: (center) => center.userStatus === 'ActiveClient',
-            // },
-            // {
-            //   sx: { color: 'info.dark' },
-            //   label: t('LABEL.UNBLOCK'),
-            //   icon: 'gg:unblock',
-            //   onClick: (item: any) => {
-            //     setSelectedId(item.id);
-            //     confirmUnblock.onTrue();
-            //   },
-            //   hide: (center) => center.userStatus === 'BlockedClient',
-            // },
-            // {
-            //   sx: { color: 'info.dark' },
-            //   label: t('LABEL.CLEAR_WALLET'),
-            //   icon: 'mingcute:wallet-fill',
-            //   onClick: (item) => {
-            //     setSelectedId(item.id);
-            //     confirmClearWallet.onTrue();
-            //   },
-            //   hide: (center) => center.walletBalance <= 0,
-            // },
-            // {
-            //   sx: { color: 'info.dark' },
-            //   label: t('LABEL.SEND_NOTIFICATION'),
-            //   icon: 'mingcute:notification-fill',
-            //   onClick: (item) => {
-            //     // setShowSendNotification(true);
-            //     // setSelectedCenter(item);
-            //   },
-            // },
-          ]}
+          actions={
+            [
+              // {
+              //   sx: { color: 'info.dark' },
+              //   label: t('LABEL.VIEW'),
+              //   icon: 'lets-icons:view',
+              //   onClick: (item) => {
+              //     router.push(`${paths.dashboard.centers}/${item.id}`);
+              //   },
+              // },
+              // {
+              //   sx: { color: 'error.dark' },
+              //   label: t('LABEL.DELETE'),
+              //   icon: 'material-symbols:delete-outline-rounded',
+              //   onClick: (item: any) => {
+              //     setSelectedId(item.id);
+              //     confirmDelete.onTrue();
+              //   },
+              // },
+              // {
+              //   sx: { color: 'error.dark' },
+              //   label: t('LABEL.BLOCK'),
+              //   icon: 'ic:outline-block',
+              //   onClick: (item: any) => {
+              //     setSelectedId(item.id);
+              //     confirmBlock.onTrue();
+              //   },
+              //   hide: (center) => center.userStatus === 'ActiveClient',
+              // },
+              // {
+              //   sx: { color: 'info.dark' },
+              //   label: t('LABEL.UNBLOCK'),
+              //   icon: 'gg:unblock',
+              //   onClick: (item: any) => {
+              //     setSelectedId(item.id);
+              //     confirmUnblock.onTrue();
+              //   },
+              //   hide: (center) => center.userStatus === 'BlockedClient',
+              // },
+              // {
+              //   sx: { color: 'info.dark' },
+              //   label: t('LABEL.CLEAR_WALLET'),
+              //   icon: 'mingcute:wallet-fill',
+              //   onClick: (item) => {
+              //     setSelectedId(item.id);
+              //     confirmClearWallet.onTrue();
+              //   },
+              //   hide: (center) => center.walletBalance <= 0,
+              // },
+              // {
+              //   sx: { color: 'info.dark' },
+              //   label: t('LABEL.SEND_NOTIFICATION'),
+              //   icon: 'mingcute:notification-fill',
+              //   onClick: (item) => {
+              //     // setShowSendNotification(true);
+              //     // setSelectedCenter(item);
+              //   },
+              // },
+            ]
+          }
           customRender={{
             appointmentDate: (item: IAppointment) => <Box>{fFullDate(item?.appointmentDate)}</Box>,
             appointmenStatusName: (item: IAppointment) => {
               const status = item?.appointmenStatusName;
-              let textColor = 'text.secondary';
-              let bgColor = 'grey.100';
-              let borderColor = 'grey.100';
-              switch (status) {
-                case 'Completed':
-                  textColor = '#28806F';
-                  bgColor = '#EFFEFA';
-                  borderColor = '#DDF3EF';
-                  break;
-                case 'Scheduled':
-                  textColor = '#116B97';
-                  bgColor = '#F0FBFF';
-                  borderColor = '#D1F0FA';
-                  break;
-                case 'Cancelled':
-                  textColor = '#B21634';
-                  bgColor = '#FEF3F2';
-                  borderColor = '#FECDCA';
-                  break;
-                case 'Rescheduled':
-                  textColor = '#7C3AED';
-                  bgColor = '#F3F4F6';
-                  borderColor = '#C4B5FD';
-                  break;
-                case 'No Show':
-                  textColor = '#6B7280';
-                  bgColor = '#F9FAFB';
-                  borderColor = '#E5E7EB';
-                  break;
-                default:
-                  textColor = 'text.secondary';
-                  bgColor = 'grey.100';
-                  borderColor = '#DDF3EF';
-              }
+              const { textColor, bgColor, borderColor } = getStatusColors(status);
 
               return (
                 <Box

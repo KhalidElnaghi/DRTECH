@@ -42,7 +42,8 @@
     "APPOINTMENT_DATE": "Appointment Date",
     "PATIENT_NAME": "Patient Name",
     "DOCTOR_NAME": "Doctor Name",
-    "NOTES": "Notes"
+    "NOTES": "Notes",
+    "KEEP_ME_LOGGED_IN": "Keep me logged in"
   },
   "BUTTON": {
     "LOGIN": "Login",

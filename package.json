@@ -38,7 +38,6 @@
     "axios": "^1.9.0",
     "cookies-next": "^4.3.0",
     "date-fns": "^2.30.0",
-    "firebase": "^10.14.1",
     "framer-motion": "^10.18.0",
     "highlight.js": "^11.11.1",
     "i18next": "^23.16.8",
