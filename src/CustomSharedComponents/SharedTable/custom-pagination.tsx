@@ -86,16 +86,26 @@ export default function CustomPagination({
         px: 1,
         borderTop: '1px solid',
         borderColor: 'divider',
+        flexWrap: 'nowrap',
+        minHeight: 56,
       }}
     >
       {/* Items per page info */}
-      <Typography variant="body2" color="text.secondary">
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{
+          flexShrink: 0,
+          whiteSpace: 'nowrap',
+          mr: 2,
+        }}
+      >
         Showing {page * rowsPerPage + 1} to {Math.min((page + 1) * rowsPerPage, count)} of {count}{' '}
         results
       </Typography>
 
       {/* Pagination controls */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0, flexShrink: 0 }}>
         {/* Previous button */}
         <IconButton
           onClick={() => handlePageChange(currentPage - 1)}
@@ -116,19 +126,35 @@ export default function CustomPagination({
         </IconButton>
 
         {/* Page numbers */}
-        <Box sx={{ mx: 2, border: '1px solid #DFE1E7', borderRadius: 1, overflow: 'hidden' }}>
+        <Box
+          sx={{
+            mx: 2,
+            border: '1px solid #DFE1E7',
+            borderRadius: 1,
+            overflow: 'hidden',
+            display: 'flex',
+            alignItems: 'center',
+            minWidth: 'fit-content',
+            maxWidth: 'none',
+          }}
+        >
           {getPageNumbers().map((pageNum, index) => (
             <React.Fragment key={index}>
               {pageNum === '...' ? (
-                <Typography
+                <Box
                   sx={{
                     px: 1,
                     color: 'text.secondary',
                     userSelect: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    minWidth: 24,
+                    height: 40,
                   }}
                 >
                   ...
-                </Typography>
+                </Box>
               ) : (
                 <Button
                   variant={pageNum === currentPage ? 'contained' : 'text'}

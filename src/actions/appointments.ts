@@ -35,21 +35,82 @@ export const fetchAppoinments = async ({
     });
     return res?.data;
   } catch (error) {
-    throw new Error(error);
+    console.log('Appointment fetch error:', error);
+    // throw new Error(error);
   }
 };
 
 export const newAppointment = async (reqBody: any): Promise<any> => {
+  const accessToken = cookies().get('access_token')?.value;
+  const lang = cookies().get('Language')?.value;
+
   try {
-    const res = await axiosInstance.post(endpoints.appointments.new, reqBody, {});
+    const res = await axiosInstance.post(endpoints.appointments.new, reqBody, {
+      headers: { Authorization: `Bearer ${accessToken}`, 'Accept-Language': lang },
+    });
     console.log('Appointment creation response:', res);
     revalidatePath('/dashboard/appointments');
-    return res.status;
-  } catch (error) {
-    console.log(error);
+    return { success: true };
+  } catch (error: any) {
+    console.log('Appointment creation error:', error);
+
+    // Handle the nested error structure from the API
+    if (error && typeof error === 'object') {
+      if (error.error && error.error.message) {
+        return {
+          error: error.error.message,
+          success: false,
+        };
+      }
+      if (error.message) {
+        return {
+          error: error.message,
+          success: false,
+        };
+      }
+    }
 
     return {
-      error: error.error.message,
+      error: getErrorMessage(error),
+      success: false,
+    };
+  }
+};
+
+export const deleteAppointment = async (appointmentId: string): Promise<any> => {
+  const accessToken = cookies().get('access_token')?.value;
+  const lang = cookies().get('Language')?.value;
+
+  try {
+    const res = await axiosInstance.delete(
+      endpoints.appointments.deleteAppointment(appointmentId),
+      {
+        headers: { Authorization: `Bearer ${accessToken}`, 'Accept-Language': lang },
+      }
+    );
+    revalidatePath('/dashboard/appointments');
+    return { success: true };
+  } catch (error: any) {
+    console.log('Delete appointment error:', error);
+
+    // Handle the nested error structure from the API
+    if (error && typeof error === 'object') {
+      if (error.error && error.error.message) {
+        return {
+          error: error.error.message,
+          success: false,
+        };
+      }
+      if (error.message) {
+        return {
+          error: error.message,
+          success: false,
+        };
+      }
+    }
+
+    return {
+      error: getErrorMessage(error),
       success: false,
     };
   }

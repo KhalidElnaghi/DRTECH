@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -20,7 +22,23 @@ export default function ConfirmDialog({
 }: ConfirmDialogProps) {
   const { t } = useTranslate();
   return (
-    <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose} {...other}>
+    <Dialog
+      fullWidth
+      maxWidth="xs"
+      open={open}
+      onClose={onClose}
+      {...other}
+      sx={{
+        '& .MuiDialog-paper': {
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          p: 2,
+        },
+      }}
+    >
+      <Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />
       <DialogTitle sx={{ pb: 2 }}>{title}</DialogTitle>
 
       {content && (
@@ -28,23 +46,16 @@ export default function ConfirmDialog({
       )}
 
       <DialogActions>
-        {action}
-
+        {' '}
         <Button
-          variant="contained"
-          sx={{
-            color: 'primary.common',
-            bgcolor: 'white',
-            border: '1px solid #DBE0E4',
-            '&:hover': {
-              bgcolor: '#DBE0E5',
-              border: '1px solid #DBE0E4',
-            },
-          }}
+          variant="outlined"
+          color="primary"
           onClick={onClose}
+          sx={{ width: 175, height: 56, borderRadius: 2,  padding: '8px 16px' }}
         >
           {t('BUTTON.CANCEL')}
         </Button>
+        {action}
       </DialogActions>
     </Dialog>
   );

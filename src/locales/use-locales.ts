@@ -16,7 +16,9 @@ import { allLangs, defaultLang } from './config-lang';
 export function useLocales() {
   const langStorage = localStorageGetItem('i18nextLng');
 
-  const currentLang = allLangs.find((lang) => lang.value === langStorage) || defaultLang;
+  // Ensure we have a valid language, default to 'en' if none is stored
+  const currentLangValue = langStorage && ['en', 'ar'].includes(langStorage) ? langStorage : 'en';
+  const currentLang = allLangs.find((lang) => lang.value === currentLangValue) || defaultLang;
 
   return {
     allLangs,

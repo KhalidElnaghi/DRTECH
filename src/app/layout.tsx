@@ -56,7 +56,7 @@ export default function RootLayout({ children }: Props) {
               <SettingsProvider
                 defaultSettings={{
                   themeMode: 'light', // 'light' | 'dark'
-                  themeDirection: 'rtl', //  'rtl' | 'ltr'
+                  themeDirection: 'ltr', //  'rtl' | 'ltr'
                   themeContrast: 'default', // 'default' | 'bold'
                   themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
                   themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'

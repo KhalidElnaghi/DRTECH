@@ -1,4 +1,4 @@
-import { getCookie } from 'cookies-next';
+import Cookies from 'js-cookie';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 import { HOST_API } from 'src/config-global';
@@ -13,6 +13,7 @@ export interface Params {
   created_at?: string;
   headers?: { access_token: string };
 }
+
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: HOST_API,
 
@@ -22,7 +23,7 @@ const axiosInstance: AxiosInstance = axios.create({
     'Access-Control-Allow-Origin': '*',
     Accept: 'application/json',
     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-    Authorization: `Bearer ${getCookie(ACCESS_TOKEN)}`,
+    Authorization: `Bearer ${Cookies.get(ACCESS_TOKEN)}`,
   },
 });
 axiosInstance.interceptors.request.use(
@@ -46,7 +47,7 @@ export const fetcher = async ({ url, config }: { url: string; config?: AxiosRequ
   const response = await axiosInstance.get(url, {
     ...config,
     headers: {
-      Authorization: `Bearer ${getCookie(ACCESS_TOKEN)}`,
+      Authorization: `Bearer ${Cookies.get(ACCESS_TOKEN)}`,
       /*       'Accept-Language': lang,
        */
     },
@@ -80,6 +81,7 @@ export const endpoints = {
   appointments: {
     fetch: '/appointments',
     new: '/appointments/create',
+    deleteAppointment: (appointmentId: string) => `/appointments/${appointmentId}`,
   },
   doctors: {
     fetch: '/doctors',

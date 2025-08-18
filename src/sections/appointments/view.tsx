@@ -37,6 +37,10 @@ import { IAppointment } from 'src/types/appointment';
 import { IDoctor } from 'src/types/doctors';
 import { IPatient } from 'src/types/patients';
 import { ILookup } from 'src/types/lookups';
+import { ConfirmDialog } from 'src/components/custom-dialog';
+import { useBoolean } from 'src/hooks/use-boolean';
+import { enqueueSnackbar } from 'notistack';
+import { deleteAppointment } from 'src/actions/appointments';
 
 // ----------------------------------------------------------------------
 interface IProps {
@@ -122,7 +126,7 @@ export default function AppointmentsPage({
   doctors,
   patients,
   services,
-  appointmentStatus
+  appointmentStatus,
 }: IProps) {
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [filterAnchorEl, setFilterAnchorEl] = useState<HTMLElement | null>(null);
@@ -140,7 +144,8 @@ export default function AppointmentsPage({
   const { t } = useTranslate();
   // const settings = useSettingsContext();
   const [selectedAppointment, setSelectedAppointment] = useState<IAppointment | undefined>();
-  // const [selectedId, setSelectedId] = useState<string>('');
+  const [selectedId, setSelectedId] = useState<string>('');
+  const confirmDelete = useBoolean();
 
   // Initialize filters from URL params on component mount
   useEffect(() => {
@@ -255,6 +260,19 @@ export default function AppointmentsPage({
     searchParams.get('DoctorName') ||
     searchParams.get('AppointmentDate') ||
     searchParams.get('Status');
+
+
+    const handleConfirmDelete = async () => {
+      const res = await deleteAppointment(selectedId);
+      if (res?.error) {
+        enqueueSnackbar(`${res?.error}`, { variant: 'error' });
+      } else {
+        enqueueSnackbar(t('MESSAGE.DELETED_SUCCESS'), {
+          variant: 'success',
+        });
+      }
+      confirmDelete.onFalse();
+    };
 
   // Show no data message if no appointments, but keep header and search/filter functionality
   if (!appointments || appointments.length === 0) {
@@ -1154,67 +1172,64 @@ export default function AppointmentsPage({
           count={totalCount}
           data={appointments}
           tableHead={TABLE_HEAD}
-          actions={
-            [
-              {
-                sx: { color: 'primary.main' },
-                label: t('LABEL.EDIT'),
-                icon: 'solar:pen-bold',
-                onClick: (item) => {
-                  setSelectedAppointment(item);
-                  handleOpenAddDialog();
-                },
+          actions={[
+            {
+              sx: { color: 'primary.main' },
+              label: t('LABEL.EDIT'),
+              icon: 'solar:pen-bold',
+              onClick: (item) => {
+                setSelectedAppointment(item);
+                handleOpenAddDialog();
               },
-              // {
-              //   sx: { color: 'error.dark' },
-              //   label: t('LABEL.DELETE'),
-              //   icon: 'material-symbols:delete-outline-rounded',
-              //   onClick: (item: any) => {
-              //     setSelectedId(item.id);
-              //     confirmDelete.onTrue();
-              //   },
-              // },
-              // {
-              //   sx: { color: 'error.dark' },
-              //   label: t('LABEL.BLOCK'),
-              //   icon: 'ic:outline-block',
-              //   onClick: (item: any) => {
-              //     setSelectedId(item.id);
-              //     confirmBlock.onTrue();
-              //   },
-              //   hide: (center) => center.userStatus === 'ActiveClient',
-              // },
-              // {
-              //   sx: { color: 'info.dark' },
-              //   label: t('LABEL.UNBLOCK'),
-              //   icon: 'gg:unblock',
-              //   onClick: (item: any) => {
-              //     setSelectedId(item.id);
-              //     confirmUnblock.onTrue();
-              //   },
-              //   hide: (center) => center.userStatus === 'BlockedClient',
-              // },
-              // {
-              //   sx: { color: 'info.dark' },
-              //   label: t('LABEL.CLEAR_WALLET'),
-              //   icon: 'mingcute:wallet-fill',
-              //   onClick: (item) => {
-              //     setSelectedId(item.id);
-              //     confirmClearWallet.onTrue();
-              //   },
-              //   hide: (center) => center.walletBalance <= 0,
-              // },
-              // {
-              //   sx: { color: 'info.dark' },
-              //   label: t('LABEL.SEND_NOTIFICATION'),
-              //   icon: 'mingcute:notification-fill',
-              //   onClick: (item) => {
-              //     // setShowSendNotification(true);
-              //     // setSelectedCenter(item);
-              //   },
-              // },
-            ]
-          }
+            },
+            {
+              sx: { color: 'error.dark' },
+              label: t('LABEL.DELETE'),
+              icon: 'material-symbols:delete-outline-rounded',
+              onClick: (item: any) => {
+                setSelectedId(item.id);
+                confirmDelete.onTrue();
+              },
+            },
+            {
+              sx: { color: 'error.dark' },
+              label: t('LABEL.CANCEL'),
+              icon: 'line-md:cancel-twotone',
+              onClick: (item: any) => {
+                setSelectedId(item.id);
+                // confirmBlock.onTrue();
+              },
+            },
+            // {
+            //   sx: { color: 'info.dark' },
+            //   label: t('LABEL.UNBLOCK'),
+            //   icon: 'gg:unblock',
+            //   onClick: (item: any) => {
+            //     setSelectedId(item.id);
+            //     confirmUnblock.onTrue();
+            //   },
+            //   hide: (center) => center.userStatus === 'BlockedClient',
+            // },
+            // {
+            //   sx: { color: 'info.dark' },
+            //   label: t('LABEL.CLEAR_WALLET'),
+            //   icon: 'mingcute:wallet-fill',
+            //   onClick: (item) => {
+            //     setSelectedId(item.id);
+            //     confirmClearWallet.onTrue();
+            //   },
+            //   hide: (center) => center.walletBalance <= 0,
+            // },
+            // {
+            //   sx: { color: 'info.dark' },
+            //   label: t('LABEL.SEND_NOTIFICATION'),
+            //   icon: 'mingcute:notification-fill',
+            //   onClick: (item) => {
+            //     // setShowSendNotification(true);
+            //     // setSelectedCenter(item);
+            //   },
+            // },
+          ]}
           customRender={{
             appointmentDate: (item: IAppointment) => <Box>{fFullDate(item?.appointmentDate)}</Box>,
             appointmenStatusName: (item: IAppointment) => {
@@ -1258,6 +1273,32 @@ export default function AppointmentsPage({
         services={services}
         appointment={selectedAppointment}
         appointmentStatus={appointmentStatus}
+      />
+      <ConfirmDialog
+        open={confirmDelete.value}
+        onClose={confirmDelete.onFalse}
+        title={t('TITLE.DELETE')}
+        content={t('MESSAGE.CONFIRM_DELETE_APPOINTMENT')}
+        action={
+          <Button
+            sx={{
+              width: 175,
+              height: 56,
+              borderRadius: 2,
+              padding: '8px 16px',
+              bgcolor: '#DF1C41',
+              '&:hover': {
+                bgcolor: '#DF1C60',
+              },
+            }}
+            variant="contained"
+            onClick={() => {
+              handleConfirmDelete();
+            }}
+          >
+            {t('BUTTON.DELETE')}
+          </Button>
+        }
       />
     </>
   );

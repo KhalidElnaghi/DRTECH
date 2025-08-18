@@ -34,7 +34,8 @@
     "DELETE_NEIGHBORHOOD": "Delete Neighborhood",
     "DELETE_BANNER": "Delete Banner",
     "DELETE_CLIENT": "Delete Client",
-    "DELETE_CENTER": "Delete Center"
+    "DELETE_CENTER": "Delete Center",
+    "DELETE": "Confirm Delete"
   },
   "LABEL": {
     "LOGOUT": "Logout",
@@ -47,7 +48,9 @@
     "CREATE_APPOINTMENT": "Create New Appointment",
     "EDIT_APPOINTMENT": "Edit Appointment",
     "EDIT": "Edit",
-    "THIS_FIELD_IS_REQUIRED": "This field is required"
+    "THIS_FIELD_IS_REQUIRED": "This field is required",
+    "CANCEL": "Cancel",
+    "DELETE": "Delete"
   },
   "BUTTON": {
     "LOGIN": "Login",
@@ -107,7 +110,9 @@
     "CHILDREN": "Children"
   },
   "MESSAGE": {
-    "APPOINTMENT_CREATED_SUCCESSFULLY": "Appointment created successfully"
+    "APPOINTMENT_CREATED_SUCCESSFULLY": "Appointment created successfully",
+    "CONFIRM_DELETE_APPOINTMENT": "Are you sure you want to delete this appointment?",
+    "DELETED_SUCCESS": "Deleted successfully"
   },
   "PLACEHOLDER": {}
 }

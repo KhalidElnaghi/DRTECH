@@ -38,7 +38,8 @@
     "DELETE_NEIGHBORHOOD": "حذف الحى",
     "DELETE_BANNER": "حذف البانر",
     "DELETE_CLIENT": "حذف العميل",
-    "DELETE_CENTER": "حذف المركز"
+    "DELETE_CENTER": "حذف المركز",
+    "DELETE": "حذف"
   },
   "LABEL": {
     "LOGOUT": "تسجيل الخروج",
@@ -51,7 +52,9 @@
     "CREATE_APPOINTMENT": "انشاء موعد جديد",
     "EDIT_APPOINTMENT": "تعديل موعد",
     "EDIT": "تعديل",
-    "THIS_FIELD_IS_REQUIRED": "هذا الحقل مطلوب"
+    "THIS_FIELD_IS_REQUIRED": "هذا الحقل مطلوب",
+    "CANCEL": "الغاء",
+    "DELETE": "حذف"
   },
   "BUTTON": {
     "LOGIN": "تسجيل الدخول",
@@ -111,7 +114,9 @@
     "CHILDREN": "أطفال"
   },
   "MESSAGE": {
-    "APPOINTMENT_CREATED_SUCCESSFULLY": "تم إنشاء الموعد بنجاح"
+    "APPOINTMENT_CREATED_SUCCESSFULLY": "تم إنشاء الموعد بنجاح",
+    "CONFIRM_DELETE_APPOINTMENT": "هل أنت متأكد من حذف هذا الموعد؟",
+    "DELETED_SUCCESS":"تم الحذف بنجاح"
   },
   "PLACEHOLDER": {}
 }
