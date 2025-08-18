@@ -38,3 +38,19 @@ export const fetchAppoinments = async ({
     throw new Error(error);
   }
 };
+
+export const newAppointment = async (reqBody: any): Promise<any> => {
+  try {
+    const res = await axiosInstance.post(endpoints.appointments.new, reqBody, {});
+    console.log('Appointment creation response:', res);
+    revalidatePath('/dashboard/appointments');
+    return res.status;
+  } catch (error) {
+    console.log(error);
+
+    return {
+      error: error.error.message,
+      success: false,
+    };
+  }
+};

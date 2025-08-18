@@ -79,7 +79,15 @@ export const endpoints = {
   },
   appointments: {
     fetch: '/appointments',
-    cities: '/city-neighborhood/all-cities',
+    new: '/appointments/create',
   },
-
+  doctors: {
+    fetch: '/doctors',
+  },
+  patients: {
+    fetch: '/patients',
+  },
+  lookups: {
+    fetch: (type: string) => `/lookups/${type}`,
+  },
 };

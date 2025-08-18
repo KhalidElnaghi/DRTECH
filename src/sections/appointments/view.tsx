@@ -30,15 +30,22 @@ import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 
 import Iconify from 'src/components/iconify';
 import EmptyState from 'src/components/empty-state/EmptyState';
-import AppointmentDialog from 'src/components/appointment-dialog';
+import AppointmentDialog from 'src/components/dialogs/appointment-dialog';
 
 // import { useSettingsContext } from 'src/components/settings';
 import { IAppointment } from 'src/types/appointment';
+import { IDoctor } from 'src/types/doctors';
+import { IPatient } from 'src/types/patients';
+import { ILookup } from 'src/types/lookups';
 
 // ----------------------------------------------------------------------
 interface IProps {
   appointments: IAppointment[];
   totalCount: number;
+  doctors: IDoctor[];
+  patients: IPatient[];
+  services: ILookup[];
+  appointmentStatus: ILookup[];
 }
 
 interface FilterState {
@@ -109,7 +116,14 @@ const formatDateLocal = (date: Date): string => {
   return `${year}-${month}-${day}`;
 };
 
-export default function AppointmentsPage({ appointments, totalCount }: IProps) {
+export default function AppointmentsPage({
+  appointments,
+  totalCount,
+  doctors,
+  patients,
+  services,
+  appointmentStatus
+}: IProps) {
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [filterAnchorEl, setFilterAnchorEl] = useState<HTMLElement | null>(null);
   const [filters, setFilters] = useState<FilterState>({
@@ -125,7 +139,7 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
 
   const { t } = useTranslate();
   // const settings = useSettingsContext();
-  // const [selectedCenter, setSelectedCenter] = useState<IAppointment | undefined>();
+  const [selectedAppointment, setSelectedAppointment] = useState<IAppointment | undefined>();
   // const [selectedId, setSelectedId] = useState<string>('');
 
   // Initialize filters from URL params on component mount
@@ -149,6 +163,7 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
 
   const handleCloseAddDialog = () => {
     setOpenAddDialog(false);
+    setSelectedAppointment(undefined);
   };
 
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -450,9 +465,6 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
                     displayEmpty
                     placeholder="Select status"
                   >
-                    <MenuItem value="">
-                      <em>All Statuses</em>
-                    </MenuItem>
                     <MenuItem
                       value="1"
                       sx={{
@@ -685,7 +697,14 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
         </Box>
 
         {/* Appointment Dialog */}
-        <AppointmentDialog open={openAddDialog} onClose={handleCloseAddDialog} />
+        <AppointmentDialog
+          open={openAddDialog}
+          onClose={handleCloseAddDialog}
+          doctors={doctors}
+          patients={patients}
+          services={services}
+          appointmentStatus={appointmentStatus}
+        />
       </>
     );
   }
@@ -954,7 +973,6 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
                       </InputAdornment>
                     }
                   >
-                    <MenuItem value="">All Statuses</MenuItem>
                     <MenuItem
                       value="1"
                       sx={{
@@ -1138,14 +1156,15 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
           tableHead={TABLE_HEAD}
           actions={
             [
-              // {
-              //   sx: { color: 'info.dark' },
-              //   label: t('LABEL.VIEW'),
-              //   icon: 'lets-icons:view',
-              //   onClick: (item) => {
-              //     router.push(`${paths.dashboard.centers}/${item.id}`);
-              //   },
-              // },
+              {
+                sx: { color: 'primary.main' },
+                label: t('LABEL.EDIT'),
+                icon: 'solar:pen-bold',
+                onClick: (item) => {
+                  setSelectedAppointment(item);
+                  handleOpenAddDialog();
+                },
+              },
               // {
               //   sx: { color: 'error.dark' },
               //   label: t('LABEL.DELETE'),
@@ -1231,7 +1250,15 @@ export default function AppointmentsPage({ appointments, totalCount }: IProps) {
       </Paper>
 
       {/* Appointment Dialog */}
-      <AppointmentDialog open={openAddDialog} onClose={handleCloseAddDialog} />
+      <AppointmentDialog
+        open={openAddDialog}
+        onClose={handleCloseAddDialog}
+        doctors={doctors}
+        patients={patients}
+        services={services}
+        appointment={selectedAppointment}
+        appointmentStatus={appointmentStatus}
+      />
     </>
   );
 }

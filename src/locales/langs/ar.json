@@ -47,7 +47,11 @@
     "PATIENT_NAME": "اسم المريض",
     "DOCTOR_NAME": "اسم الطبيب",
     "NOTES": "الملاحظات",
-    "KEEP_ME_LOGGED_IN": "تذكرني"
+    "KEEP_ME_LOGGED_IN": "تذكرني",
+    "CREATE_APPOINTMENT": "انشاء موعد جديد",
+    "EDIT_APPOINTMENT": "تعديل موعد",
+    "EDIT": "تعديل",
+    "THIS_FIELD_IS_REQUIRED": "هذا الحقل مطلوب"
   },
   "BUTTON": {
     "LOGIN": "تسجيل الدخول",
@@ -75,7 +79,9 @@
     "ADD_BANNER": "اضافه بانر",
     "ADD_CITY": "اضافة مدينة",
     "ADD_NEIGHBORHOOD": "اضافة حي",
-    "ADD_PACKAGES": "اضافه باقة"
+    "ADD_PACKAGES": "اضافه باقة",
+    "UPDATE": "تعديل",
+    "CREATE_APPOINTMENT": "انشاء موعد"
   },
   "SIDEBAR": {
     "MAIN": "الرئيسية",
@@ -104,6 +110,8 @@
     "SPORT_ACTIVITY_NAME_IN_ENGLISH": "اسم النشاط الرياضة باللغة الإنجليزية",
     "CHILDREN": "أطفال"
   },
-  "MESSAGE": {},
+  "MESSAGE": {
+    "APPOINTMENT_CREATED_SUCCESSFULLY": "تم إنشاء الموعد بنجاح"
+  },
   "PLACEHOLDER": {}
 }
