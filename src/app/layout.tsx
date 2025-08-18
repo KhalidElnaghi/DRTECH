@@ -24,9 +24,9 @@ export const viewport = {
 };
 
 export const metadata = {
-  title: 'Maharatna',
-  description: 'An application for delivering orders and charging in the Kingdom of Saudi Arabia',
-  keywords: 'mart,order,charge,delivery,shop,food,market',
+  title: 'Dr.Tech',
+  description: 'DRTECH - Hospital Management Dashboard',
+  keywords: 'hospital,health,management,dashboard,drtech',
   manifest: '/manifest.json',
   icons: [
     { rel: 'icon', url: '/favicon/favicon.ico' },
@@ -51,31 +51,31 @@ export default function RootLayout({ children }: Props) {
       </head>
       <body>
         <I18nProvider>
-            <AuthProvider>
-              <LocalizationProvider>
-                <SettingsProvider
-                  defaultSettings={{
-                    themeMode: 'light', // 'light' | 'dark'
-                    themeDirection: 'rtl', //  'rtl' | 'ltr'
-                    themeContrast: 'default', // 'default' | 'bold'
-                    themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
-                    themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
-                    themeStretch: false,
-                  }}
-                >
-                  <ThemeProvider>
-                    <MotionLazy>
-                      <SnackbarProvider>
-                        <SettingsDrawer />
-                        <ProgressBar />
-                        {children}
-                      </SnackbarProvider>
-                    </MotionLazy>
-                  </ThemeProvider>
-                </SettingsProvider>
-              </LocalizationProvider>
-            </AuthProvider>
-            <Toaster />
+          <AuthProvider>
+            <LocalizationProvider>
+              <SettingsProvider
+                defaultSettings={{
+                  themeMode: 'light', // 'light' | 'dark'
+                  themeDirection: 'rtl', //  'rtl' | 'ltr'
+                  themeContrast: 'default', // 'default' | 'bold'
+                  themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
+                  themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
+                  themeStretch: false,
+                }}
+              >
+                <ThemeProvider>
+                  <MotionLazy>
+                    <SnackbarProvider>
+                      <SettingsDrawer />
+                      <ProgressBar />
+                      {children}
+                    </SnackbarProvider>
+                  </MotionLazy>
+                </ThemeProvider>
+              </SettingsProvider>
+            </LocalizationProvider>
+          </AuthProvider>
+          <Toaster />
         </I18nProvider>
       </body>
     </html>
