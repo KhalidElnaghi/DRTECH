@@ -29,7 +29,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fFullDate } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
-import { deleteAppointment, cancelAppointment } from 'src/actions/appointments';
+import { useDeleteAppointment, useCancelAppointment } from 'src/hooks/use-appointments-query';
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 
 import Iconify from 'src/components/iconify';
@@ -148,6 +148,10 @@ export default function AppointmentsPage({
   const confirmDelete = useBoolean();
   const [isDeleting, setIsDeleting] = useState(false);
   const [openCancelDialog, setOpenCancelDialog] = useState(false);
+
+  // React Query mutations
+  const deleteAppointmentMutation = useDeleteAppointment();
+  const cancelAppointmentMutation = useCancelAppointment();
 
   // Initialize filters from URL params on component mount
   useEffect(() => {
@@ -273,16 +277,21 @@ export default function AppointmentsPage({
 
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
-    const res = await deleteAppointment(selectedId);
-    setIsDeleting(false);
-    if (res?.error) {
-      enqueueSnackbar(`${res?.error}`, { variant: 'error' });
-    } else {
+
+    try {
+      await deleteAppointmentMutation.mutateAsync(selectedId);
+
       enqueueSnackbar(t('MESSAGE.DELETED_SUCCESS'), {
         variant: 'success',
       });
+      confirmDelete.onFalse();
+    } catch (error: any) {
+      enqueueSnackbar(error?.message || 'Failed to delete appointment', {
+        variant: 'error',
+      });
+    } finally {
+      setIsDeleting(false);
     }
-    confirmDelete.onFalse();
   };
 
   // Show no data message if no appointments, but keep header and search/filter functionality
@@ -1205,9 +1214,6 @@ export default function AppointmentsPage({
                 setSelectedId(item.id);
                 confirmDelete.onTrue();
               },
-              hide: (item: IAppointment) =>
-                item.appointmenStatusName === 'Cancelled' ||
-                item.appointmenStatusName === 'Completed',
             },
             {
               sx: { color: 'error.dark' },
@@ -1216,7 +1222,9 @@ export default function AppointmentsPage({
               onClick: (item: any) => {
                 handleOpenCancelDialog(item.id);
               },
-              hide: (item: IAppointment) => item.appointmenStatusName === 'Cancelled',
+              hide: (item: IAppointment) =>
+                item.appointmenStatusName === 'Cancelled' ||
+                item.appointmenStatusName === 'Completed',
             },
             // {
             //   sx: { color: 'info.dark' },

@@ -31,7 +31,7 @@ import { IDoctor } from 'src/types/doctors';
 import { IPatient } from 'src/types/patients';
 import { ILookup } from 'src/types/lookups';
 import { IAppointment } from 'src/types/appointment';
-import { editAppointment, newAppointment } from 'src/actions/appointments';
+import { useEditAppointment, useNewAppointment } from 'src/hooks/use-appointments-query';
 
 interface AppointmentDialogProps {
   open: boolean;
@@ -55,6 +55,9 @@ export default function AppointmentDialog({
   const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
 
+  // React Query mutations
+  const editAppointmentMutation = useEditAppointment();
+  const newAppointmentMutation = useNewAppointment();
 
   // Helper function to combine date and time
   const combineDateAndTime = (date: Date, time: Date): Date => {
@@ -196,7 +199,6 @@ export default function AppointmentDialog({
         // Combine the user's selected date with their selected time
         const combinedDateTime = combineDateAndTime(data.appointmentDate, data.scheduledTime);
 
-
         const serializedData = {
           ...data,
           appointmentDate: formatDateTimeLocal(combinedDateTime), // Send as single variable without timezone conversion
@@ -204,26 +206,17 @@ export default function AppointmentDialog({
           Notes: data.notes || '',
         };
         delete serializedData.notes;
-        const res = await editAppointment(serializedData, appointment?.id);
+        await editAppointmentMutation.mutateAsync({ reqBody: serializedData, id: appointment.id });
 
-        if (res?.error) {
-          enqueueSnackbar(`${res.error}`, { variant: 'error' });
-        } else if (res?.success === false) {
-          enqueueSnackbar(`${res.error}`, { variant: 'error' });
-        } else {
-          enqueueSnackbar(
-            t('MESSAGE.APPOINTMENT_UPDATED_SUCCESSFULLY') || 'Appointment updated successfully',
-            {
-              variant: 'success',
-            }
-          );
-          onClose();
-          reset();
-        }
+        enqueueSnackbar(
+          t('MESSAGE.APPOINTMENT_UPDATED_SUCCESSFULLY') || 'Appointment updated successfully',
+          { variant: 'success' }
+        );
+        onClose();
+        reset();
       } else {
         // Combine the user's selected date with their selected time
         const combinedDateTime = combineDateAndTime(data.appointmentDate, data.scheduledTime);
-
 
         // Serialize the data to prevent circular reference issues
         const serializedData = {
@@ -232,22 +225,14 @@ export default function AppointmentDialog({
           scheduledTime: formatDateTimeLocal(combinedDateTime), // Also send scheduledTime without timezone conversion
         };
 
-        const res = await newAppointment(serializedData);
+        await newAppointmentMutation.mutateAsync(serializedData);
 
-        if (res?.error) {
-          enqueueSnackbar(`${res.error}`, { variant: 'error' });
-        } else if (res?.success === false) {
-          enqueueSnackbar(`${res.error}`, { variant: 'error' });
-        } else {
-          enqueueSnackbar(
-            t('MESSAGE.APPOINTMENT_CREATED_SUCCESSFULLY') || 'Appointment created successfully',
-            {
-              variant: 'success',
-            }
-          );
-          onClose();
-          reset();
-        }
+        enqueueSnackbar(
+          t('MESSAGE.APPOINTMENT_CREATED_SUCCESSFULLY') || 'Appointment created successfully',
+          { variant: 'success' }
+        );
+        onClose();
+        reset();
       }
     } catch (error) {
       console.error('Form submission error:', error);

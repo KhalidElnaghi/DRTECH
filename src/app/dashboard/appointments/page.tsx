@@ -1,42 +1,50 @@
-// ----------------------------------------------------------------------
+'use client';
 
-import { fetchDoctors } from 'src/actions/doctors';
-import { fetchLookups } from 'src/actions/lookups';
-import { fetchPatients } from 'src/actions/patients';
-import { fetchAppoinments } from 'src/actions/appointments';
+import { useSearchParams } from 'next/navigation';
+
+import { useDoctors } from 'src/hooks/use-doctors-query';
+import { useLookups } from 'src/hooks/use-lookups-query';
+import { usePatients } from 'src/hooks/use-patients-query';
+import { useAppointments } from 'src/hooks/use-appointments-query';
+
+import { LoadingScreen } from 'src/components/loading-screen';
 
 import AppointmentsPage from '../../../sections/appointments/view';
 
-export const metadata = {
-  title: 'Appointments',
-};
+export default function Page() {
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get('page')) || 1;
+  const DoctorName = searchParams.get('DoctorName') || '';
+  const AppointmentDate = searchParams.get('AppointmentDate') || '';
+  const Status = searchParams.get('Status') || '';
 
-type props = {
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-export default async function Page({ searchParams }: Readonly<props>) {
-  const page = typeof searchParams?.page === 'string' ? Number(searchParams?.page) : 1;
-  const DoctorName = typeof searchParams?.DoctorName === 'string' ? searchParams?.DoctorName : '';
-  const AppointmentDate =
-    typeof searchParams?.AppointmentDate === 'string' ? searchParams?.AppointmentDate : '';
-  const Status = typeof searchParams?.Status === 'string' ? searchParams?.Status : '';
+  const { data: appointmentsData, isLoading: appointmentsLoading } = useAppointments({
+    page,
+    DoctorName,
+    AppointmentDate,
+    Status,
+  });
 
-  const appointments = await fetchAppoinments({ page, DoctorName, AppointmentDate, Status });
-  const doctors = await fetchDoctors({});
-  const patients = await fetchPatients({});
-  const services = await fetchLookups('service-types');
-  const appointmentStatus = await fetchLookups('appointment-status');
+  const { data: doctorsData, isLoading: doctorsLoading } = useDoctors();
+  const { data: patientsData, isLoading: patientsLoading } = usePatients();
+  const { data: services, isLoading: servicesLoading } = useLookups('service-types');
+  const { data: appointmentStatus, isLoading: statusLoading } = useLookups('appointment-status');
 
+  const isLoading =
+    appointmentsLoading || doctorsLoading || patientsLoading || servicesLoading || statusLoading;
 
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <AppointmentsPage
-      appointments={appointments.data.items}
-      totalCount={appointments.data.totalCount}
-      doctors={doctors.data.items}
-      patients={patients.data.items}
-      services={services}
-      appointmentStatus={appointmentStatus}
+      appointments={appointmentsData?.data?.items || []}
+      totalCount={appointmentsData?.data?.totalCount || 0}
+      doctors={doctorsData?.data?.items || []}
+      patients={patientsData?.data?.items || []}
+      services={services || []}
+      appointmentStatus={appointmentStatus || []}
     />
   );
 }

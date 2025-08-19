@@ -46,7 +46,6 @@ export const newAppointment = async (reqBody: any): Promise<any> => {
     const res = await axiosInstance.post(endpoints.appointments.new, reqBody, {
       headers: { Authorization: `Bearer ${accessToken}`, 'Accept-Language': lang },
     });
-    revalidatePath('/dashboard/appointments');
     return { success: true };
   } catch (error: any) {
     // Handle the nested error structure from the API
@@ -83,7 +82,6 @@ export const editAppointment = async (reqBody: any, id: number): Promise<any> =>
         'Content-Type': 'application/json',
       },
     });
-    revalidatePath('/dashboard/appointments');
     return { success: true };
   } catch (error) {
     // Handle the nested error structure from the API
@@ -120,7 +118,6 @@ export const deleteAppointment = async (appointmentId: number): Promise<any> => 
         headers: { Authorization: `Bearer ${accessToken}`, 'Accept-Language': lang },
       }
     );
-    revalidatePath('/dashboard/appointments');
     return { success: true };
   } catch (error: any) {
     // Handle the nested error structure from the API
@@ -162,10 +159,8 @@ export const cancelAppointment = async (appointmentId: number, reason: string): 
         },
       }
     );
-    revalidatePath('/dashboard/appointments');
     return { success: true };
   } catch (error: any) {
-
     // Handle the nested error structure from the API
     if (error && typeof error === 'object') {
       if (error.error && error.error.message) {

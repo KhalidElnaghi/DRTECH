@@ -16,7 +16,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
 import { useTranslate } from 'src/locales';
-import { cancelAppointment } from 'src/actions/appointments';
+import { useCancelAppointment } from 'src/hooks/use-appointments-query';
 
 // ----------------------------------------------------------------------
 
@@ -38,6 +38,9 @@ export default function CancelAppointmentDialog({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmCancellation, setConfirmCancellation] = useState(false);
 
+  // React Query mutation
+  const cancelAppointmentMutation = useCancelAppointment();
+
   const handleSubmit = async () => {
     if (!reason.trim()) {
       enqueueSnackbar(t('MESSAGE.CANCELLATION_REASON_REQUIRED'), { variant: 'error' });
@@ -56,20 +59,16 @@ export default function CancelAppointmentDialog({
 
     setIsSubmitting(true);
     try {
-      const result = await cancelAppointment(appointmentId, reason.trim());
+      await cancelAppointmentMutation.mutateAsync({ appointmentId, reason: reason.trim() });
 
-      if (result?.error) {
-        enqueueSnackbar(result.error, { variant: 'error' });
-      } else {
-        enqueueSnackbar(t('MESSAGE.APPOINTMENT_CANCELLED_SUCCESS'), { variant: 'success' });
-        setReason('');
-        setConfirmCancellation(false);
-        onSuccess?.();
-        onClose();
-      }
-    } catch (error) {
+      enqueueSnackbar(t('MESSAGE.APPOINTMENT_CANCELLED_SUCCESS'), { variant: 'success' });
+      setReason('');
+      setConfirmCancellation(false);
+      onSuccess?.();
+      onClose();
+    } catch (error: any) {
       console.error('Error cancelling appointment:', error);
-      enqueueSnackbar(t('MESSAGE.CANCELLATION_FAILED'), { variant: 'error' });
+      enqueueSnackbar(error?.message || 'Failed to cancel appointment', { variant: 'error' });
     } finally {
       setIsSubmitting(false);
     }
@@ -136,7 +135,7 @@ export default function CancelAppointmentDialog({
           error={reason.length > 0 && reason.length < 10}
         />
 
-        <Box sx={{  display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <FormControlLabel
             control={
               <Checkbox
@@ -147,7 +146,6 @@ export default function CancelAppointmentDialog({
               />
             }
             label={t('MESSAGE.CONFIRMATION_CHECKBOX_LABEL')}
-
           />
         </Box>
       </DialogContent>

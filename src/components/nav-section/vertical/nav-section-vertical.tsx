@@ -62,6 +62,7 @@ function Group({ subheader, items, slotProps }: NavGroupProps) {
               '&:hover': {
                 color: 'text.primary',
               },
+              textTransform: 'none',
               ...slotProps?.subheader,
             }}
           >
