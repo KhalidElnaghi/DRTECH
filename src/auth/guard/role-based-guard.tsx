@@ -24,7 +24,7 @@ export default function RoleBasedGuard({ hasContent, roles, children, sx }: Role
   const { user } = useAuthContext();
 
   // const currentRole = 'user';
-  const currentRole = user?.role; // admin;
+  const currentRole = user?.Role; // admin;
 
   // COMMENTED OUT: Role-based access control temporarily disabled
   // if (typeof roles !== 'undefined' && currentRole !== undefined && !roles.includes(currentRole)) {

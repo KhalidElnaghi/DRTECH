@@ -46,9 +46,9 @@ export default function NavMini() {
 
         <NavSectionMini
           data={navData}
-          slotProps={{
-            userModules: user?.modules,
-          }}
+          // slotProps={{
+          //   userModules: user?.Modules,
+          // }}
         />
       </Stack>
     </Box>

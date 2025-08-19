@@ -55,9 +55,9 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
       <Logo sx={{ my: 1 }} fullNav />
       <NavSectionVertical
         data={navData}
-        slotProps={{
-          userModules: user?.modules,
-        }}
+        // slotProps={{
+        //   userModules: user?.modules,
+        // }}
       />
       <Box sx={{ flexGrow: 1 }} />
     </Scrollbar>

@@ -32,7 +32,7 @@ export type AuthUserType = null | User;
 
 // API Response Types
 export interface LoginResponse {
-  data: User;
+  Data: User;
   isSuccess: boolean;
   statusCode: number;
   error: {
