@@ -29,12 +29,13 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fFullDate } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
-import { deleteAppointment } from 'src/actions/appointments';
+import { deleteAppointment, cancelAppointment } from 'src/actions/appointments';
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import AppointmentDialog from 'src/components/dialogs/appointment-dialog';
+import CancelAppointmentDialog from 'src/components/dialogs/cancel-appointment-dialog';
 
 import { IDoctor } from 'src/types/doctors';
 import { ILookup } from 'src/types/lookups';
@@ -146,6 +147,7 @@ export default function AppointmentsPage({
   const [selectedId, setSelectedId] = useState<number>(0);
   const confirmDelete = useBoolean();
   const [isDeleting, setIsDeleting] = useState(false);
+  const [openCancelDialog, setOpenCancelDialog] = useState(false);
 
   // Initialize filters from URL params on component mount
   useEffect(() => {
@@ -169,6 +171,16 @@ export default function AppointmentsPage({
   const handleCloseAddDialog = () => {
     setOpenAddDialog(false);
     setSelectedAppointment(undefined);
+  };
+
+  const handleOpenCancelDialog = (appointmentId: number) => {
+    setSelectedId(appointmentId);
+    setOpenCancelDialog(true);
+  };
+
+  const handleCloseCancelDialog = () => {
+    setOpenCancelDialog(false);
+    setSelectedId(0);
   };
 
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -216,7 +228,6 @@ export default function AppointmentsPage({
   };
 
   const handleFilterChange = (field: keyof FilterState, value: string) => {
-
     const newFilters = {
       ...filters,
       [field]: value,
@@ -1182,6 +1193,9 @@ export default function AppointmentsPage({
                 setSelectedAppointment(item);
                 handleOpenAddDialog();
               },
+              hide: (item: IAppointment) =>
+                item.appointmenStatusName === 'Cancelled' ||
+                item.appointmenStatusName === 'Completed',
             },
             {
               sx: { color: 'error.dark' },
@@ -1191,15 +1205,18 @@ export default function AppointmentsPage({
                 setSelectedId(item.id);
                 confirmDelete.onTrue();
               },
+              hide: (item: IAppointment) =>
+                item.appointmenStatusName === 'Cancelled' ||
+                item.appointmenStatusName === 'Completed',
             },
             {
               sx: { color: 'error.dark' },
               label: t('LABEL.CANCEL'),
               icon: 'line-md:cancel-twotone',
               onClick: (item: any) => {
-                setSelectedId(item.id);
-                // confirmBlock.onTrue();
+                handleOpenCancelDialog(item.id);
               },
+              hide: (item: IAppointment) => item.appointmenStatusName === 'Cancelled',
             },
             // {
             //   sx: { color: 'info.dark' },
@@ -1275,6 +1292,19 @@ export default function AppointmentsPage({
         appointment={selectedAppointment}
         appointmentStatus={appointmentStatus}
       />
+
+      {/* Cancel Appointment Dialog */}
+      <CancelAppointmentDialog
+        open={openCancelDialog}
+        onClose={handleCloseCancelDialog}
+        appointmentId={selectedId}
+        onSuccess={() => {
+          // Close the dialog and let the parent component handle refresh
+          // The appointment list will be updated via the API call
+          handleCloseCancelDialog();
+        }}
+      />
+
       <ConfirmDialog
         open={confirmDelete.value}
         onClose={confirmDelete.onFalse}

@@ -49,7 +49,6 @@ export const newAppointment = async (reqBody: any): Promise<any> => {
     revalidatePath('/dashboard/appointments');
     return { success: true };
   } catch (error: any) {
-
     // Handle the nested error structure from the API
     if (error && typeof error === 'object') {
       if (error.error && error.error.message) {
@@ -87,7 +86,6 @@ export const editAppointment = async (reqBody: any, id: number): Promise<any> =>
     revalidatePath('/dashboard/appointments');
     return { success: true };
   } catch (error) {
-
     // Handle the nested error structure from the API
     if (error && typeof error === 'object') {
       if (error.error && error.error.message) {
@@ -120,6 +118,48 @@ export const deleteAppointment = async (appointmentId: number): Promise<any> => 
       endpoints.appointments.deleteAppointment(appointmentId),
       {
         headers: { Authorization: `Bearer ${accessToken}`, 'Accept-Language': lang },
+      }
+    );
+    revalidatePath('/dashboard/appointments');
+    return { success: true };
+  } catch (error: any) {
+    // Handle the nested error structure from the API
+    if (error && typeof error === 'object') {
+      if (error.error && error.error.message) {
+        return {
+          error: error.error.message,
+          success: false,
+        };
+      }
+      if (error.message) {
+        return {
+          error: error.message,
+          success: false,
+        };
+      }
+    }
+
+    return {
+      error: getErrorMessage(error),
+      success: false,
+    };
+  }
+};
+
+export const cancelAppointment = async (appointmentId: number, reason: string): Promise<any> => {
+  const accessToken = cookies().get('access_token')?.value;
+  const lang = cookies().get('Language')?.value;
+
+  try {
+    const res = await axiosInstance.put(
+      `/appointments/${appointmentId}/cancel`,
+      { reason },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Accept-Language': lang,
+          'Content-Type': 'application/json',
+        },
       }
     );
     revalidatePath('/dashboard/appointments');

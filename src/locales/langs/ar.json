@@ -39,7 +39,8 @@
     "DELETE_BANNER": "حذف البانر",
     "DELETE_CLIENT": "حذف العميل",
     "DELETE_CENTER": "حذف المركز",
-    "DELETE": "حذف"
+    "DELETE": "حذف",
+    "CANCEL_APPOINTMENT": "إلغاء الموعد"
   },
   "LABEL": {
     "LOGOUT": "تسجيل الخروج",
@@ -56,7 +57,8 @@
     "CANCEL": "الغاء",
     "DELETE": "حذف",
     "CLINIC_NAME": "اسم العيادة",
-    "CLINIC_LOCATION": "عنوان العيادة"
+    "CLINIC_LOCATION": "عنوان العيادة",
+    "REASON_FOR_CANCELLATION": "سبب الإلغاء"
   },
   "BUTTON": {
     "LOGIN": "تسجيل الدخول",
@@ -86,7 +88,8 @@
     "ADD_NEIGHBORHOOD": "اضافة حي",
     "ADD_PACKAGES": "اضافه باقة",
     "UPDATE": "تعديل",
-    "CREATE_APPOINTMENT": "انشاء موعد"
+    "CREATE_APPOINTMENT": "انشاء موعد",
+    "CONFIRM_CANCELLATION": "تأكيد الإلغاء"
   },
   "SIDEBAR": {
     "MAIN": "الرئيسية",
@@ -119,7 +122,16 @@
     "APPOINTMENT_CREATED_SUCCESSFULLY": "تم إنشاء الموعد بنجاح",
     "CONFIRM_DELETE_APPOINTMENT": "هل أنت متأكد من حذف هذا الموعد؟",
     "DELETED_SUCCESS":"تم الحذف بنجاح",
-    "APPOINTMENT_UPDATED_SUCCESSFULLY": "تم تعديل الموعد بنجاح"
+    "APPOINTMENT_UPDATED_SUCCESSFULLY": "تم تعديل الموعد بنجاح",
+    "APPOINTMENT_CANCELLED_SUCCESS": "تم إلغاء الموعد بنجاح",
+    "CANCELLATION_REASON_REQUIRED": "يرجى تقديم سبب الإلغاء",
+    "CANCELLATION_FAILED": "فشل في إلغاء الموعد",
+    "CANCELLATION_DESCRIPTION": "يرجى تقديم سبب إلغاء هذا الموعد. سيتم تسجيل هذه المعلومات لأغراض إدارية.",
+    "CANCELLATION_REASON_TOO_SHORT": "يجب أن يكون سبب الإلغاء 10 أحرف على الأقل",
+    "CONFIRMATION_REQUIRED": "يرجى التأكيد على أنك تريد إلغاء هذا الموعد",
+    "CONFIRMATION_CHECKBOX_LABEL": "أؤكد أنني أريد إلغاء هذا الموعد"
   },
-  "PLACEHOLDER": {}
+  "PLACEHOLDER": {
+    "CANCELLATION_REASON": "أدخل سبب إلغاء هذا الموعد..."
+  }
 }

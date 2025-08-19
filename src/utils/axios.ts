@@ -83,6 +83,7 @@ export const endpoints = {
     new: '/appointments/create',
     edit: (appointmentId: number) => `/appointments/${appointmentId}`,
     deleteAppointment: (appointmentId: number) => `/appointments/${appointmentId}`,
+    cancel: (appointmentId: number) => `/appointments/${appointmentId}/cancel`,
   },
   doctors: {
     fetch: '/doctors',
