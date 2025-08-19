@@ -7,10 +7,8 @@ export const doctorKeys = {
   list: () => [...doctorKeys.lists()] as const,
 };
 
-export const useDoctors = () => {
-  return useQuery({
+export const useDoctors = () => useQuery({
     queryKey: doctorKeys.list(),
     queryFn: fetchDoctorsClient,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
-};

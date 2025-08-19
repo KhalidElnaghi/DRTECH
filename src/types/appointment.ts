@@ -1,17 +1,17 @@
 export type IAppointment = {
-  id: number;
-  patientName: string;
-  patientId: number;
-  doctorId: number;
-  doctorName: string;
-  appointmentDate: string;
-  scheduledTime?: string;
-  serviceType?: number;
-  status?: number;
-  appointmenStatusName: string;
-  notes: string;
+  Id: number;
+  PatientName: string;
+  PatientId: number;
+  DoctorId: number;
+  DoctorName: string;
+  AppointmentDate: string;
+  ScheduledTime?: string;
+  ServiceType?: number;
+  Status?: number;
+  AppointmenStatusName: string;
+  Notes: string;
   ClinicName: string;
-  clinicLocation: {
+  ClinicLocation: {
     lat: number;
     lng: number;
     location: string;

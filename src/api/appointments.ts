@@ -8,14 +8,14 @@ export interface AppointmentParams {
 }
 
 export interface AppointmentData {
-  patientId: number;
-  doctorId: number;
-  appointmentDate: string;
-  scheduledTime?: string;
-  serviceType?: number;
+  PatientId: number;
+  DoctorId: number;
+  AppointmentDate: string;
+  ScheduledTime?: string;
+  ServiceType?: number;
   Status: number;
-  clinicName: string;
-  clinicLocation: {
+  ClinicName: string;
+  ClinicLocation: {
     lat: number;
     lng: number;
     location: string;

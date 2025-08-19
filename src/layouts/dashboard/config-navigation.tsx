@@ -65,6 +65,7 @@ const ICONS = {
   city: icon('healthicons:city-outline'),
   banner: icon('solar:bill-linear'),
   appointments: icon('hugeicons:appointment-02'),
+  rooms: icon('icon-park-twotone:single-bed'),
 };
 
 export function useNavData() {
@@ -76,7 +77,7 @@ export function useNavData() {
         items: [
           { title: t('SIDEBAR.MAIN'), path: paths.dashboard.root, icon: ICONS.home },
           { title: t('SIDEBAR.APPOINTMENTS'), path: paths.dashboard.appointments, icon: ICONS.appointments },
-
+          { title: t('SIDEBAR.ROOMS'), path: paths.dashboard.rooms, icon: ICONS.rooms },
         ],
       },
     ],

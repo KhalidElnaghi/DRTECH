@@ -14,21 +14,18 @@ export type ActionMapType<M extends { [index: string]: any }> = {
 };
 
 export interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  fullName: string;
-  userName: string;
-  role: number;
-  gender: number;
-  dateOfBirth: string;
-  acceptNewsLetter: boolean;
-  isLogin: boolean;
-  email: string;
-  phoneNumber: string;
-  token: string;
-  accountStatus: number;
-  modules?: string[]; // Optional modules array for user permissions
+  Id: number;
+  FirstName: string;
+  LastName: string;
+  FullName: string;
+  UserName: string;
+  Role: number;
+  Gender: number;
+  AcceptNewsLetter: boolean;
+  IsLogin: boolean;
+  Email: string;
+  Token: string;
+  AccountStatus: number;
 }
 
 export type AuthUserType = null | User;

@@ -256,11 +256,11 @@ export default function AppointmentsPage({
   const openFilter = Boolean(filterAnchorEl);
 
   const TABLE_HEAD = [
-    { id: 'patientName', label: 'LABEL.PATIENT_NAME' },
-    { id: 'doctorName', label: 'LABEL.DOCTOR_NAME' },
-    { id: 'appointmentDate', label: 'LABEL.APPOINTMENT_DATE' },
-    { id: 'appointmenStatusName', label: 'LABEL.STATUS' },
-    { id: 'notes', label: 'LABEL.NOTES' },
+    { id: 'PatientName', label: 'LABEL.PATIENT_NAME' },
+    { id: 'DoctorName', label: 'LABEL.DOCTOR_NAME' },
+    { id: 'AppointmentDate', label: 'LABEL.APPOINTMENT_DATE' },
+    { id: 'AppointmenStatusName', label: 'LABEL.STATUS' },
+    { id: 'Notes', label: 'LABEL.NOTES' },
     { id: '', label: '', width: 80 },
   ];
 
@@ -278,14 +278,18 @@ export default function AppointmentsPage({
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
 
+    console.log(selectedId);
     try {
-      await deleteAppointmentMutation.mutateAsync(selectedId);
+      const res = await deleteAppointmentMutation.mutateAsync(selectedId);
+      console.log(res);
 
       enqueueSnackbar(t('MESSAGE.DELETED_SUCCESS'), {
         variant: 'success',
       });
       confirmDelete.onFalse();
     } catch (error: any) {
+      console.log(error);
+
       enqueueSnackbar(error?.message || 'Failed to delete appointment', {
         variant: 'error',
       });
@@ -293,6 +297,7 @@ export default function AppointmentsPage({
       setIsDeleting(false);
     }
   };
+  console.log(appointments);
 
   // Show no data message if no appointments, but keep header and search/filter functionality
   if (!appointments || appointments.length === 0) {
@@ -455,9 +460,24 @@ export default function AppointmentsPage({
                     }}
                   >
                     <MenuItem value="">All Doctors</MenuItem>
-                    <MenuItem value="Dr. Smith">Dr. Smith</MenuItem>
-                    <MenuItem value="Dr. Johnson">Dr. Johnson</MenuItem>
-                    <MenuItem value="Dr. Williams">Dr. Williams</MenuItem>
+                    {doctors.map((doctor) => (
+                      <MenuItem key={doctor.Id} value={doctor.FullName}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                          }}
+                        >
+                          <Typography variant="body2">
+                            Dr.{doctor.FullName}{' '}
+                            <Typography variant="caption" color="text.secondary">
+                              ({doctor.SpecializationName})
+                            </Typography>
+                          </Typography>
+                        </Box>
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Grid>
@@ -941,21 +961,41 @@ export default function AppointmentsPage({
             <Grid container spacing={1.5}>
               {/* Doctor Name */}
               <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Doctor Name"
-                  placeholder="Enter doctor name"
-                  value={filters.doctorName}
-                  onChange={(e) => handleFilterChange('doctorName', e.target.value)}
-                  size="small"
-                  InputProps={{
-                    startAdornment: (
+                <FormControl fullWidth size="small">
+                  <InputLabel>Doctor Name</InputLabel>
+                  <Select
+                    value={filters.doctorName}
+                    onChange={(e) => handleFilterChange('doctorName', e.target.value)}
+                    label="Doctor Name"
+                    placeholder="Select doctor"
+                    startAdornment={
                       <InputAdornment position="start">
                         <Iconify icon="eva:person-fill" />
                       </InputAdornment>
-                    ),
-                  }}
-                />
+                    }
+                  >
+                    <MenuItem value="">All Doctors</MenuItem>
+                    {doctors?.map((doctor) => (
+                      <MenuItem key={doctor.Id} value={doctor.FullName}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                          }}
+                        >
+                          <Typography variant="body2">
+                            Dr.{doctor.FullName}
+                            <Typography variant="caption" color="text.secondary">
+                              {' '}
+                              ({doctor.SpecializationName})
+                            </Typography>
+                          </Typography>
+                        </Box>
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
 
               {/* Appointment Date */}
@@ -1191,7 +1231,10 @@ export default function AppointmentsPage({
         </Box>
         <SharedTable
           count={totalCount}
-          data={appointments}
+          data={appointments.map((item) => ({
+            id: item.Id,
+            ...item,
+          }))}
           tableHead={TABLE_HEAD}
           actions={[
             {
@@ -1203,8 +1246,8 @@ export default function AppointmentsPage({
                 handleOpenAddDialog();
               },
               hide: (item: IAppointment) =>
-                item.appointmenStatusName === 'Cancelled' ||
-                item.appointmenStatusName === 'Completed',
+                item.AppointmenStatusName === 'Cancelled' ||
+                item.AppointmenStatusName === 'Completed',
             },
             {
               sx: { color: 'error.dark' },
@@ -1223,8 +1266,8 @@ export default function AppointmentsPage({
                 handleOpenCancelDialog(item.id);
               },
               hide: (item: IAppointment) =>
-                item.appointmenStatusName === 'Cancelled' ||
-                item.appointmenStatusName === 'Completed',
+                item.AppointmenStatusName === 'Cancelled' ||
+                item.AppointmenStatusName === 'Completed',
             },
             // {
             //   sx: { color: 'info.dark' },
@@ -1257,9 +1300,9 @@ export default function AppointmentsPage({
             // },
           ]}
           customRender={{
-            appointmentDate: (item: IAppointment) => <Box>{fFullDate(item?.appointmentDate)}</Box>,
-            appointmenStatusName: (item: IAppointment) => {
-              const status = item?.appointmenStatusName;
+            AppointmentDate: (item: IAppointment) => <Box>{fFullDate(item?.AppointmentDate)}</Box>,
+            AppointmenStatusName: (item: IAppointment) => {
+              const status = item?.AppointmenStatusName;
               const { textColor, bgColor, borderColor } = getStatusColors(status);
 
               return (

@@ -1,12 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
 import {
+  newAppointmentClient,
+  type AppointmentData,
+  editAppointmentClient,
+  type AppointmentParams,
   fetchAppointmentsClient,
   deleteAppointmentClient,
-  editAppointmentClient,
-  newAppointmentClient,
   cancelAppointmentClient,
-  type AppointmentParams,
-  type AppointmentData,
 } from 'src/api/appointments';
 
 // Query keys for caching
@@ -41,14 +42,14 @@ export const useDeleteAppointment = () => {
 
       // Optimistically update to the new value
       queryClient.setQueriesData({ queryKey: appointmentKeys.lists() }, (old: any) => {
-        if (!old) return old;
+        if (!old || !old.data || !old.data.items) return old;
 
         return {
           ...old,
           data: {
             ...old.data,
             items: old.data.items.filter((apt: any) => apt.id !== appointmentId),
-            totalCount: old.data.totalCount - 1,
+            totalCount: Math.max(0, (old.data.totalCount || 0) - 1),
           },
         };
       });

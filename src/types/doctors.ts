@@ -1,9 +1,9 @@
 export type IDoctor = {
-  id: number;
-  fullName: string;
-  specializationId: number;
-  specializationName: string;
-  phoneNumber: string;
-  statusName: string;
-  status: number;
+  Id: number;
+  FullName: string;
+  SpecializationId: number;
+  SpecializationName: string;
+  PhoneNumber: string;
+  StatusName: string;
+  Status: number;
 };

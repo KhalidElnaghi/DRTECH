@@ -190,8 +190,8 @@ export function AuthProvider({ children }: Readonly<Props>) {
 
       const res = await axiosInstance.post<LoginResponse>(endpoints.auth.login, credentials);
 
-      const user = res.data.data;
-      const { token: accessToken } = user;
+      const user = res.data.Data;
+      const { Token: accessToken } = user;
 
       setSession(accessToken);
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;

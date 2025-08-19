@@ -1,4 +1,4 @@
 export type ILookup = {
-  id: number;
-  name: string;
+  Id: number;
+  Name: string;
 };

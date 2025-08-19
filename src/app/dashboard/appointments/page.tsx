@@ -36,13 +36,14 @@ export default function Page() {
   if (isLoading) {
     return <LoadingScreen />;
   }
+console.log(doctorsData);
 
   return (
     <AppointmentsPage
-      appointments={appointmentsData?.data?.items || []}
-      totalCount={appointmentsData?.data?.totalCount || 0}
-      doctors={doctorsData?.data?.items || []}
-      patients={patientsData?.data?.items || []}
+      appointments={appointmentsData?.Data?.Items || []}
+      totalCount={appointmentsData?.Data?.TotalCount || 0}
+      doctors={doctorsData?.Data?.Items || []}
+      patients={patientsData?.Data?.Items || []}
       services={services || []}
       appointmentStatus={appointmentStatus || []}
     />
