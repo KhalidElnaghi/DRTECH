@@ -6,10 +6,14 @@ export type IAppointment = {
   doctorName: string;
   appointmentDate: string;
   scheduledTime?: string;
-  serviceType?:number;
-  appointmenStatus: number;
+  serviceType?: number;
   status?: number;
   appointmenStatusName: string;
   notes: string;
+  ClinicName: string;
+  clinicLocation: {
+    lat: number;
+    lng: number;
+    location: string;
+  };
 };
-

@@ -54,7 +54,9 @@
     "EDIT": "تعديل",
     "THIS_FIELD_IS_REQUIRED": "هذا الحقل مطلوب",
     "CANCEL": "الغاء",
-    "DELETE": "حذف"
+    "DELETE": "حذف",
+    "CLINIC_NAME": "اسم العيادة",
+    "CLINIC_LOCATION": "عنوان العيادة"
   },
   "BUTTON": {
     "LOGIN": "تسجيل الدخول",
@@ -116,7 +118,8 @@
   "MESSAGE": {
     "APPOINTMENT_CREATED_SUCCESSFULLY": "تم إنشاء الموعد بنجاح",
     "CONFIRM_DELETE_APPOINTMENT": "هل أنت متأكد من حذف هذا الموعد؟",
-    "DELETED_SUCCESS":"تم الحذف بنجاح"
+    "DELETED_SUCCESS":"تم الحذف بنجاح",
+    "APPOINTMENT_UPDATED_SUCCESSFULLY": "تم تعديل الموعد بنجاح"
   },
   "PLACEHOLDER": {}
 }

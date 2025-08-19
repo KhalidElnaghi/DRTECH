@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { enqueueSnackbar } from 'notistack';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
@@ -16,31 +17,29 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import InputLabel from '@mui/material/InputLabel';
+import LoadingButton from '@mui/lab/LoadingButton';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
+import { useBoolean } from 'src/hooks/use-boolean';
+
 import { fFullDate } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
-import { AppointmentIcon } from 'src/assets/icons';
+import { deleteAppointment } from 'src/actions/appointments';
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 
 import Iconify from 'src/components/iconify';
-import EmptyState from 'src/components/empty-state/EmptyState';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import AppointmentDialog from 'src/components/dialogs/appointment-dialog';
 
-// import { useSettingsContext } from 'src/components/settings';
-import { IAppointment } from 'src/types/appointment';
 import { IDoctor } from 'src/types/doctors';
-import { IPatient } from 'src/types/patients';
 import { ILookup } from 'src/types/lookups';
-import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useBoolean } from 'src/hooks/use-boolean';
-import { enqueueSnackbar } from 'notistack';
-import { deleteAppointment } from 'src/actions/appointments';
+import { IPatient } from 'src/types/patients';
+import { IAppointment } from 'src/types/appointment';
 
 // ----------------------------------------------------------------------
 interface IProps {
@@ -144,8 +143,9 @@ export default function AppointmentsPage({
   const { t } = useTranslate();
   // const settings = useSettingsContext();
   const [selectedAppointment, setSelectedAppointment] = useState<IAppointment | undefined>();
-  const [selectedId, setSelectedId] = useState<string>('');
+  const [selectedId, setSelectedId] = useState<number>(0);
   const confirmDelete = useBoolean();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Initialize filters from URL params on component mount
   useEffect(() => {
@@ -261,18 +261,19 @@ export default function AppointmentsPage({
     searchParams.get('AppointmentDate') ||
     searchParams.get('Status');
 
-
-    const handleConfirmDelete = async () => {
-      const res = await deleteAppointment(selectedId);
-      if (res?.error) {
-        enqueueSnackbar(`${res?.error}`, { variant: 'error' });
-      } else {
-        enqueueSnackbar(t('MESSAGE.DELETED_SUCCESS'), {
-          variant: 'success',
-        });
-      }
-      confirmDelete.onFalse();
-    };
+  const handleConfirmDelete = async () => {
+    setIsDeleting(true);
+    const res = await deleteAppointment(selectedId);
+    setIsDeleting(false);
+    if (res?.error) {
+      enqueueSnackbar(`${res?.error}`, { variant: 'error' });
+    } else {
+      enqueueSnackbar(t('MESSAGE.DELETED_SUCCESS'), {
+        variant: 'success',
+      });
+    }
+    confirmDelete.onFalse();
+  };
 
   // Show no data message if no appointments, but keep header and search/filter functionality
   if (!appointments || appointments.length === 0) {
@@ -722,6 +723,7 @@ export default function AppointmentsPage({
           patients={patients}
           services={services}
           appointmentStatus={appointmentStatus}
+          appointment={null}
         />
       </>
     );
@@ -1280,7 +1282,7 @@ export default function AppointmentsPage({
         title={t('TITLE.DELETE')}
         content={t('MESSAGE.CONFIRM_DELETE_APPOINTMENT')}
         action={
-          <Button
+          <LoadingButton
             sx={{
               width: 175,
               height: 56,
@@ -1292,12 +1294,13 @@ export default function AppointmentsPage({
               },
             }}
             variant="contained"
+            loading={isDeleting}
             onClick={() => {
               handleConfirmDelete();
             }}
           >
             {t('BUTTON.DELETE')}
-          </Button>
+          </LoadingButton>
         }
       />
     </>

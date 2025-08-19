@@ -50,7 +50,9 @@
     "EDIT": "Edit",
     "THIS_FIELD_IS_REQUIRED": "This field is required",
     "CANCEL": "Cancel",
-    "DELETE": "Delete"
+    "DELETE": "Delete",
+    "CLINIC_NAME": "Clinic Name",
+    "CLINIC_LOCATION": "Clinic Location"
   },
   "BUTTON": {
     "LOGIN": "Login",
@@ -112,7 +114,8 @@
   "MESSAGE": {
     "APPOINTMENT_CREATED_SUCCESSFULLY": "Appointment created successfully",
     "CONFIRM_DELETE_APPOINTMENT": "Are you sure you want to delete this appointment?",
-    "DELETED_SUCCESS": "Deleted successfully"
+    "DELETED_SUCCESS": "Deleted successfully",
+    "APPOINTMENT_UPDATED_SUCCESSFULLY": "Appointment updated successfully"
   },
   "PLACEHOLDER": {}
 }

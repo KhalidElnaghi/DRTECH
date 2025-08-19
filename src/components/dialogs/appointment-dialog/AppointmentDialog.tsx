@@ -31,7 +31,7 @@ import { IDoctor } from 'src/types/doctors';
 import { IPatient } from 'src/types/patients';
 import { ILookup } from 'src/types/lookups';
 import { IAppointment } from 'src/types/appointment';
-import { newAppointment } from 'src/actions/appointments';
+import { editAppointment, newAppointment } from 'src/actions/appointments';
 
 interface AppointmentDialogProps {
   open: boolean;
@@ -39,7 +39,7 @@ interface AppointmentDialogProps {
   doctors: IDoctor[];
   patients: IPatient[];
   services: ILookup[];
-  appointment?: IAppointment;
+  appointment?: IAppointment | null;
   appointmentStatus: ILookup[];
 }
 
@@ -54,6 +54,27 @@ export default function AppointmentDialog({
 }: AppointmentDialogProps) {
   const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
+  console.log(appointment);
+  console.log(appointmentStatus);
+
+  // Helper function to combine date and time
+  const combineDateAndTime = (date: Date, time: Date): Date => {
+    const combined = new Date(date);
+    combined.setHours(time.getHours(), time.getMinutes(), time.getSeconds());
+    return combined;
+  };
+
+  // Helper function to format datetime without timezone conversion
+  const formatDateTimeLocal = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`;
+  };
 
   const methods = useForm({
     resolver: yupResolver(
@@ -66,7 +87,7 @@ export default function AppointmentDialog({
           .number()
           .required(t('LABEL.THIS_FIELD_IS_REQUIRED'))
           .min(1, t('LABEL.THIS_FIELD_IS_REQUIRED')),
-        status: yup
+        Status: yup
           .number()
           .required(t('LABEL.THIS_FIELD_IS_REQUIRED'))
           .min(1, t('LABEL.THIS_FIELD_IS_REQUIRED')),
@@ -77,6 +98,12 @@ export default function AppointmentDialog({
         appointmentDate: yup.date().required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
         // .min(yup.ref('startDate'), t('LABEL.END_DATE_MUST_BE_AFTER_START_DATE')),
         scheduledTime: yup.date().required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
+        clinicName: yup.string().required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
+        clinicLocation: yup.object().shape({
+          lat: yup.number().required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
+          lng: yup.number().required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
+          location: yup.string().required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
+        }),
         notes: yup.string(),
       })
     ),
@@ -87,8 +114,14 @@ export default function AppointmentDialog({
         ? new Date(appointment.appointmentDate)
         : new Date(),
       scheduledTime: appointment?.scheduledTime ? new Date(appointment.scheduledTime) : new Date(),
-      status: appointment?.appointmenStatus || 0,
+      Status: appointment?.status || 0,
       serviceType: appointment?.serviceType || 0,
+      clinicName: appointment?.ClinicName || '',
+      clinicLocation: appointment?.clinicLocation || {
+        lat: 0,
+        lng: 0,
+        location: '',
+      },
       notes: appointment?.notes || '',
     },
     mode: 'onChange',
@@ -105,16 +138,30 @@ export default function AppointmentDialog({
   // // Reset form when appointment changes (for edit mode)
   useEffect(() => {
     if (appointment) {
+      // Set appointmentDate from appointment.appointmentDate
+      const appointmentDateTime = appointment.appointmentDate
+        ? new Date(appointment.appointmentDate)
+        : new Date();
+
+      // Set scheduledTime from appointment.scheduledTime if it exists, otherwise use current time
+      const scheduledTimeValue = appointment.scheduledTime
+        ? new Date(appointment.scheduledTime)
+        : new Date();
+
       const formData = {
         patientId: appointment.patientId || undefined,
         doctorId: appointment.doctorId || undefined,
-        appointmentDate: appointment.appointmentDate
-          ? new Date(appointment.appointmentDate)
-          : new Date(),
-        scheduledTime: appointment.scheduledTime ? new Date(appointment.scheduledTime) : new Date(),
+        appointmentDate: appointmentDateTime,
+        scheduledTime: scheduledTimeValue, // Use the actual scheduledTime, not extracted from appointmentDate
         // Handle both status fields (there's a typo in the type)
-        status: appointment.status || appointment.appointmenStatus || undefined,
+        Status: appointment.status || undefined,
         serviceType: appointment.serviceType || undefined,
+        clinicName: appointment.ClinicName || '',
+        clinicLocation: appointment.clinicLocation || {
+          lat: 0,
+          lng: 0,
+          location: '',
+        },
         notes: appointment.notes || '',
       };
       reset(formData);
@@ -125,33 +172,52 @@ export default function AppointmentDialog({
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log('Form submitted with data:', data);
-
       if (appointment) {
-        // const res = await editAppointment(data);
-        // console.log(res);
-        // if (res?.error) {
-        //   enqueueSnackbar(`${res?.error}`, { variant: 'error' });
-        // } else {
-        //   enqueueSnackbar(t('MESSAGE.COUPON_CREATED_SUCCESSFULLY'), {
-        //     variant: 'success',
-        //   });
-        //   onClose();
-        // }
+        // Combine the user's selected date with their selected time
+        const combinedDateTime = combineDateAndTime(data.appointmentDate, data.scheduledTime);
+        console.log('User selected date:', data.appointmentDate);
+        console.log('User selected time:', data.scheduledTime);
+        console.log('Combined datetime:', combinedDateTime.toISOString());
+
+        const serializedData = {
+          ...data,
+          appointmentDate: formatDateTimeLocal(combinedDateTime), // Send as single variable without timezone conversion
+          scheduledTime: formatDateTimeLocal(combinedDateTime), // Also send scheduledTime without timezone conversion
+          Notes: data.notes || '',
+        };
+        delete serializedData.notes;
+        console.log('Final data sent (with scheduledTime):', serializedData);
+        const res = await editAppointment(serializedData, appointment?.id);
+
+        if (res?.error) {
+          enqueueSnackbar(`${res.error}`, { variant: 'error' });
+        } else if (res?.success === false) {
+          enqueueSnackbar(`${res.error}`, { variant: 'error' });
+        } else {
+          enqueueSnackbar(
+            t('MESSAGE.APPOINTMENT_UPDATED_SUCCESSFULLY') || 'Appointment updated successfully',
+            {
+              variant: 'success',
+            }
+          );
+          onClose();
+          reset();
+        }
       } else {
+        // Combine the user's selected date with their selected time
+        const combinedDateTime = combineDateAndTime(data.appointmentDate, data.scheduledTime);
+        console.log('User selected date:', data.appointmentDate);
+        console.log('User selected time:', data.scheduledTime);
+        console.log('Combined datetime:', combinedDateTime.toISOString());
+
         // Serialize the data to prevent circular reference issues
         const serializedData = {
           ...data,
-          appointmentDate:
-            data.appointmentDate instanceof Date
-              ? data.appointmentDate.toISOString()
-              : data.appointmentDate,
-          scheduledTime:
-            data.scheduledTime instanceof Date
-              ? data.scheduledTime.toISOString()
-              : data.scheduledTime,
+          appointmentDate: formatDateTimeLocal(combinedDateTime), // Send as single variable without timezone conversion
+          scheduledTime: formatDateTimeLocal(combinedDateTime), // Also send scheduledTime without timezone conversion
         };
 
+        console.log('Final data sent (with scheduledTime):', serializedData);
         const res = await newAppointment(serializedData);
 
         if (res?.error) {
@@ -308,11 +374,110 @@ export default function AppointmentDialog({
                   color: '#666D80',
                 }}
               >
+                Clinic Name
+              </Typography>
+              <RHFTextField
+                name="clinicName"
+                InputLabelProps={{ shrink: true }}
+                sx={{ flexGrow: 1 }}
+              />
+            </Box>
+
+            <Box>
+              <Typography
+                sx={{
+                  fontFamily: 'Inter Tight',
+                  fontWeight: 400,
+                  fontStyle: 'normal',
+                  fontSize: '12px',
+                  lineHeight: '150%',
+                  letterSpacing: '2%',
+                  mb: 1,
+                  color: '#666D80',
+                }}
+              >
+                Clinic Location
+              </Typography>
+              <RHFTextField
+                name="clinicLocation.location"
+                InputLabelProps={{ shrink: true }}
+                sx={{ flexGrow: 1 }}
+              />
+            </Box>
+
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: 1,
+                justifyContent: 'space-between',
+              }}
+            >
+              <Box sx={{ flex: 1 }}>
+                <Typography
+                  sx={{
+                    fontFamily: 'Inter Tight',
+                    fontWeight: 400,
+                    fontStyle: 'normal',
+                    fontSize: '12px',
+                    lineHeight: '150%',
+                    letterSpacing: '2%',
+                    mb: 1,
+                    color: '#666D80',
+                  }}
+                >
+                  Latitude
+                </Typography>
+                <RHFTextField
+                  name="clinicLocation.lat"
+                  placeholder="0.0"
+                  // type="number"
+                  InputLabelProps={{ shrink: true }}
+                  sx={{ flexGrow: 1 }}
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <Typography
+                  sx={{
+                    fontFamily: 'Inter Tight',
+                    fontWeight: 400,
+                    fontStyle: 'normal',
+                    fontSize: '12px',
+                    lineHeight: '150%',
+                    letterSpacing: '2%',
+                    mb: 1,
+                    color: '#666D80',
+                  }}
+                >
+                  Longitude
+                </Typography>
+                <RHFTextField
+                  name="clinicLocation.lng"
+                  placeholder="0.0"
+                  InputLabelProps={{ shrink: true }}
+                  sx={{ flexGrow: 1 }}
+                />
+              </Box>
+            </Box>
+
+            <Box>
+              <Typography
+                sx={{
+                  fontFamily: 'Inter Tight',
+                  fontWeight: 400,
+                  fontStyle: 'normal',
+                  fontSize: '12px',
+                  lineHeight: '150%',
+                  letterSpacing: '2%',
+                  mb: 1,
+                  color: '#666D80',
+                }}
+              >
                 Status
               </Typography>
               <RHFSelect
                 placeholder={t('LABEL.STATUS')}
-                name="status"
+                name="Status"
                 InputLabelProps={{ shrink: true }}
                 sx={{ flexGrow: 1 }}
               >

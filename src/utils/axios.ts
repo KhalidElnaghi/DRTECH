@@ -81,7 +81,8 @@ export const endpoints = {
   appointments: {
     fetch: '/appointments',
     new: '/appointments/create',
-    deleteAppointment: (appointmentId: string) => `/appointments/${appointmentId}`,
+    edit: (appointmentId: number) => `/appointments/${appointmentId}`,
+    deleteAppointment: (appointmentId: number) => `/appointments/${appointmentId}`,
   },
   doctors: {
     fetch: '/doctors',
