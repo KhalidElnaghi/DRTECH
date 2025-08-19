@@ -73,7 +73,7 @@ export default function AppointmentDialog({
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
 
-    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`;
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
   };
 
   const methods = useForm({
@@ -113,7 +113,18 @@ export default function AppointmentDialog({
       appointmentDate: appointment?.appointmentDate
         ? new Date(appointment.appointmentDate)
         : new Date(),
-      scheduledTime: appointment?.scheduledTime ? new Date(appointment.scheduledTime) : new Date(),
+      scheduledTime: (() => {
+        if (appointment?.appointmentDate) {
+          const appointmentDate = new Date(appointment.appointmentDate);
+          const scheduledTime = new Date();
+          scheduledTime.setHours(appointmentDate.getHours());
+          scheduledTime.setMinutes(appointmentDate.getMinutes());
+          scheduledTime.setSeconds(appointmentDate.getSeconds());
+          scheduledTime.setMilliseconds(appointmentDate.getMilliseconds());
+          return scheduledTime;
+        }
+        return new Date();
+      })(),
       Status: appointment?.status || 0,
       serviceType: appointment?.serviceType || 0,
       clinicName: appointment?.ClinicName || '',
@@ -143,10 +154,20 @@ export default function AppointmentDialog({
         ? new Date(appointment.appointmentDate)
         : new Date();
 
-      // Set scheduledTime from appointment.scheduledTime if it exists, otherwise use current time
-      const scheduledTimeValue = appointment.scheduledTime
-        ? new Date(appointment.scheduledTime)
-        : new Date();
+      // Extract time from appointmentDate and set as scheduledTime default
+      let scheduledTimeValue: Date;
+      if (appointment.appointmentDate) {
+        const appointmentDate = new Date(appointment.appointmentDate);
+        // Create a new Date object with the time from appointmentDate
+        scheduledTimeValue = new Date();
+        scheduledTimeValue.setHours(appointmentDate.getHours());
+        scheduledTimeValue.setMinutes(appointmentDate.getMinutes());
+        scheduledTimeValue.setSeconds(appointmentDate.getSeconds());
+        scheduledTimeValue.setMilliseconds(appointmentDate.getMilliseconds());
+      } else {
+        // Fallback to current time if no appointmentDate
+        scheduledTimeValue = new Date();
+      }
 
       const formData = {
         patientId: appointment.patientId || undefined,
