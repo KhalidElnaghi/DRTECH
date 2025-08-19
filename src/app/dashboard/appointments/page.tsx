@@ -26,9 +26,7 @@ export default async function Page({ searchParams }: Readonly<props>) {
   const patients = await fetchPatients({});
   const services = await fetchLookups('service-types');
   const appointmentStatus = await fetchLookups('appointment-status');
-  console.log(doctors.data.items);
-  console.log(patients.data.items);
-  console.log(services);
+
 
 
   return (

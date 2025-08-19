@@ -32,14 +32,6 @@ export function SettingsProvider({ children, defaultSettings }: SettingsProvider
     const shouldBeRTL = currentLang === 'ar';
     const currentDirection = state.themeDirection;
 
-    console.log(
-      'Settings Provider - Language:',
-      currentLang,
-      'Current Direction:',
-      currentDirection,
-      'Should be RTL:',
-      shouldBeRTL
-    );
 
     // Only update if the direction doesn't match the language
     if (

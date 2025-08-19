@@ -24,7 +24,6 @@ export const fetchDoctors = async ({ page = 1 }: IParams): Promise<any> => {
     });
     return res?.data;
   } catch (error) {
-    console.log(error);
 
     // throw new Error(error);
   }

@@ -54,8 +54,7 @@ export default function AppointmentDialog({
 }: AppointmentDialogProps) {
   const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
-  console.log(appointment);
-  console.log(appointmentStatus);
+
 
   // Helper function to combine date and time
   const combineDateAndTime = (date: Date, time: Date): Date => {
@@ -196,9 +195,7 @@ export default function AppointmentDialog({
       if (appointment) {
         // Combine the user's selected date with their selected time
         const combinedDateTime = combineDateAndTime(data.appointmentDate, data.scheduledTime);
-        console.log('User selected date:', data.appointmentDate);
-        console.log('User selected time:', data.scheduledTime);
-        console.log('Combined datetime:', combinedDateTime.toISOString());
+
 
         const serializedData = {
           ...data,
@@ -207,7 +204,6 @@ export default function AppointmentDialog({
           Notes: data.notes || '',
         };
         delete serializedData.notes;
-        console.log('Final data sent (with scheduledTime):', serializedData);
         const res = await editAppointment(serializedData, appointment?.id);
 
         if (res?.error) {
@@ -227,9 +223,7 @@ export default function AppointmentDialog({
       } else {
         // Combine the user's selected date with their selected time
         const combinedDateTime = combineDateAndTime(data.appointmentDate, data.scheduledTime);
-        console.log('User selected date:', data.appointmentDate);
-        console.log('User selected time:', data.scheduledTime);
-        console.log('Combined datetime:', combinedDateTime.toISOString());
+
 
         // Serialize the data to prevent circular reference issues
         const serializedData = {
@@ -238,7 +232,6 @@ export default function AppointmentDialog({
           scheduledTime: formatDateTimeLocal(combinedDateTime), // Also send scheduledTime without timezone conversion
         };
 
-        console.log('Final data sent (with scheduledTime):', serializedData);
         const res = await newAppointment(serializedData);
 
         if (res?.error) {

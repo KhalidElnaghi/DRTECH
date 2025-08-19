@@ -216,8 +216,7 @@ export default function AppointmentsPage({
   };
 
   const handleFilterChange = (field: keyof FilterState, value: string) => {
-    console.log('field', field);
-    console.log('value', value);
+
     const newFilters = {
       ...filters,
       [field]: value,
