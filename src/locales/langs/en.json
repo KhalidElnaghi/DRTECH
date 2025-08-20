@@ -101,7 +101,8 @@
     "DOCTORS": "Doctors",
     "PATIENTS": "Patients",
     "INPATIENTS": "Inpatients",
-    "USERS": "Users"
+    "USERS": "Users",
+    "SETTINGS": "Settings"
   },
   "TABLE": {
     "DENSE": "Dense",

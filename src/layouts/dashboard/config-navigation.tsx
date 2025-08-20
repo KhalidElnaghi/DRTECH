@@ -43,7 +43,7 @@ const ICONS = {
   appPages: icon('gravity-ui:square-bars-vertical'),
   reports: icon('oui:app-reporting'),
   loyaltySystem: icon('material-symbols:loyalty-outline'),
-  settings: icon('teenyicons:cog-outline'),
+  settings: icon('cuida:settings-outline'),
   sliders: icon('ph:sliders'),
   workingArea: icon('mdi:locations'),
   reasons: icon('ph:question'),
@@ -96,10 +96,11 @@ export function useNavData() {
         subheader:"Settings",
         items: [
           { title: t('SIDEBAR.USERS'), path: paths.dashboard.users, icon: ICONS.users },
+          { title: t('SIDEBAR.SETTINGS'), path: paths.dashboard.settings, icon: ICONS.settings },
 
         ],
       },
-    ], 
+    ],
     [t]
   );
 
