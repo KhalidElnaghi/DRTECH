@@ -99,7 +99,8 @@
     "APPOINTMENTS": "Appointments",
     "ROOMS": "Rooms",
     "DOCTORS": "Doctors",
-    "PATIENTS": "Patients"
+    "PATIENTS": "Patients",
+    "INPATIENTS": "Inpatients"
   },
   "TABLE": {
     "DENSE": "Dense",
@@ -139,7 +140,9 @@
     "ROOM_CREATED_SUCCESSFULLY": "Room created successfully",
     "ROOM_UPDATED_SUCCESSFULLY": "Room updated successfully",
     "DOCTOR_CREATED_SUCCESSFULLY": "Doctor created successfully",
-    "DOCTOR_UPDATED_SUCCESSFULLY": "Doctor updated successfully"
+    "DOCTOR_UPDATED_SUCCESSFULLY": "Doctor updated successfully",
+    "INPATIENT_CREATED_SUCCESSFULLY": "Inpatient created successfully",
+    "INPATIENT_UPDATED_SUCCESSFULLY": "Inpatient updated successfully"
   },
   "PLACEHOLDER": {
     "CANCELLATION_REASON": "Enter the reason for cancelling this appointment..."
@@ -217,6 +220,33 @@
   "ERROR": {
     "ROOM_DUPLICATE": "A room with the same number already exists",
     "UNEXPECTED_ERROR": "An unexpected error occurred"
+  },
+  "INPATIENT": {
+    "INPATIENTS": "Inpatients",
+    "ADD_INPATIENT": "Add New Inpatient",
+    "EDIT_INPATIENT": "Edit Inpatient",
+    "PATIENT_NAME": "Patient Name",
+    "ROOM_NUMBER": "Room Number",
+    "ADMISSION_DATE": "Admission Date",
+    "DISCHARGE_DATE": "Discharge Date",
+    "DIAGNOSIS": "Diagnosis",
+    "SELECT_PATIENT": "Select a patient",
+    "SELECT_ROOM": "Select a room",
+    "ENTER_DIAGNOSIS": "Enter patient diagnosis",
+    "DELETE_INPATIENT": "Delete Inpatient",
+    "DELETE_INPATIENT_CONFIRMATION": "Are you sure you want to delete this inpatient?",
+    "SEARCH_INPATIENTS": "Search patient name, room number, or diagnosis...",
+    "NO_INPATIENTS_YET": "No inpatients yet",
+    "ADD_INPATIENT_MESSAGE": "You haven't added any inpatients yet. Start by adding a new one.",
+    "ADD_NEW_INPATIENT": "Add New Inpatient",
+    "PATIENT_REQUIRED": "Patient is required",
+    "ROOM_REQUIRED": "Room is required",
+    "ADMISSION_DATE_REQUIRED": "Admission date is required",
+    "DISCHARGE_DATE_REQUIRED": "Discharge date is required",
+    "DIAGNOSIS_REQUIRED": "Diagnosis is required",
+    "DISCHARGE_DATE_MUST_BE_AFTER_ADMISSION_DATE": "Discharge date must be after admission date",
+    "INPATIENT_CREATED_SUCCESSFULLY": "Inpatient created successfully",
+    "INPATIENT_UPDATED_SUCCESSFULLY": "Inpatient updated successfully"
   },
   "AVAILABILITY_STATUS": "Availability Status"
 }

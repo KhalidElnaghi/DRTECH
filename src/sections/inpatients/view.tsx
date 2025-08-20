@@ -1,0 +1,309 @@
+'use client';
+
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+
+import {
+  Box,
+  Chip,
+  Grid,
+  Stack,
+  Paper,
+  Button,
+  Select,
+  Popover,
+  MenuItem,
+  TextField,
+  Typography,
+  InputLabel,
+  IconButton,
+  FormControl,
+  InputAdornment,
+} from '@mui/material';
+
+import { useBoolean } from 'src/hooks/use-boolean';
+import { useDeleteInpatient } from 'src/hooks/use-inpatients-query';
+
+import { useTranslate } from 'src/locales';
+import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
+
+import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
+import InpatientDialog from 'src/components/dialogs/inpatient-dialog';
+
+import { IRoom } from 'src/types/room';
+import { IPatient } from 'src/types/patient';
+import { IInpatient } from 'src/types/inpatient';
+
+interface IProps {
+  inpatients: IInpatient[];
+  totalCount: number;
+  patients: IPatient[];
+  rooms: IRoom[];
+}
+
+const formatDateLocal = (dateString: string) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+};
+
+export default function InpatientsPage({ inpatients, totalCount, patients, rooms }: IProps) {
+  const [openAddDialog, setOpenAddDialog] = useState(false);
+
+  const { t } = useTranslate();
+  const [selectedInpatient, setSelectedInpatient] = useState<IInpatient | undefined>();
+  const [selectedId, setSelectedId] = useState<number>(0);
+  const confirmDelete = useBoolean();
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // React Query mutations
+  const deleteInpatientMutation = useDeleteInpatient();
+
+  const handleOpenAddDialog = () => {
+    setSelectedInpatient(undefined); // Clear any previously selected inpatient
+    setOpenAddDialog(true);
+  };
+
+  const handleCloseAddDialog = () => {
+    setOpenAddDialog(false);
+    setSelectedInpatient(undefined);
+  };
+
+  const handleEditInpatient = (inpatient: IInpatient) => {
+    setSelectedInpatient(inpatient);
+    setOpenAddDialog(true);
+  };
+
+  const handleDeleteInpatient = async (inpatientId: number) => {
+    try {
+      setIsDeleting(true);
+      await deleteInpatientMutation.mutateAsync(inpatientId);
+      confirmDelete.onFalse();
+      setIsDeleting(false);
+    } catch (error) {
+      console.error('Delete inpatient error:', error);
+      setIsDeleting(false);
+    }
+  };
+
+  // Table configuration for SharedTable
+  const TABLE_HEAD = [
+    { id: 'PatientName', label: 'Patient Name' },
+    { id: 'RoomNumber', label: 'Room Number' },
+    { id: 'AdmissionDate', label: 'Admission Date' },
+    { id: 'DischargeDate', label: 'Discharge Date' },
+    { id: 'Diagnosis', label: 'Diagnosis' },
+    { id: '', label: '', width: 80 },
+  ];
+
+  // Show no data message if no inpatients, but keep header and search/filter functionality
+  if (!inpatients || inpatients.length === 0) {
+    return (
+      <>
+        {/* No Data Found Message */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            py: 8,
+            px: 2,
+            textAlign: 'center',
+          }}
+        >
+          <Box
+            component="img"
+            src="/assets/images/inpatients/icon.svg"
+            alt="No data found"
+            sx={{
+              width: 144,
+              height: 144,
+              mb: 3,
+            }}
+          />
+
+          <Typography variant="h5" sx={{ mb: 1, color: 'text.secondary' }}>
+            No inpatients yet
+          </Typography>
+          <Typography variant="body1" sx={{ mb: 3, color: 'text.secondary', maxWidth: 400 }}>
+            You haven&apos;t added any inpatients yet. Start by adding a new one.
+          </Typography>
+          <Button variant="contained" onClick={handleOpenAddDialog} sx={{ mb: 2 }}>
+            Add New Inpatient
+          </Button>
+        </Box>
+
+        {/* Inpatient Dialog */}
+        <InpatientDialog
+          key={selectedInpatient ? `edit-${selectedInpatient.Id}` : 'new-inpatient'}
+          open={openAddDialog}
+          onClose={handleCloseAddDialog}
+          patients={patients}
+          rooms={rooms}
+          inpatient={null}
+        />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Stack spacing={3}>
+        {/* Header Section */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            mb: 3,
+            pt: 1,
+          }}
+        >
+          <Box>
+            <Typography variant="h4" sx={{ mb: 1, fontWeight: 'bold' }}>
+              Inpatients
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Latest updates from the past 7 days.{' '}
+            </Typography>
+          </Box>
+          <Button
+            variant="contained"
+            size="large"
+            onClick={handleOpenAddDialog}
+            sx={{
+              bgcolor: 'primary.main',
+              color: 'white',
+              borderRadius: 1,
+              fontWeight: 500,
+              '&:hover': {
+                bgcolor: 'primary.dark',
+              },
+            }}
+          >
+            Add New Inpatient
+          </Button>
+        </Box>
+
+        {/* Search and Filter Bar */}
+        <Paper
+          elevation={1}
+          sx={{
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: 2,
+            px: 0,
+            mb: 1,
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              px: 2,
+              py: 2,
+            }}
+          >
+            <Box>
+              <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
+                Inpatients
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Inpatients Table using SharedTable */}
+          <SharedTable
+            count={totalCount}
+            data={inpatients.map((inpatient) => ({
+              id: inpatient.Id,
+              ...inpatient,
+            }))}
+            tableHead={TABLE_HEAD}
+            actions={[
+              // {
+              //   sx: { color: 'primary.main' },
+              //   label: 'Edit',
+              //   icon: 'solar:pen-bold',
+              //   onClick: (inpatient: IInpatient) => handleEditInpatient(inpatient),
+              // },
+              {
+                sx: { color: 'error.dark' },
+                label: 'Delete',
+                icon: 'material-symbols:delete-outline-rounded',
+                onClick: (inpatient: IInpatient) => {
+                  setSelectedId(inpatient.Id);
+                  confirmDelete.onTrue();
+                },
+              },
+            ]}
+            customRender={{
+              AdmissionDate: ({ AdmissionDate }: IInpatient) => (
+                <Box>{formatDateLocal(AdmissionDate)}</Box>
+              ),
+              DischargeDate: ({ DischargeDate }: IInpatient) => (
+                <Box>{formatDateLocal(DischargeDate)}</Box>
+              ),
+              Diagnosis: ({ Diagnosis }: IInpatient) => (
+                <Box
+                  sx={{
+                    maxWidth: 200,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                  title={Diagnosis}
+                >
+                  {Diagnosis}
+                </Box>
+              ),
+            }}
+          />
+        </Paper>
+      </Stack>
+
+      {/* Inpatient Dialog */}
+      <InpatientDialog
+        key={selectedInpatient ? `edit-${selectedInpatient.Id}` : 'new-inpatient'}
+        open={openAddDialog}
+        onClose={handleCloseAddDialog}
+        patients={patients}
+        rooms={rooms}
+        inpatient={selectedInpatient}
+      />
+
+      {/* Confirm Delete Dialog */}
+      <ConfirmDialog
+        open={confirmDelete.value}
+        onClose={confirmDelete.onFalse}
+        title="Delete Inpatient"
+        content="Are you sure you want to delete this inpatient?"
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => handleDeleteInpatient(selectedId)}
+            disabled={isDeleting}
+            sx={{
+              width: 175,
+              height: 56,
+              borderRadius: 2,
+              padding: '8px 16px',
+              bgcolor: '#DF1C41',
+              '&:hover': {
+                bgcolor: '#DF1C60',
+              },
+            }}
+          >
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </Button>
+        }
+      />
+    </>
+  );
+}

@@ -398,7 +398,7 @@ export default function RoomDialog({
             disabled={isSubmitting || !isFormReady}
             color="primary"
           >
-            {room ? t('COMMON.UPDATE_STATUS') || 'Update Status' : t('COMMON.CREATE') || 'Create'}
+            {room ? 'Update Status' : 'Add Room'}
           </LoadingButton>
         </DialogActions>
       </FormProvider>

@@ -28,5 +28,6 @@ export const paths = {
     rooms: `${ROOTS.DASHBOARD}/rooms`,
     doctors: `${ROOTS.DASHBOARD}/doctors`,
     patients: `${ROOTS.DASHBOARD}/patients`,
+    inpatients: `${ROOTS.DASHBOARD}/inpatients`,
   },
 };

@@ -68,6 +68,7 @@ const ICONS = {
   rooms: icon('icon-park-twotone:single-bed'),
   doctors: icon('fa7-solid:user-doctor'),
   patients: icon('ic:baseline-people'),
+  inpatients: icon('fa6-solid:bed-pulse'),
 };
 
 export function useNavData() {
@@ -87,6 +88,7 @@ export function useNavData() {
         items: [
           { title: t('SIDEBAR.DOCTORS'), path: paths.dashboard.doctors, icon: ICONS.doctors },
           { title: t('SIDEBAR.PATIENTS'), path: paths.dashboard.patients, icon: ICONS.patients },
+          { title: t('SIDEBAR.INPATIENTS'), path: paths.dashboard.inpatients, icon: ICONS.inpatients },
         ],
       },
     ],

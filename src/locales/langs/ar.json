@@ -103,7 +103,8 @@
     "APPOINTMENTS": "المواعيد",
     "ROOMS": "الغرف",
     "DOCTORS": "الطبيب",
-    "PATIENTS": "المرضى"
+    "PATIENTS": "المرضى",
+    "INPATIENTS": "المرضى الداخليين"
   },
   "TABLE": {
     "DENSE": "تكديس",
@@ -186,6 +187,33 @@
   "ERROR": {
     "ROOM_DUPLICATE": "غرفة بنفس الرقم موجودة بالفعل",
     "UNEXPECTED_ERROR": "حدث خطأ غير متوقع"
+  },
+  "INPATIENT": {
+    "INPATIENTS": "المرضى المقيمين",
+    "ADD_INPATIENT": "إضافة مريض مقيم جديد",
+    "EDIT_INPATIENT": "تعديل مريض مقيم",
+    "PATIENT_NAME": "اسم المريض",
+    "ROOM_NUMBER": "رقم الغرفة",
+    "ADMISSION_DATE": "تاريخ الدخول",
+    "DISCHARGE_DATE": "تاريخ الخروج",
+    "DIAGNOSIS": "التشخيص",
+    "SELECT_PATIENT": "اختر مريض",
+    "SELECT_ROOM": "اختر غرفة",
+    "ENTER_DIAGNOSIS": "أدخل تشخيص المريض",
+    "DELETE_INPATIENT": "حذف مريض مقيم",
+    "DELETE_INPATIENT_CONFIRMATION": "هل أنت متأكد من حذف هذا المريض المقيم؟",
+    "SEARCH_INPATIENTS": "البحث في اسم المريض أو رقم الغرفة أو التشخيص...",
+    "NO_INPATIENTS_YET": "لا يوجد مرضى مقيمين بعد",
+    "ADD_INPATIENT_MESSAGE": "لم تقم بإضافة أي مرضى مقيمين بعد. ابدأ بإضافة واحد جديد.",
+    "ADD_NEW_INPATIENT": "إضافة مريض مقيم جديد",
+    "PATIENT_REQUIRED": "المريض مطلوب",
+    "ROOM_REQUIRED": "الغرفة مطلوبة",
+    "ADMISSION_DATE_REQUIRED": "تاريخ الدخول مطلوب",
+    "DISCHARGE_DATE_REQUIRED": "تاريخ الخروج مطلوب",
+    "DIAGNOSIS_REQUIRED": "التشخيص مطلوب",
+    "DISCHARGE_DATE_MUST_BE_AFTER_ADMISSION_DATE": "يجب أن يكون تاريخ الخروج بعد تاريخ الدخول",
+    "INPATIENT_CREATED_SUCCESSFULLY": "تم إنشاء المريض المقيم بنجاح",
+    "INPATIENT_UPDATED_SUCCESSFULLY": "تم تحديث المريض المقيم بنجاح"
   },
   "AVAILABILITY_STATUS": "حالة التواجد"
 }

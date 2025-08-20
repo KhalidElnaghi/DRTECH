@@ -107,6 +107,12 @@ export const endpoints = {
     delete: (patientId: string) => `/patients/${patientId}`,
     archive: (patientId: string) => `/patients/${patientId}/archive`,
   },
+  inpatients: {
+    fetch: '/inpatients',
+    new: '/inpatients/create',
+    edit: (inpatientId: number) => `/inpatients/${inpatientId}`,
+    delete: (inpatientId: number) => `/inpatients/${inpatientId}`,
+  },
   lookups: {
     fetch: (type: string) => `/lookups/${type}`,
   },

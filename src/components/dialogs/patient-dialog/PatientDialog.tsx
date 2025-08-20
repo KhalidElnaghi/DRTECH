@@ -106,21 +106,9 @@ export default function PatientDialog({
     trigger,
     control,
     reset,
-    watch,
-    setValue,
+
     formState: { isSubmitting, errors },
   } = methods;
-
-  // Watch form values for debugging
-  const watchedValues = watch();
-
-  // Debug: Log form values and errors
-  useEffect(() => {
-    if (open && patient) {
-      console.log('Form values after reset:', watchedValues);
-      console.log('Form errors:', errors);
-    }
-  }, [watchedValues, errors, open, patient]);
 
   // Reset form when patient changes (for edit mode) or when dialog opens
   useEffect(() => {
@@ -138,11 +126,9 @@ export default function PatientDialog({
             Address: patient.Address || '',
             DateOfBirth: patient.DateOfBirth ? new Date(patient.DateOfBirth) : new Date(),
           };
-          console.log('Setting form data for edit:', formData);
           reset(formData, { keepDefaultValues: false, keepErrors: false, keepDirty: false });
         } else {
           // For create mode, reset to empty form
-          console.log('Resetting form for create mode');
           reset(defaultValues, { keepDefaultValues: false, keepErrors: false, keepDirty: false });
         }
       }, 100);
@@ -161,7 +147,6 @@ export default function PatientDialog({
   }, [open, reset, defaultValues]);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('Form submission started with data:', data);
     try {
       if (patient) {
         // Convert form data to PatientData type (Date to string)
@@ -171,7 +156,6 @@ export default function PatientDialog({
           DateOfBirth: data.DateOfBirth ? data.DateOfBirth.toISOString().split('T')[0] : '',
         };
 
-        console.log('Updating patient with data:', patientData);
         await editPatientMutation.mutateAsync({ id: patient.Id, data: patientData });
 
         onClose();
@@ -183,7 +167,6 @@ export default function PatientDialog({
           DateOfBirth: data.DateOfBirth ? data.DateOfBirth.toISOString().split('T')[0] : '',
         };
 
-        console.log('Creating patient with data:', patientData);
         await newPatientMutation.mutateAsync(patientData);
 
         onClose();
@@ -461,7 +444,7 @@ export default function PatientDialog({
             color="primary"
             disabled={isSubmitting}
           >
-            {patient ? t('BUTTON.UPDATE') || 'Update' : t('BUTTON.CREATE') || 'Create Patient'}
+            {patient ? 'Update Patient' : 'Add Patient'}
           </LoadingButton>
         </DialogActions>
       </FormProvider>

@@ -207,7 +207,7 @@ const DoctorDialog = ({
         ? t('COMMON.UPDATING') || 'Updating...'
         : t('COMMON.CREATING') || 'Creating...';
     }
-    return isEditing ? t('COMMON.UPDATE') || 'Update' : t('COMMON.CREATE') || 'Create';
+    return isEditing ? 'Update Doctor' : 'Add Doctor';
   };
 
   return (
@@ -441,6 +441,7 @@ const DoctorDialog = ({
           </Button>
           <Button
             type="submit"
+            color="primary"
             variant="contained"
             disabled={
               isSubmitting || createDoctorMutation.isPending || updateDoctorMutation.isPending
