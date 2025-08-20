@@ -93,7 +93,8 @@
   },
   "SIDEBAR": {
     "MAIN": "الرئيسية",
-    "APPOINTMENTS": "المواعيد"
+    "APPOINTMENTS": "المواعيد",
+    "ROOMS": "الغرف"
   },
   "TABLE": {
     "DENSE": "تكديس",
@@ -121,7 +122,7 @@
   "MESSAGE": {
     "APPOINTMENT_CREATED_SUCCESSFULLY": "تم إنشاء الموعد بنجاح",
     "CONFIRM_DELETE_APPOINTMENT": "هل أنت متأكد من حذف هذا الموعد؟",
-    "DELETED_SUCCESS":"تم الحذف بنجاح",
+    "DELETED_SUCCESS": "تم الحذف بنجاح",
     "APPOINTMENT_UPDATED_SUCCESSFULLY": "تم تعديل الموعد بنجاح",
     "APPOINTMENT_CANCELLED_SUCCESS": "تم إلغاء الموعد بنجاح",
     "CANCELLATION_REASON_REQUIRED": "يرجى تقديم سبب الإلغاء",
@@ -129,9 +130,52 @@
     "CANCELLATION_DESCRIPTION": "يرجى تقديم سبب إلغاء هذا الموعد. سيتم تسجيل هذه المعلومات لأغراض إدارية.",
     "CANCELLATION_REASON_TOO_SHORT": "يجب أن يكون سبب الإلغاء 10 أحرف على الأقل",
     "CONFIRMATION_REQUIRED": "يرجى التأكيد على أنك تريد إلغاء هذا الموعد",
-    "CONFIRMATION_CHECKBOX_LABEL": "أؤكد أنني أريد إلغاء هذا الموعد"
+    "CONFIRMATION_CHECKBOX_LABEL": "أؤكد أنني أريد إلغاء هذا الموعد",
+    "ROOM_CREATED_SUCCESSFULLY": "تم إنشاء الغرفة بنجاح",
+    "ROOM_UPDATED_SUCCESSFULLY": "تم تحديث الغرفة بنجاح"
   },
   "PLACEHOLDER": {
     "CANCELLATION_REASON": "أدخل سبب إلغاء هذا الموعد..."
+  },
+  "ROOM": {
+    "ROOMS": "الغرف",
+    "ADD_ROOM": "إضافة غرفة جديدة",
+    "EDIT_ROOM": "تعديل الغرفة",
+    "ROOM_NUMBER": "رقم الغرفة",
+    "FLOOR": "الطابق",
+    "ROOM_TYPE": "نوع الغرفة",
+    "ROOM_STATUS": "حالة الغرفة",
+    "ENTER_ROOM_NUMBER": "أدخل رقم الغرفة",
+    "ENTER_FLOOR": "أدخل الطابق",
+    "SELECT_ROOM_TYPE": "اختر نوع الغرفة",
+    "SELECT_ROOM_STATUS": "اختر حالة الغرفة",
+    "DELETE_ROOM": "حذف الغرفة",
+    "DELETE_ROOM_CONFIRMATION": "هل أنت متأكد من حذف هذه الغرفة؟",
+    "DISABLE_ROOM": "تعطيل الغرفة",
+    "DISABLE_ROOM_CONFIRMATION": "هل أنت متأكد من تعطيل هذه الغرفة؟",
+    "ARCHIVE_ROOM": "أرشفة الغرفة",
+    "ARCHIVE_ROOM_CONFIRMATION": "هل أنت متأكد من أرشفة هذه الغرفة؟",
+    "SEARCH_ROOM_NUMBER": "البحث عن رقم الغرفة...",
+    "SEARCH_FLOOR": "البحث عن الطابق..."
+  },
+  "COMMON": {
+    "ALL": "الكل",
+    "APPLY": "تطبيق",
+    "RESET": "إعادة تعيين",
+    "CANCEL": "إلغاء",
+    "CREATE": "إنشاء",
+    "UPDATE": "تحديث",
+    "EDIT": "تعديل",
+    "DELETE": "حذف",
+    "DISABLE": "تعطيل",
+    "ARCHIVE": "أرشفة",
+    "DELETING": "جاري الحذف...",
+    "ACTIONS": "الإجراءات",
+    "CREATED_AT": "تاريخ الإنشاء",
+    "UPDATE_STATUS": "تحديث الحالة"
+  },
+  "ERROR": {
+    "ROOM_DUPLICATE": "غرفة بنفس الرقم موجودة بالفعل",
+    "UNEXPECTED_ERROR": "حدث خطأ غير متوقع"
   }
 }

@@ -233,31 +233,51 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
   };
 
   const getStatusColor = (status: number) => {
+    let textColor = 'text.secondary';
+    let bgColor = 'grey.100';
+    let borderColor = 'grey.100';
     switch (status) {
-      case 1: // Available
-        return 'success';
-      case 2: // Occupied
-        return 'error';
-      case 3: // Maintenance
-        return 'warning';
-      case 4: // Disabled
-        return 'default';
+      case 1:
+        textColor = '#28806F';
+        bgColor = '#EFFEFA';
+        borderColor = '#DDF3EF';
+        break;
+      case 2:
+        textColor = '#A77B2E';
+        bgColor = '#FFF6E0';
+        borderColor = '#FAEDCC';
+        break;
+      case 3:
+        textColor = '#B21634';
+        bgColor = '#FEF3F2';
+        borderColor = '#FECDCA';
+        break;
+      case 4:
+        textColor = '#003768';
+        bgColor = '#F0F8FF';
+        borderColor = '#B3D9FF';
+        break;
+      case 5:
+        textColor = '#A52A2A';
+        bgColor = '#FFF0F0';
+        borderColor = '#FF8080';
+        break;
+      case 6:
+        textColor = '#1F2937';
+        bgColor = '#F3F4F6';
+        borderColor = '#9CA3AF';
+        break;
+      case 7:
+        textColor = '#006C9C';
+        bgColor = '#CAFDF5';
+        borderColor = '#B3D9FF';
+        break;
       default:
-        return 'default';
+        textColor = 'text.secondary';
+        bgColor = 'grey.100';
+        borderColor = '#DDF3EF';
     }
-  };
-
-  const getTypeColor = (type: number) => {
-    switch (type) {
-      case 1: // Single
-        return 'primary';
-      case 2: // Double
-        return 'secondary';
-      case 3: // Suite
-        return 'info';
-      default:
-        return 'default';
-    }
+    return { textColor, bgColor, borderColor };
   };
 
   // Table configuration for SharedTable
@@ -279,200 +299,6 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
   if (!rooms || rooms.length === 0) {
     return (
       <>
-        {/* Header Section */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            mb: 3,
-            pt: 1,
-          }}
-        >
-          <Box>
-            <Typography variant="h4" sx={{ mb: 1, fontWeight: 'bold' }}>
-              {t('ROOM.ROOMS') || 'Rooms'}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Manage and monitor all rooms in the facility.
-            </Typography>
-          </Box>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={handleOpenAddDialog}
-            sx={{
-              bgcolor: 'primary.main',
-              color: 'white',
-              borderRadius: 1,
-              fontWeight: 500,
-              '&:hover': {
-                bgcolor: 'primary.dark',
-              },
-            }}
-          >
-            {t('ROOM.ADD_ROOM') || 'Add Room'}
-          </Button>
-        </Box>
-
-        {/* Search and Filter Bar */}
-        <Paper
-          elevation={1}
-          sx={{
-            border: '1px solid',
-            borderColor: 'divider',
-            borderRadius: 2,
-            px: 0,
-            mb: 1,
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              px: 2,
-              py: 2,
-            }}
-          >
-            <Box>
-              <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
-                {t('ROOM.ROOMS') || 'Rooms'}
-              </Typography>
-            </Box>
-
-            {/* Search and Filter Bar */}
-            <Box
-              sx={{
-                display: 'flex',
-                gap: 1.5,
-                alignItems: 'center',
-              }}
-            >
-              {/* Search Bar */}
-              <TextField
-                placeholder="Search room number, floor, or type..."
-                value={filters.searchTerm}
-                onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
-                sx={{ flexGrow: 1, maxWidth: 600, width: '100%' }}
-                size="small"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Iconify icon="eva:search-fill" />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-
-              {/* Filter Icon Button */}
-              <IconButton
-                onClick={handleFilterClick}
-                sx={{
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  borderRadius: 1,
-                  p: 1,
-                  boxShadow: '0 2px 12px rgba(25, 118, 210, 0.4), 0 0 20px rgba(25, 118, 210, 0.1)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    borderColor: 'primary.main',
-                    bgcolor: 'primary.50',
-                    boxShadow:
-                      '0 6px 24px rgba(25, 118, 210, 0.6), 0 0 30px rgba(25, 118, 210, 0.2)',
-                    transform: 'translateY(-3px)',
-                  },
-                }}
-              >
-                <Iconify icon="majesticons:filter-line" width={20} height={20} />
-              </IconButton>
-            </Box>
-          </Box>
-
-          {/* Filter Popup */}
-          <Popover
-            open={openFilter}
-            anchorEl={filterAnchorEl}
-            onClose={handleFilterClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            PaperProps={{
-              sx: {
-                width: 400,
-                p: 2,
-                mt: 1,
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
-                borderRadius: 2,
-              },
-            }}
-          >
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-                Filter by Status
-              </Typography>
-            </Box>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Room Status</InputLabel>
-                  <Select
-                    value={filters.status}
-                    label="Room Status"
-                    onChange={(e) => handleFilterChange('status', Number(e.target.value))}
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <Iconify icon="eva:flag-fill" />
-                      </InputAdornment>
-                    }
-                  >
-                    <MenuItem value={0}>All Statuses</MenuItem>
-                    {roomStatus?.map((status) => (
-                      <MenuItem key={status.Id} value={status.Id}>
-                        {status.Name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-
-            {/* Active Filters Display */}
-            {filters.status > 0 && (
-              <Box sx={{ mt: 1.5, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                <Typography variant="body2" sx={{ alignSelf: 'center', mr: 1 }}>
-                  Active filters:
-                </Typography>
-                {filters.status > 0 && (
-                  <Chip
-                    label={`Status: ${roomStatus?.find((status) => status.Id === filters.status)?.Name || ''}`}
-                    onDelete={() => handleFilterChange('status', 0)}
-                    color="primary"
-                    variant="outlined"
-                    size="small"
-                  />
-                )}
-              </Box>
-            )}
-
-            {/* Action Buttons */}
-            <Box sx={{ mt: 2, display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
-              <Button variant="outlined" onClick={handleFilterReset} size="small">
-                Reset
-              </Button>
-              <Button variant="contained" onClick={handleFilterClose} size="small">
-                Apply
-              </Button>
-            </Box>
-          </Popover>
-        </Paper>
-
         {/* No Data Found Message */}
         <Box
           sx={{
@@ -494,7 +320,6 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
                 width: 144,
                 height: 144,
                 mb: 3,
-                opacity: 0.6,
               }}
             />
           )}
@@ -547,7 +372,7 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
               {t('ROOM.ROOMS') || 'Rooms'}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Manage and monitor all rooms in the facility.
+              Latest updates from the past 7 days.{' '}
             </Typography>
           </Box>
           <Button
@@ -564,7 +389,7 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
               },
             }}
           >
-            {t('ROOM.ADD_ROOM') || 'Add Room'}
+            {t('ROOM.ADD_ROOM') || 'Add New Room'}
           </Button>
         </Box>
 
@@ -724,10 +549,9 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
               </Button>
             </Box>
           </Popover>
-        </Paper>
 
-        {/* Rooms Table using SharedTable */}
-        <Card>
+          {/* Rooms Table using SharedTable */}
+
           <SharedTable
             count={totalCount}
             data={rooms.map((room) => ({
@@ -743,37 +567,54 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
                 onClick: (room: IRoom) => handleEditRoom(room),
               },
               {
-                sx: { color: 'warning.main' },
+                sx: { color: 'error.dark' },
                 label: t('COMMON.DISABLE') || 'Disable',
                 icon: 'eva:slash-fill',
                 onClick: (room: IRoom) => handleOpenDisableDialog(room.Id),
-                hide: (room: IRoom) => room.Status === 4, // Hide if already disabled
+                hide: (room: IRoom) => room.Status === 6, // Hide if already disabled
               },
               {
-                sx: { color: 'info.main' },
+                sx: { color: 'warning.main' },
                 label: t('COMMON.ARCHIVE') || 'Archive',
                 icon: 'eva:archive-fill',
                 onClick: (room: IRoom) => handleOpenArchiveDialog(room.Id),
-                hide: (room: IRoom) => room.IsArchived, // Hide if already archived
+                hide: (room: IRoom) => room.Status === 7, // Hide if already archived
               },
-              {
-                sx: { color: 'error.dark' },
-                label: t('COMMON.DELETE') || 'Delete',
-                icon: 'material-symbols:delete-outline-rounded',
-                onClick: (room: IRoom) => {
-                  setSelectedId(room.Id);
-                  confirmDelete.onTrue();
-                },
-              },
+              // {
+              //   sx: { color: 'error.dark' },
+              //   label: t('COMMON.DELETE') || 'Delete',
+              //   icon: 'material-symbols:delete-outline-rounded',
+              //   onClick: (room: IRoom) => {
+              //     setSelectedId(room.Id);
+              //     confirmDelete.onTrue();
+              //   },
+              // },
             ]}
             customRender={{
               StatusName: ({ StatusName, Status }: IRoom) => (
-                <Chip label={StatusName} color={getStatusColor(Status) as any} size="small" />
+                <Box
+                  sx={{
+                    display: 'inline-block',
+                    px: 1.5,
+                    py: 0.5,
+                    borderRadius: 1,
+                    fontSize: '0.8rem',
+                    fontWeight: 500,
+                    textAlign: 'center',
+                    minWidth: 80,
+                    color: getStatusColor(Status).textColor,
+                    backgroundColor: getStatusColor(Status).bgColor,
+                    borderColor: getStatusColor(Status).borderColor,
+                    border: `1px solid ${getStatusColor(Status).borderColor}`,
+                  }}
+                >
+                  {StatusName}
+                </Box>
               ),
               CreatedAt: ({ CreatedAt }: IRoom) => <Box>{formatDateLocal(CreatedAt)}</Box>,
             }}
           />
-        </Card>
+        </Paper>
       </Stack>
 
       {/* Room Dialog */}
@@ -813,7 +654,11 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
           t('ROOM.DISABLE_ROOM_CONFIRMATION') || 'Are you sure you want to disable this room?'
         }
         action={
-          <Button variant="contained" color="warning" onClick={() => handleDisableRoom(selectedId)}>
+          <Button
+            variant="contained"
+            sx={{ width: 175, height: 56, borderRadius: 2, padding: '8px 16px' }}
+            onClick={() => handleDisableRoom(selectedId)}
+          >
             {t('COMMON.DISABLE') || 'Disable'}
           </Button>
         }
@@ -828,7 +673,12 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
           t('ROOM.ARCHIVE_ROOM_CONFIRMATION') || 'Are you sure you want to archive this room?'
         }
         action={
-          <Button variant="contained" color="info" onClick={() => handleArchiveRoom(selectedId)}>
+          <Button
+            variant="contained"
+            sx={{ width: 175, height: 56, borderRadius: 2, padding: '8px 16px' }}
+            color="info"
+            onClick={() => handleArchiveRoom(selectedId)}
+          >
             {t('COMMON.ARCHIVE') || 'Archive'}
           </Button>
         }

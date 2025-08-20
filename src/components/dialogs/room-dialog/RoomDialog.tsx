@@ -18,6 +18,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  TextField,
 } from '@mui/material';
 
 import { useTranslate } from 'src/locales';
@@ -29,6 +30,9 @@ import RHFTextField from 'src/components/hook-form/rhf-text-field-form';
 import { ILookup } from 'src/types/lookups';
 import { IRoom, RoomData } from 'src/types/room';
 import { useEditRoom, useNewRoom } from 'src/hooks/use-rooms-query';
+
+// Partial type for editing room status only
+type PartialRoomData = Partial<RoomData>;
 
 interface RoomDialogProps {
   open: boolean;
@@ -56,6 +60,7 @@ export default function RoomDialog({
   const { enqueueSnackbar } = useSnackbar();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isFormReady, setIsFormReady] = useState(false);
 
   const editRoomMutation = useEditRoom();
   const newRoomMutation = useNewRoom();
@@ -68,20 +73,71 @@ export default function RoomDialog({
       Type: 0,
       Status: 0,
     },
+    mode: 'onSubmit', // Change to onSubmit to prevent premature validation
   });
 
-  const { handleSubmit, reset, control } = methods;
+  const { handleSubmit, reset, control, watch } = methods;
+
+  // Watch the Floor field to debug the issue
+  const floorValue = watch('Floor');
+  const formValues = watch();
+  console.log('Current Floor value:', floorValue);
+  console.log('Current form values:', formValues);
+
+  // Monitor dialog open state
+  useEffect(() => {
+    if (open && room) {
+      console.log('Dialog opened with room data:', room);
+      console.log('Current form values:', methods.getValues());
+
+      // Force set the Floor value if it's not set correctly
+      if (room.Floor && !methods.getValues().Floor) {
+        console.log('Force setting Floor value:', room.Floor);
+        methods.setValue('Floor', room.Floor);
+      }
+
+      // Also check other fields
+      if (room.RoomNumber && !methods.getValues().RoomNumber) {
+        console.log('Force setting RoomNumber value:', room.RoomNumber);
+        methods.setValue('RoomNumber', room.RoomNumber);
+      }
+
+      // Check Type and Status fields
+      if (room.Type && !methods.getValues().Type) {
+        console.log('Force setting Type value:', room.Type);
+        methods.setValue('Type', room.Type);
+      }
+
+      if (room.Status && !methods.getValues().Status) {
+        console.log('Force setting Status value:', room.Status);
+        methods.setValue('Status', room.Status);
+      }
+    }
+  }, [open, room, methods]);
 
   useEffect(() => {
     console.log('RoomDialog useEffect - room:', room);
     if (room) {
       console.log('Setting form for edit mode:', room);
-      reset({
-        RoomNumber: room.RoomNumber,
-        Floor: room.Floor,
-        Type: room.Type,
-        Status: room.Status, 
-      });
+      const formData = {
+        RoomNumber: room.RoomNumber || '',
+        Floor: room.Floor || '',
+        Type: room.Type || 0,
+        Status: room.Status || 0,
+      };
+      console.log('Form data to set:', formData);
+
+      // Reset form with the room data
+      reset(formData);
+
+      // Verify the form values were set correctly
+      setTimeout(() => {
+        const currentValues = methods.getValues();
+        console.log('Form values after reset:', currentValues);
+        console.log('Floor value after reset:', currentValues.Floor);
+      }, 100);
+
+      setIsFormReady(true);
     } else {
       console.log('Setting form for new room mode');
       // Reset to default values for new room
@@ -91,15 +147,18 @@ export default function RoomDialog({
         Type: 0,
         Status: 0,
       });
+      setIsFormReady(true);
     }
-  }, [room, reset]);
+  }, [room, reset, methods]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       setIsSubmitting(true);
 
       if (room) {
-        await editRoomMutation.mutateAsync({ reqBody: data, id: room.Id });
+        // When editing, only send the Status field since others are read-only
+        const editData: PartialRoomData = { Status: data.Status };
+        await editRoomMutation.mutateAsync({ reqBody: editData as RoomData, id: room.Id });
 
         enqueueSnackbar(t('MESSAGE.ROOM_UPDATED_SUCCESSFULLY') || 'Room updated successfully', {
           variant: 'success',
@@ -107,6 +166,12 @@ export default function RoomDialog({
         onClose();
         reset();
       } else {
+        // For new rooms, validate all required fields
+        if (!data.RoomNumber || !data.Floor || !data.Type || !data.Status) {
+          enqueueSnackbar('Please fill in all required fields', { variant: 'error' });
+          return;
+        }
+
         console.log('data', data);
         await newRoomMutation.mutateAsync(data);
 
@@ -123,9 +188,15 @@ export default function RoomDialog({
       // Handle API error responses
       let errorMessage = 'An unexpected error occurred';
 
-      if (error?.error?.message) {
-        // Handle the specific error from the API (when axios interceptor returns error.response.data)
+      // Handle the specific error from the API (when axios interceptor returns error.response.data)
+      if (error?.Error?.Message) {
+        errorMessage = error.Error.Message;
+      } else if (error?.error?.message) {
+        // Fallback for different error structures
         errorMessage = error.error.message;
+      } else if (error?.response?.data?.Error?.Message) {
+        // Another fallback for error structure
+        errorMessage = error.response.data.Error.Message;
       } else if (error?.response?.data?.error?.message) {
         // Handle the specific error from the API (fallback)
         errorMessage = error.response.data.error.message;
@@ -159,7 +230,9 @@ export default function RoomDialog({
         }}
       >
         <Typography variant="h6">
-          {room ? t('ROOM.EDIT_ROOM') || 'Edit Room' : t('ROOM.ADD_ROOM') || 'Add Room'}
+          {room
+            ? t('ROOM.EDIT_ROOM_STATUS') || 'Edit Room Status'
+            : t('ROOM.ADD_ROOM') || 'Add Room'}
         </Typography>
         <IconButton
           onClick={onClose}
@@ -193,13 +266,26 @@ export default function RoomDialog({
                   color: '#666D80',
                 }}
               >
-                {t('ROOM.ROOM_NUMBER') || 'Room Number'}
+                {t('ROOM.ROOM_NUMBER') || 'Room Number'} {room && '(Read Only)'}
               </Typography>
-              <RHFTextField
+
+              <Controller
+                key={room?.Id || 'new-room'}
                 name="RoomNumber"
-                placeholder={t('ROOM.ENTER_ROOM_NUMBER') || 'Enter room number'}
-                InputLabelProps={{ shrink: true }}
-                sx={{ flexGrow: 1 }}
+                control={control}
+                defaultValue={room?.RoomNumber || ''}
+                render={({ field, fieldState: { error } }) => (
+                  <TextField
+                    {...field}
+                    placeholder={t('ROOM.ENTER_ROOM_NUMBER') || 'Enter room number'}
+                    InputLabelProps={{ shrink: true }}
+                    sx={{ flexGrow: 1, width: '100%' }}
+                    error={!!error}
+                    helperText={error?.message}
+                    fullWidth
+                    disabled={!!room} // Disable when editing existing room
+                  />
+                )}
               />
             </Box>
 
@@ -216,13 +302,25 @@ export default function RoomDialog({
                   color: '#666D80',
                 }}
               >
-                {t('ROOM.FLOOR') || 'Floor'}
+                {t('ROOM.FLOOR') || 'Floor'} {room && '(Read Only)'}
               </Typography>
-              <RHFTextField
+              <Controller
+                key={room?.Id || 'new-room'}
                 name="Floor"
-                placeholder={t('ROOM.ENTER_FLOOR') || 'Enter floor'}
-                InputLabelProps={{ shrink: true }}
-                sx={{ flexGrow: 1 }}
+                control={control}
+                defaultValue={room?.Floor || ''}
+                render={({ field, fieldState: { error } }) => (
+                  <TextField
+                    {...field}
+                    placeholder={t('ROOM.ENTER_FLOOR') || 'Enter floor'}
+                    InputLabelProps={{ shrink: true }}
+                    sx={{ flexGrow: 1, width: '100%' }}
+                    error={!!error}
+                    helperText={error?.message}
+                    fullWidth
+                    disabled={!!room} // Disable when editing existing room
+                  />
+                )}
               />
             </Box>
 
@@ -239,7 +337,7 @@ export default function RoomDialog({
                   color: '#666D80',
                 }}
               >
-                {t('ROOM.ROOM_TYPE') || 'Room Type'}
+                {t('ROOM.ROOM_TYPE') || 'Room Type'} {room && '(Read Only)'}
               </Typography>
               <Controller
                 name="Type"
@@ -252,6 +350,7 @@ export default function RoomDialog({
                     helperText={error?.message}
                     InputLabelProps={{ shrink: true }}
                     sx={{ flexGrow: 1 }}
+                    disabled={!!room} // Disable when editing existing room
                   >
                     {roomTypes.map((type) => (
                       <MenuItem key={type.Id} value={type.Id}>
@@ -317,10 +416,10 @@ export default function RoomDialog({
             type="submit"
             variant="contained"
             loading={isSubmitting}
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isFormReady}
             color="primary"
           >
-            {room ? t('COMMON.UPDATE') || 'Update' : t('COMMON.CREATE') || 'Create'}
+            {room ? t('COMMON.UPDATE_STATUS') || 'Update Status' : t('COMMON.CREATE') || 'Create'}
           </LoadingButton>
         </DialogActions>
       </FormProvider>

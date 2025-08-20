@@ -38,7 +38,10 @@ export default function ConfirmDialog({
         },
       }}
     >
-      <Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />
+      {typeof content === 'string' && content.includes('delete') && (
+        <Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />
+      )}
+
       <DialogTitle sx={{ pb: 2 }}>{title}</DialogTitle>
 
       {content && (
@@ -51,7 +54,7 @@ export default function ConfirmDialog({
           variant="outlined"
           color="primary"
           onClick={onClose}
-          sx={{ width: 175, height: 56, borderRadius: 2,  padding: '8px 16px' }}
+          sx={{ width: 175, height: 56, borderRadius: 2, padding: '8px 16px' }}
         >
           {t('BUTTON.CANCEL')}
         </Button>
