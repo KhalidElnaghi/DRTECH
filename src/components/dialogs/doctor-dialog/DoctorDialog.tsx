@@ -37,7 +37,7 @@ interface DoctorDialogProps {
   statusOptions: ILookup[] | undefined;
 }
 
-const phoneRegex = /^\+966[0-9]{9}$/;
+export const phoneRegex = /^\+966[0-9]{9}$/;
 
 const DoctorDialog = ({
   open,

@@ -26,7 +26,7 @@ export default function Page() {
   });
 
   const { data: doctorsData, isLoading: doctorsLoading } = useDoctors();
-  const { data: patientsData, isLoading: patientsLoading } = usePatients();
+  const { data: patientsData, isLoading: patientsLoading } = usePatients({ page: 1 });
   const { data: services, isLoading: servicesLoading } = useLookups('service-types');
   const { data: appointmentStatus, isLoading: statusLoading } = useLookups('appointment-status');
 

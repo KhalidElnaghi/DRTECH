@@ -58,7 +58,14 @@
     "DELETE": "حذف",
     "CLINIC_NAME": "اسم العيادة",
     "CLINIC_LOCATION": "عنوان العيادة",
-    "REASON_FOR_CANCELLATION": "سبب الإلغاء"
+    "REASON_FOR_CANCELLATION": "سبب الإلغاء",
+    "FULL_NAME": "الاسم الكامل",
+    "GENDER": "الجنس",
+    "BLOOD_TYPE": "فصيلة الدم",
+    "PHONE_NUMBER": "رقم الهاتف",
+    "EMERGENCY_CONTACT": "رقم الطوارئ",
+    "ADDRESS": "العنوان",
+    "DATE_OF_BIRTH": "تاريخ الميلاد"
   },
   "BUTTON": {
     "LOGIN": "تسجيل الدخول",
@@ -95,7 +102,8 @@
     "MAIN": "الرئيسية",
     "APPOINTMENTS": "المواعيد",
     "ROOMS": "الغرف",
-    "DOCTORS": "الطبيب"
+    "DOCTORS": "الطبيب",
+    "PATIENTS": "المرضى"
   },
   "TABLE": {
     "DENSE": "تكديس",

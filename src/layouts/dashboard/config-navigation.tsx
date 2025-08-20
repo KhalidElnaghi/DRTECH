@@ -67,6 +67,7 @@ const ICONS = {
   appointments: icon('hugeicons:appointment-02'),
   rooms: icon('icon-park-twotone:single-bed'),
   doctors: icon('fa7-solid:user-doctor'),
+  patients: icon('ic:baseline-people'),
 };
 
 export function useNavData() {
@@ -85,6 +86,7 @@ export function useNavData() {
         subheader:"Management",
         items: [
           { title: t('SIDEBAR.DOCTORS'), path: paths.dashboard.doctors, icon: ICONS.doctors },
+          { title: t('SIDEBAR.PATIENTS'), path: paths.dashboard.patients, icon: ICONS.patients },
         ],
       },
     ],

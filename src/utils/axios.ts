@@ -102,6 +102,10 @@ export const endpoints = {
   },
   patients: {
     fetch: '/patients',
+    new: '/patients/create',
+    edit: (patientId: string) => `/patients/${patientId}`,
+    delete: (patientId: string) => `/patients/${patientId}`,
+    archive: (patientId: string) => `/patients/${patientId}/archive`,
   },
   lookups: {
     fetch: (type: string) => `/lookups/${type}`,

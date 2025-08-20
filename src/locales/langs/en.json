@@ -54,7 +54,14 @@
     "DELETE": "Delete",
     "CLINIC_NAME": "Clinic Name",
     "CLINIC_LOCATION": "Clinic Location",
-    "REASON_FOR_CANCELLATION": "Reason for Cancellation"
+    "REASON_FOR_CANCELLATION": "Reason for Cancellation",
+    "FULL_NAME": "Full Name",
+    "GENDER": "Gender",
+    "BLOOD_TYPE": "Blood Type",
+    "PHONE_NUMBER": "Phone Number",
+    "EMERGENCY_CONTACT": "Emergency Contact",
+    "ADDRESS": "Address",
+    "DATE_OF_BIRTH": "Date of Birth"
   },
   "BUTTON": {
     "LOGIN": "Login",
@@ -91,7 +98,8 @@
     "MAIN": "Main",
     "APPOINTMENTS": "Appointments",
     "ROOMS": "Rooms",
-    "DOCTORS": "Doctors"
+    "DOCTORS": "Doctors",
+    "PATIENTS": "Patients"
   },
   "TABLE": {
     "DENSE": "Dense",
