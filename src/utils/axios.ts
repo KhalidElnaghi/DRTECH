@@ -95,6 +95,10 @@ export const endpoints = {
   },
   doctors: {
     fetch: '/doctors',
+    new: '/doctors/create',
+    edit: (doctorId: string) => `/doctors/${doctorId}`,
+    delete: (doctorId: string) => `/doctors/${doctorId}`,
+    specializations: '/doctors/dropdown-specializations',
   },
   patients: {
     fetch: '/patients',

@@ -94,7 +94,8 @@
   "SIDEBAR": {
     "MAIN": "الرئيسية",
     "APPOINTMENTS": "المواعيد",
-    "ROOMS": "الغرف"
+    "ROOMS": "الغرف",
+    "DOCTORS": "الطبيب"
   },
   "TABLE": {
     "DENSE": "تكديس",
@@ -177,5 +178,6 @@
   "ERROR": {
     "ROOM_DUPLICATE": "غرفة بنفس الرقم موجودة بالفعل",
     "UNEXPECTED_ERROR": "حدث خطأ غير متوقع"
-  }
+  },
+  "AVAILABILITY_STATUS": "حالة التواجد"
 }

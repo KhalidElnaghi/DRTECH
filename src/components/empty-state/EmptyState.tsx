@@ -20,7 +20,7 @@ export default function EmptyState({
   subheader,
   buttonText,
   onButtonClick,
-  iconSize = 80,
+  iconSize = 120,
   iconColor = 'text.secondary',
 }: EmptyStateProps) {
   const renderIcon = () => {

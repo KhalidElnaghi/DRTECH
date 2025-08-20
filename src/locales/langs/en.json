@@ -90,7 +90,8 @@
   "SIDEBAR": {
     "MAIN": "Main",
     "APPOINTMENTS": "Appointments",
-    "ROOMS": "Rooms"
+    "ROOMS": "Rooms",
+    "DOCTORS": "Doctors"
   },
   "TABLE": {
     "DENSE": "Dense",
@@ -128,7 +129,9 @@
     "CONFIRMATION_REQUIRED": "Please confirm that you want to cancel this appointment",
     "CONFIRMATION_CHECKBOX_LABEL": "I confirm that I want to cancel this appointment",
     "ROOM_CREATED_SUCCESSFULLY": "Room created successfully",
-    "ROOM_UPDATED_SUCCESSFULLY": "Room updated successfully"
+    "ROOM_UPDATED_SUCCESSFULLY": "Room updated successfully",
+    "DOCTOR_CREATED_SUCCESSFULLY": "Doctor created successfully",
+    "DOCTOR_UPDATED_SUCCESSFULLY": "Doctor updated successfully"
   },
   "PLACEHOLDER": {
     "CANCELLATION_REASON": "Enter the reason for cancelling this appointment..."
@@ -154,6 +157,36 @@
     "SEARCH_ROOM_NUMBER": "Search room number...",
     "SEARCH_FLOOR": "Search floor..."
   },
+  "DOCTOR": {
+    "DOCTORS": "Doctors",
+    "ADD_DOCTOR": "Add New Doctor",
+    "EDIT_DOCTOR": "Edit Doctor",
+    "FULL_NAME": "Full Name",
+    "SPECIALIZATION": "Specialization",
+    "PHONE_NUMBER": "Phone Number",
+    "STATUS": "Status",
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "ENTER_FULL_NAME": "Enter full name",
+    "ENTER_EMAIL": "Enter email address",
+    "SELECT_SPECIALIZATION": "Select specialization",
+    "SELECT_STATUS": "Select status",
+    "DELETE_DOCTOR": "Delete Doctor",
+    "DELETE_DOCTOR_CONFIRMATION": "Are you sure you want to delete this doctor?",
+    "SEARCH_DOCTORS": "Search doctors...",
+    "NO_DOCTORS_YET": "No doctors yet",
+    "ADD_DOCTOR_MESSAGE": "Click 'Add Doctor' to register a new member of the medical staff",
+    "ADD_NEW_DOCTOR": "Add New Doctor",
+    "FULL_NAME_REQUIRED": "Full name is required",
+    "SPECIALIZATION_REQUIRED": "Specialization is required",
+    "PHONE_REQUIRED": "Phone number is required",
+    "PHONE_INVALID": "Phone number must be in format +966XXXXXXXXX",
+    "STATUS_REQUIRED": "Status is required",
+    "EMAIL_REQUIRED": "Email is required",
+    "EMAIL_INVALID": "Invalid email format",
+    "PASSWORD_REQUIRED": "Password is required",
+    "PASSWORD_MIN": "Password must be at least 6 characters"
+  },
   "COMMON": {
     "ALL": "All",
     "APPLY": "Apply",
@@ -168,10 +201,14 @@
     "DELETING": "Deleting...",
     "ACTIONS": "Actions",
     "CREATED_AT": "Created At",
-    "UPDATE_STATUS": "Update Status"
+    "UPDATE_STATUS": "Update Status",
+    "FILTERS": "Filters",
+    "UPDATING": "Updating...",
+    "CREATING": "Creating..."
   },
   "ERROR": {
     "ROOM_DUPLICATE": "A room with the same number already exists",
     "UNEXPECTED_ERROR": "An unexpected error occurred"
-  }
+  },
+  "AVAILABILITY_STATUS": "Availability Status"
 }
