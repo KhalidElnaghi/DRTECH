@@ -37,8 +37,9 @@ export default function AccountPopover() {
   // const { userData } = useMockedUser();
   const { logout } = useAuthContext();
   const { t } = useTranslate();
-
+  const { user } = useAuthContext();
   const popover = usePopover();
+  console.log(user);
 
   const handleLogout = async () => {
     try {
@@ -54,39 +55,86 @@ export default function AccountPopover() {
     popover.onClose();
     router.push(path);
   };
+  const getUserRole = (role: number) => {
+    switch (role) {
+      case 0:
+        return 'Super Admin';
+      case 1:
+        return 'Admin';
+      case 2:
+        return 'Doctor';
+      case 3:
+        return 'Nurse';
+      case 4:
+        return 'Receptionist';
+      case 5:
+        return 'Pharmacist';
+      default:
+        return 'Patient';
+    }
+  };
 
   return (
     <>
-      <IconButton
-        component={m.button}
-        whileTap="tap"
-        whileHover="hover"
-        variants={varHover(1.05)}
-        onClick={popover.onOpen}
-        sx={{
-          width: 40,
-          height: 40,
-          background: (theme) => alpha(theme.palette.grey[500], 0.08),
-          ...(popover.open && {
-            background: (theme) =>
-              `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 100%)`,
-          }),
-          text: '#fff',
-        }}
-      >
-        <Avatar
-          src="/assets/images/popover/setting.png"
-          // alt={userData?.displayName}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <IconButton
+          component={m.button}
+          whileTap="tap"
+          whileHover="hover"
+          variants={varHover(1.05)}
+          onClick={popover.onOpen}
           sx={{
-            width: 36,
-            height: 36,
-            border: (theme) => `solid 2px ${theme.palette.background.default}`,
+            width: 40,
+            height: 40,
+            background: (theme) => alpha(theme.palette.grey[500], 0.08),
+            ...(popover.open && {
+              background: (theme) =>
+                `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 100%)`,
+            }),
+            text: '#fff',
           }}
-        />
-      </IconButton>
+        >
+          <Avatar
+            src="/assets/images/nav/profile.svg"
+            // alt={userData?.displayName}
+            sx={{
+              borderRadius: '0px',
+              width: 36,
+              height: 36,
+            }}
+          />
+        </IconButton>
+        <Box>
+          <Typography
+            variant="body1"
+            sx={{
+              fontWeight: 600,
+              fontSize: 12,
+              lineHeight: '150%',
+              letterSpacing: '2%',
+              color: '#0D0D12',
+            }}
+          >
+            {user?.FullName}
+          </Typography>
+          <Typography
+            variant="body1"
+            color="initial"
+            sx={{
+              fontWeight: 400,
+              fontSize: 11,
+              lineHeight: '150%',
+              letterSpacing: '2%',
+              color: '#818898',
+            }}
+          >
+            {getUserRole(user?.Role || 0)}
+          </Typography>
+        </Box>
+      </Box>
 
-      <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 200, p: 0 }}>
-        {/* <Stack sx={{ p: 1 }}>
+      {/* <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 200, p: 0 }}> */}
+      {/* <Stack sx={{ p: 1 }}>
           {OPTIONS.map((option) => (
             <MenuItem sx={{color: 'primary.main', fontWeight: 'fontWeightBold'}} key={option.label} onClick={() => handleClickItem(option.linkTo)}>
               {t('TITLE.' + option.label)}
@@ -94,15 +142,15 @@ export default function AccountPopover() {
           ))}
         </Stack> */}
 
-        {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
+      {/* <Divider sx={{ borderStyle: 'dashed' }} /> */}
 
-        <MenuItem
+      {/* <MenuItem
           onClick={handleLogout}
           sx={{ m: 1, fontWeight: 'fontWeightBold', color: 'error.main' }}
         >
           {t('LABEL.LOGOUT')}
         </MenuItem>
-      </CustomPopover>
+      </CustomPopover> */}
     </>
   );
 }

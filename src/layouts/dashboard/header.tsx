@@ -1,7 +1,10 @@
+import Image from 'next/image';
+import { m } from 'framer-motion';
+
 import Stack from '@mui/material/Stack';
-import { Divider } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import { Box, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 
@@ -59,11 +62,28 @@ export default function Header({ onOpenNav }: Props) {
       >
         {/* <LanguagePopover /> */}
 
-        {/* <NotificationsPopover /> */}
+        <IconButton
+          component={m.button}
+          whileTap="tap"
+          whileHover="hover"
+          sx={{
+            width: 40,
+            height: 40,
+
+          }}
+        >
+          <Image
+            src="/assets/images/nav/notification.svg"
+            alt="notification"
+            width={24}
+            height={24}
+          />
+        </IconButton>
 
         {/* <ContactsPopover /> */}
 
         {/* <SettingsButton /> */}
+        <Box sx={{ borderLeft: '1px solid #DFE1E7', width: '1px', height: '20px' }} />
 
         <AccountPopover />
       </Stack>
