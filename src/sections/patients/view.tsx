@@ -33,6 +33,7 @@ import PatientDialog from 'src/components/dialogs/patient-dialog';
 
 import { ILookup } from 'src/types/lookups';
 import { IPatient } from 'src/types/patient';
+import Image from 'next/image';
 
 interface IProps {
   patients: IPatient[];
@@ -722,6 +723,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
         onClose={confirmDelete.onFalse}
         title="Delete Patient"
         content="Are you sure you want to delete this patient?"
+        icon={<Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />}
         action={
           <Button
             variant="contained"

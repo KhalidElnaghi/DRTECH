@@ -4,11 +4,11 @@ import {
   Box,
   Button,
   Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   MenuItem,
   TextField,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
 } from '@mui/material';
 
 import { useTranslate } from 'src/locales';

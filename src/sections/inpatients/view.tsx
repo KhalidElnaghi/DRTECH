@@ -1,24 +1,14 @@
 'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
+import { useState } from 'react';
 
 import {
   Box,
-  Chip,
-  Grid,
   Stack,
   Paper,
   Button,
-  Select,
-  Popover,
-  MenuItem,
-  TextField,
   Typography,
-  InputLabel,
-  IconButton,
-  FormControl,
-  InputAdornment,
 } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -27,7 +17,6 @@ import { useDeleteInpatient } from 'src/hooks/use-inpatients-query';
 import { useTranslate } from 'src/locales';
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 
-import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import InpatientDialog from 'src/components/dialogs/inpatient-dialog';
 
@@ -282,6 +271,7 @@ export default function InpatientsPage({ inpatients, totalCount, patients, rooms
         open={confirmDelete.value}
         onClose={confirmDelete.onFalse}
         title="Delete Inpatient"
+        icon={<Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />}
         content="Are you sure you want to delete this inpatient?"
         action={
           <Button

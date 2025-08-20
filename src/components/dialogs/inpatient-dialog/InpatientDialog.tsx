@@ -2,7 +2,7 @@
 
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
-import { useEffect, useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -27,9 +27,9 @@ import { useTranslate } from 'src/locales';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
 import RHFTextField from 'src/components/hook-form/rhf-text-field-form';
 
-import { IPatient } from 'src/types/patient';
 import { IRoom } from 'src/types/room';
-import { IInpatient, InpatientData } from 'src/types/inpatient';
+import { IPatient } from 'src/types/patient';
+import { IInpatient } from 'src/types/inpatient';
 
 interface InpatientDialogProps {
   open: boolean;

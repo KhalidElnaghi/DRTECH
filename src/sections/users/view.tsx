@@ -20,6 +20,7 @@ import UserRoleDialog from 'src/components/dialogs/user-role-dialog/UserRoleDial
 import { ILookup } from 'src/types/lookups';
 import { TableUser } from 'src/types/users';
 import { enqueueSnackbar } from 'notistack';
+import Image from 'next/image';
 
 interface IProps {
   users: TableUser[];
@@ -306,6 +307,8 @@ export default function UsersPage({ users, totalCount, roles, statuses, speciali
         onClose={confirmDelete.onFalse}
         title="Delete User"
         content="Are you sure you want to delete this user?"
+        icon={<Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />}
+
         action={
           <Button
             variant="contained"

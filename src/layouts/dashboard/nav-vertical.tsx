@@ -33,7 +33,6 @@ type Props = {
 };
 
 export default function NavVertical({ openNav, onCloseNav }: Props) {
-  const { user } = useAuthContext();
   const { logout } = useAuthContext();
   const { t } = useTranslate();
   const router = useRouter();

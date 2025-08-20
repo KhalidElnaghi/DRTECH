@@ -71,8 +71,8 @@ export const setSession = (accessToken: string | null) => {
     // tokenExpired(exp); // TODO: uncomment this line when deploy
   } else {
     // sessionStorage.removeItem('accessToken');
-    Cookie.remove('access_token');
-    Cookie.remove('user');
+    Cookie.remove('access_token', { path: '/' });
+    Cookie.remove('user', { path: '/' });
     delete axios.defaults.headers.common.Authorization;
   }
 };

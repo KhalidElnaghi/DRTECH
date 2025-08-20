@@ -36,6 +36,7 @@ import DoctorDialog from 'src/components/dialogs/doctor-dialog';
 
 import { ILookup } from 'src/types/lookups';
 import { IDoctor, ISpecialization } from 'src/types/doctors';
+import Image from 'next/image';
 
 interface IProps {
   doctors: IDoctor[];
@@ -639,6 +640,7 @@ export default function DoctorsPage({
         open={confirmDelete.value}
         onClose={confirmDelete.onFalse}
         title={t('DOCTOR.DELETE_DOCTOR') || 'Delete Doctor'}
+        icon={<Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />}
         content={
           t('DOCTOR.DELETE_DOCTOR_CONFIRMATION') || 'Are you sure you want to delete this doctor?'
         }

@@ -655,8 +655,16 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
         action={
           <Button
             variant="contained"
-            sx={{ width: 175, height: 56, borderRadius: 2, padding: '8px 16px' }}
-            onClick={() => handleDisableRoom(selectedId)}
+            sx={{
+              width: 175,
+              height: 56,
+              borderRadius: 2,
+              padding: '8px 16px',
+              bgcolor: '#DF1C41',
+              '&:hover': {
+                bgcolor: '#DF1C60',
+              },
+            }}            onClick={() => handleDisableRoom(selectedId)}
           >
             {t('COMMON.DISABLE') || 'Disable'}
           </Button>

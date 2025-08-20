@@ -2,8 +2,8 @@
 
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
-import { useMemo, useState, useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useState, useEffect } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -13,23 +13,23 @@ import {
   Dialog,
   Button,
   MenuItem,
+  TextField,
   Typography,
   IconButton,
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
 } from '@mui/material';
+
+import { useNewRoom, useEditRoom } from 'src/hooks/use-rooms-query';
 
 import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
-import RHFTextField from 'src/components/hook-form/rhf-text-field-form';
 
 import { ILookup } from 'src/types/lookups';
 import { IRoom, RoomData } from 'src/types/room';
-import { useEditRoom, useNewRoom } from 'src/hooks/use-rooms-query';
 
 // Partial type for editing room status only
 type PartialRoomData = Partial<RoomData>;

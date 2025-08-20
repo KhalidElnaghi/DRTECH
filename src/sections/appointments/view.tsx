@@ -41,6 +41,7 @@ import { IDoctor } from 'src/types/doctors';
 import { ILookup } from 'src/types/lookups';
 import { IPatient } from 'src/types/patients';
 import { IAppointment } from 'src/types/appointment';
+import Image from 'next/image';
 
 // ----------------------------------------------------------------------
 interface IProps {
@@ -1357,6 +1358,8 @@ export default function AppointmentsPage({
         onClose={confirmDelete.onFalse}
         title={t('TITLE.DELETE')}
         content={t('MESSAGE.CONFIRM_DELETE_APPOINTMENT')}
+        icon={<Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />}
+
         action={
           <LoadingButton
             sx={{

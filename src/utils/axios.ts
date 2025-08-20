@@ -3,8 +3,6 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 import { HOST_API } from 'src/config-global';
 
-import { ACCESS_TOKEN } from '../auth/constants';
-
 export interface Params {
   page: number;
   limit: number;
@@ -16,22 +14,29 @@ export interface Params {
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: HOST_API,
-
   headers: {
     'Content-Type': 'application/json',
     'Accept-Language': 'en',
     'Access-Control-Allow-Origin': '*',
     Accept: 'application/json',
     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-    Authorization: `Bearer ${Cookies.get(ACCESS_TOKEN)}`,
+    // Remove static Authorization header
   },
 });
+
+// Add request interceptor to dynamically set Authorization header
 axiosInstance.interceptors.request.use(
-  (config) =>
-    /*     config.headers['Accept-Language'] = lang;
-     */ config,
+  (config) => {
+    const token = Cookies.get('access_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+      config.headers['Accept-Language'] = 'en';
+    }
+    return config;
+  },
   (error) => Promise.reject(error)
 );
+console.log(Cookies.get('access_token'));
 
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -47,7 +52,7 @@ export const fetcher = async ({ url, config }: { url: string; config?: AxiosRequ
   const response = await axiosInstance.get(url, {
     ...config,
     headers: {
-      Authorization: `Bearer ${Cookies.get(ACCESS_TOKEN)}`,
+      // Authorization header is now handled by the request interceptor
       /*       'Accept-Language': lang,
        */
     },
@@ -71,6 +76,12 @@ export const getErrorMessage = (error: unknown): string => {
 };
 
 export const endpoints = {
+  dashboard: {
+    summary: '/dashboard/summary',
+    upcomingAppointments: '/dashboard/upcoming-appointments',
+    patientsStatistics: '/dashboard/patients-statistics',
+    patients: '/dashboard/patients',
+  },
   auth: {
     me: '/auth/me',
     login: '/auth/login',

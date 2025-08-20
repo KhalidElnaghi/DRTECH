@@ -1,4 +1,4 @@
-import MainPage from 'src/sections/main/view';
+import MainPage from 'src/sections/home/view';
 
 // ----------------------------------------------------------------------
 
