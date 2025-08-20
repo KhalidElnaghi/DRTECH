@@ -39,6 +39,7 @@
     "CANCEL_APPOINTMENT": "Cancel Appointment"
   },
   "LABEL": {
+    "HELP_CENTER": "Help Center",
     "LOGOUT": "Logout",
     "STATUS": "Status",
     "APPOINTMENT_DATE": "Appointment Date",
@@ -74,6 +75,7 @@
     "CANCEL": "Cancel",
     "SEND": "Send",
     "DELETE": "Delete",
+    "YES_LOGOUT": "Yes, Logout",
     "EDIT": "Edit",
     "ADD_FIELD": "Add Field",
     "ADD_REASON": "Add Reason",
@@ -144,7 +146,8 @@
     "DOCTOR_CREATED_SUCCESSFULLY": "Doctor created successfully",
     "DOCTOR_UPDATED_SUCCESSFULLY": "Doctor updated successfully",
     "INPATIENT_CREATED_SUCCESSFULLY": "Inpatient created successfully",
-    "INPATIENT_UPDATED_SUCCESSFULLY": "Inpatient updated successfully"
+    "INPATIENT_UPDATED_SUCCESSFULLY": "Inpatient updated successfully",
+    "ARE_YOU_SURE_LOGOUT": "Are you sure want to Logout ?"
   },
   "PLACEHOLDER": {
     "CANCELLATION_REASON": "Enter the reason for cancelling this appointment..."

@@ -18,6 +18,7 @@ export default function ConfirmDialog({
   action,
   open,
   onClose,
+  icon,
   ...other
 }: ConfirmDialogProps) {
   const { t } = useTranslate();
@@ -38,9 +39,7 @@ export default function ConfirmDialog({
         },
       }}
     >
-      {typeof content === 'string' && content.includes('delete') && (
-        <Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />
-      )}
+      {icon}
 
       <DialogTitle sx={{ pb: 2 }}>{title}</DialogTitle>
 

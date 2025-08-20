@@ -43,6 +43,7 @@
     "CANCEL_APPOINTMENT": "إلغاء الموعد"
   },
   "LABEL": {
+    "HELP_CENTER": "مركز المساعدة",
     "LOGOUT": "تسجيل الخروج",
     "STATUS": "الحالة",
     "APPOINTMENT_DATE": "تاريخ المواعيد",
@@ -78,6 +79,7 @@
     "CANCEL": "الغاء",
     "SEND": "ارسال",
     "DELETE": "حذف",
+    "YES_LOGOUT": "نعم، تسجيل الخروج",
     "EDIT": "تعديل",
     "ADD_FIELD": "اضافة مجال",
     "ADD_REASON": "اضافه سبب",
@@ -144,7 +146,8 @@
     "CONFIRMATION_REQUIRED": "يرجى التأكيد على أنك تريد إلغاء هذا الموعد",
     "CONFIRMATION_CHECKBOX_LABEL": "أؤكد أنني أريد إلغاء هذا الموعد",
     "ROOM_CREATED_SUCCESSFULLY": "تم إنشاء الغرفة بنجاح",
-    "ROOM_UPDATED_SUCCESSFULLY": "تم تحديث الغرفة بنجاح"
+    "ROOM_UPDATED_SUCCESSFULLY": "تم تحديث الغرفة بنجاح",
+    "ARE_YOU_SURE_LOGOUT": "هل أنت متأكد أنك تريد تسجيل الخروج؟"
   },
   "PLACEHOLDER": {
     "CANCELLATION_REASON": "أدخل سبب إلغاء هذا الموعد..."
