@@ -11,7 +11,8 @@ export const dashboardKeys = {
   summary: () => [...dashboardKeys.all, 'summary'] as const,
   upcomingAppointments: (params?: { limit?: number }) =>
     [...dashboardKeys.all, 'upcoming-appointments', params] as const,
-  patientsStatistics: () => [...dashboardKeys.all, 'patients-statistics'] as const,
+  patientsStatistics: (params?: { period?: string }) =>
+    [...dashboardKeys.all, 'patients-statistics', params] as const,
   patients: (params?: { limit?: number }) => [...dashboardKeys.all, 'patients', params] as const,
 };
 
@@ -25,10 +26,10 @@ export const useDashboardUpcomingAppointments = (params?: { limit?: number }) =>
     staleTime: 60 * 1000,
   });
 
-export const useDashboardPatientsStatistics = () =>
+export const useDashboardPatientsStatistics = (params?: { period?: string }) =>
   useQuery({
-    queryKey: dashboardKeys.patientsStatistics(),
-    queryFn: fetchDashboardPatientsStatisticsClient,
+    queryKey: dashboardKeys.patientsStatistics(params),
+    queryFn: () => fetchDashboardPatientsStatisticsClient(params),
     staleTime: 5 * 60 * 1000,
   });
 

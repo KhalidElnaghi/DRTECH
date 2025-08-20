@@ -14,8 +14,10 @@ export const fetchDashboardUpcomingAppointmentsClient = async (params?: { limit?
   return response.data;
 };
 
-export const fetchDashboardPatientsStatisticsClient = async () => {
-  const response = await axiosInstance.get(endpoints.dashboard.patientsStatistics);
+export const fetchDashboardPatientsStatisticsClient = async (params?: { period?: string }) => {
+  const response = await axiosInstance.get(endpoints.dashboard.patientsStatistics, {
+    params: { period: params?.period ?? 'monthly' },
+  });
   return response.data;
 };
 
