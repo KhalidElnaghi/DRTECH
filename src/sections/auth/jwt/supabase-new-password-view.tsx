@@ -18,6 +18,7 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import { useAuthContext } from 'src/auth/hooks';
 import { NewPasswordIcon } from 'src/assets/icons';
@@ -25,6 +26,7 @@ import { NewPasswordIcon } from 'src/assets/icons';
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import { t } from 'i18next';
+import AuthFooter from 'src/components/auth-footer';
 
 // ----------------------------------------------------------------------
 
@@ -130,17 +132,21 @@ export default function SupabaseNewPasswordView() {
 
   return (
     <>
-      {renderHead}
+      <Box sx={{ mb: 8 }}>
+        {' '}
+        {/* Add margin bottom to prevent overlap with footer */}
+        {renderHead}
+        {!!error && (
+          <Alert severity="error" sx={{ textAlign: 'left', mb: 3 }}>
+            {error}
+          </Alert>
+        )}
+        <FormProvider methods={methods} onSubmit={onSubmit}>
+          {renderForm}
+        </FormProvider>
+      </Box>
 
-      {!!error && (
-        <Alert severity="error" sx={{ textAlign: 'left', mb: 3 }}>
-          {error}
-        </Alert>
-      )}
-
-      <FormProvider methods={methods} onSubmit={onSubmit}>
-        {renderForm}
-      </FormProvider>
+      <AuthFooter />
     </>
   );
 }

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
@@ -24,6 +25,7 @@ import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import AuthFooter from 'src/components/auth-footer';
 // ----------------------------------------------------------------------
 
 export default function JwtRegisterView() {
@@ -151,19 +153,23 @@ export default function JwtRegisterView() {
 
   return (
     <>
-      {renderHead}
+      <Box sx={{ mb: 8 }}> {/* Add margin bottom to prevent overlap with footer */}
+        {renderHead}
 
-      {!!error && (
-        <Alert severity="error" sx={{ m: 3 }}>
-          {error}
-        </Alert>
-      )}
+        {!!error && (
+          <Alert severity="error" sx={{ m: 3 }}>
+            {error}
+          </Alert>
+        )}
 
-      <FormProvider methods={methods} onSubmit={onSubmit}>
-        {renderForm}
-      </FormProvider>
+        <FormProvider methods={methods} onSubmit={onSubmit}>
+          {renderForm}
+        </FormProvider>
 
-      {renderTerms}
+        {renderTerms}
+      </Box>
+      
+      <AuthFooter />
     </>
   );
 }

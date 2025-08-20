@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -19,6 +20,7 @@ import Iconify from 'src/components/iconify';
 import FormProvider, { RHFCode, RHFTextField } from 'src/components/hook-form';
 import { useAuthContext } from 'src/auth/hooks';
 import { t } from 'i18next';
+import AuthFooter from 'src/components/auth-footer';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +33,6 @@ export default function ClassicVerifyView() {
 
   const defaultValues = {
     code: '',
-
   };
 
   const methods = useForm({
@@ -48,8 +49,7 @@ export default function ClassicVerifyView() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       await verify?.(data?.code);
-     router.push(`${paths.auth.jwt.changePassword}`)
-
+      router.push(`${paths.auth.jwt.changePassword}`);
     } catch (error) {
       console.error(error);
     }
@@ -57,8 +57,6 @@ export default function ClassicVerifyView() {
 
   const renderForm = (
     <Stack spacing={3} alignItems="center">
-
-
       <RHFCode name="code" />
 
       <LoadingButton
@@ -107,17 +105,25 @@ export default function ClassicVerifyView() {
         <Typography variant="h3">{t('MESSAGE.CHECK_MESSAGE')}</Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-        {t('MESSAGE.WE_SENT_CODE')}
+          {t('MESSAGE.WE_SENT_CODE')}
         </Typography>
       </Stack>
     </>
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
-      {renderHead}
+    <>
+      <Box sx={{ mb: 8 }}>
+        {' '}
+        {/* Add margin bottom to prevent overlap with footer */}
+        <FormProvider methods={methods} onSubmit={onSubmit}>
+          {renderHead}
 
-      {renderForm}
-    </FormProvider>
+          {renderForm}
+        </FormProvider>
+      </Box>
+
+      <AuthFooter />
+    </>
   );
 }

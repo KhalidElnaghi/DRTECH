@@ -2,65 +2,57 @@
 
 import * as Yup from 'yup';
 import Image from 'next/image';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
-import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import { Card, useTheme } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
+import { Card } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
-import { useRouter, useSearchParams } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
+import { useRouter } from 'src/routes/hooks';
 
 import { useTranslate } from 'src/locales';
-import { countries } from 'src/assets/data';
 import { useAuthContext } from 'src/auth/hooks';
-import { PATH_AFTER_LOGIN } from 'src/config-global';
+import { useBoolean } from 'src/hooks/use-boolean';
 
-import Iconify from 'src/components/iconify';
-import FormProvider, { RHFTextField, RHFCheckbox } from 'src/components/hook-form';
-import RHFAutocomplete from 'src/components/hook-form/rhf-autocomplete';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import AuthFooter from 'src/components/auth-footer';
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function JwtLoginView() {
+export default function JwtResetPasswordView() {
   const { t } = useTranslate();
-  const { login, error, clearError } = useAuthContext();
+  // const { resetPassword } = useAuthContext(); // Commented out until implemented
 
   const router = useRouter();
 
-  const theme = useTheme();
-
-  const searchParams = useSearchParams();
-
-  const returnTo = searchParams.get('returnTo');
-
   const password = useBoolean();
+  const confirmPassword = useBoolean();
 
-  const LoginSchema = Yup.object().shape({
-    email: Yup.string().required(t('phone_is_required')).email('Invalid email. Please try again.'),
-    password: Yup.string().required(t('password_is_required')),
+  const ResetPasswordSchema = Yup.object().shape({
+    newPassword: Yup.string()
+      .required('New password is required')
+      .min(8, 'Password must be at least 8 characters'),
+    confirmPassword: Yup.string()
+      .required('Please confirm your password')
+      .oneOf([Yup.ref('newPassword')], 'Passwords must match'),
   });
 
   const defaultValues = {
-    email: 'prod-admin@drtech.com',
-    password: 'SecureProductionPassword@456',
-    keepMeLoggedIn: false,
+    newPassword: '',
+    confirmPassword: '',
   };
 
   const methods = useForm({
-    resolver: yupResolver(LoginSchema),
+    resolver: yupResolver(ResetPasswordSchema),
     defaultValues,
   });
 
@@ -72,10 +64,13 @@ export default function JwtLoginView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      clearError();
-      await login?.(data.email, data.password);
-      router.push(returnTo || PATH_AFTER_LOGIN);
-    } catch (loginError) {
+      // Call the reset password function - you may need to implement this in your auth context
+      // await resetPassword?.(data.newPassword);
+      console.log('Password reset with:', data.newPassword);
+      // Redirect to login page after successful password reset
+      router.push(paths.auth.jwt.login);
+    } catch (error) {
+      console.error(error);
       reset();
     }
   });
@@ -88,7 +83,12 @@ export default function JwtLoginView() {
           mb: 2,
         }}
       >
-        <Image src="/assets/icons/auth/login.svg" alt="Login Icon" width={100} height={100} />
+        <Image
+          src="/assets/images/auth/reset-password.svg"
+          alt="Reset Password Icon"
+          width={100}
+          height={100}
+        />
       </Box>
       <Typography
         sx={{
@@ -102,7 +102,7 @@ export default function JwtLoginView() {
           textAlign: 'center',
         }}
       >
-        Welcome Back
+        Create New Password
       </Typography>
       <Typography
         sx={{
@@ -116,7 +116,7 @@ export default function JwtLoginView() {
           textAlign: 'center',
         }}
       >
-        Login to manage your hospital dashboard
+        Enter new password
       </Typography>
     </Stack>
   );
@@ -124,26 +124,8 @@ export default function JwtLoginView() {
   const renderForm = (
     <Stack spacing={2.5} sx={{ minWidth: '100%' }}>
       <RHFTextField
-        name="email"
-        label={t('LABEL.EMAIL')}
-        error={!!methods.formState.errors.email}
-        helperText={methods.formState.errors.email?.message}
-        sx={{
-          '& .MuiOutlinedInput-root': {
-            '&.Mui-error fieldset': {
-              borderColor: 'red',
-            },
-          },
-          '& .MuiFormHelperText-root.Mui-error': {
-            color: 'red',
-          },
-        }}
-      />
-
-      <RHFTextField
-        name="password"
-        label={t('LABEL.PASSWORD')}
-        // @ts-ignore
+        name="newPassword"
+        label="New Password"
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -157,24 +139,29 @@ export default function JwtLoginView() {
             </InputAdornment>
           ),
         }}
+        error={!!methods.formState.errors.newPassword}
+        helperText={methods.formState.errors.newPassword?.message}
       />
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        {' '}
-        <RHFCheckbox
-          name="keepMeLoggedIn"
-          label={t('LABEL.KEEP_ME_LOGGED_IN')}
-          sx={{ alignSelf: 'flex-start' }}
-        />
-        <Link
-          variant="body2"
-          color="primary"
-          underline="always"
-          href={paths.auth.jwt.forgot}
-          component={RouterLink}
-        >
-          {t('BUTTON.FORGOT_PASSWORD')}
-        </Link>
-      </Box>
+
+      <RHFTextField
+        name="confirmPassword"
+        label="Confirm New Password"
+        type={confirmPassword.value ? 'text' : 'password'}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={confirmPassword.onToggle}>
+                <Iconify
+                  icon={confirmPassword.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
+                  color="primary"
+                />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+        error={!!methods.formState.errors.confirmPassword}
+        helperText={methods.formState.errors.confirmPassword?.message}
+      />
 
       <LoadingButton
         fullWidth
@@ -184,8 +171,30 @@ export default function JwtLoginView() {
         variant="contained"
         loading={isSubmitting}
       >
-        {t('BUTTON.LOGIN')}
+        Reset Password
       </LoadingButton>
+
+      <Link
+        component={RouterLink}
+        href={paths.auth.jwt.login}
+        variant="subtitle2"
+        color="primary"
+        sx={{
+          alignItems: 'center',
+          display: 'inline-flex',
+          justifyContent: 'center',
+          textDecoration: 'none',
+          border: '1px solid',
+          borderColor: 'primary.main',
+          borderRadius: '8px',
+          py: 1.5,
+          '&:hover': {
+            textDecoration: 'none',
+          },
+        }}
+      >
+        Back to Login
+      </Link>
     </Stack>
   );
 
@@ -216,11 +225,6 @@ export default function JwtLoginView() {
           {renderHead}
 
           <FormProvider methods={methods} onSubmit={onSubmit}>
-            {!!error && (
-              <Alert severity="error" sx={{ mb: 3 }}>
-                {error}
-              </Alert>
-            )}
             {renderForm}
           </FormProvider>
         </Card>
@@ -228,13 +232,5 @@ export default function JwtLoginView() {
 
       <AuthFooter />
     </>
-  );
-}
-
-function InputIcon(icon: string = 'solar:pen-new-square-outline') {
-  return (
-    <InputAdornment position="start">
-      <Iconify icon={icon} color="secondary.main" />
-    </InputAdornment>
   );
 }
