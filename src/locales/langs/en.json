@@ -100,7 +100,8 @@
     "ROOMS": "Rooms",
     "DOCTORS": "Doctors",
     "PATIENTS": "Patients",
-    "INPATIENTS": "Inpatients"
+    "INPATIENTS": "Inpatients",
+    "USERS": "Users"
   },
   "TABLE": {
     "DENSE": "Dense",

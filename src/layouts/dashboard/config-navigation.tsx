@@ -69,6 +69,7 @@ const ICONS = {
   doctors: icon('fa7-solid:user-doctor'),
   patients: icon('ic:baseline-people'),
   inpatients: icon('fa6-solid:bed-pulse'),
+  users: icon('hugeicons:user-03'),
 };
 
 export function useNavData() {
@@ -91,7 +92,14 @@ export function useNavData() {
           { title: t('SIDEBAR.INPATIENTS'), path: paths.dashboard.inpatients, icon: ICONS.inpatients },
         ],
       },
-    ],
+      {
+        subheader:"Settings",
+        items: [
+          { title: t('SIDEBAR.USERS'), path: paths.dashboard.users, icon: ICONS.users },
+
+        ],
+      },
+    ], 
     [t]
   );
 

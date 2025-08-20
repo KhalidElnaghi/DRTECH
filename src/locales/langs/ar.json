@@ -104,7 +104,8 @@
     "ROOMS": "الغرف",
     "DOCTORS": "الطبيب",
     "PATIENTS": "المرضى",
-    "INPATIENTS": "المرضى الداخليين"
+    "INPATIENTS": "المرضى الداخليين",
+    "USERS":"المستخدمين"
   },
   "TABLE": {
     "DENSE": "تكديس",

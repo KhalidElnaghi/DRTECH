@@ -85,6 +85,13 @@ export const endpoints = {
     deleteAppointment: (appointmentId: number) => `/appointments/${appointmentId}`,
     cancel: (appointmentId: number) => `/appointments/${appointmentId}/cancel`,
   },
+  users: {
+    fetch: '/users',
+    new: '/users/create',
+    edit: (userId: string | number) => `/users/${userId}`,
+    delete: (userId: string | number) => `/users/remove-user/${userId}`,
+    updateRole: '/users/update-user-role',
+  },
   rooms: {
     fetch: '/rooms',
     new: '/rooms/create',

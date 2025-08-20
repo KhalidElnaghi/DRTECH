@@ -90,7 +90,7 @@ export default function CustomPagination({
         minHeight: 56,
       }}
     >
-      {/* Items per page info */}
+      {/* Page info */}
       <Typography
         variant="body2"
         color="text.secondary"
@@ -100,8 +100,7 @@ export default function CustomPagination({
           mr: 2,
         }}
       >
-        Showing {page * rowsPerPage + 1} to {Math.min((page + 1) * rowsPerPage, count)} of {count}{' '}
-        results
+        Page {currentPage} of {totalPages}
       </Typography>
 
       {/* Pagination controls */}

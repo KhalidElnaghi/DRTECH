@@ -29,5 +29,6 @@ export const paths = {
     doctors: `${ROOTS.DASHBOARD}/doctors`,
     patients: `${ROOTS.DASHBOARD}/patients`,
     inpatients: `${ROOTS.DASHBOARD}/inpatients`,
+    users: `${ROOTS.DASHBOARD}/users`,
   },
 };
