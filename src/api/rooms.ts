@@ -23,10 +23,9 @@ export const newRoomClient = async (data: RoomData) => {
 };
 
 export const editRoomClient = async (data: RoomData, roomId: string) => {
-  console.log(data);
+
 
   const response = await axiosInstance.put(endpoints.rooms.edit(roomId), data);
-  console.log('response', response);
   return response.data;
 };
 

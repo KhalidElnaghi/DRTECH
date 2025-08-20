@@ -278,17 +278,14 @@ export default function AppointmentsPage({
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
 
-    console.log(selectedId);
     try {
       const res = await deleteAppointmentMutation.mutateAsync(selectedId);
-      console.log(res);
 
       enqueueSnackbar(t('MESSAGE.DELETED_SUCCESS'), {
         variant: 'success',
       });
       confirmDelete.onFalse();
     } catch (error: any) {
-      console.log(error);
 
       enqueueSnackbar(error?.message || 'Failed to delete appointment', {
         variant: 'error',
@@ -297,7 +294,6 @@ export default function AppointmentsPage({
       setIsDeleting(false);
     }
   };
-  console.log(appointments);
 
   // Show no data message if no appointments, but keep header and search/filter functionality
   if (!appointments || appointments.length === 0) {

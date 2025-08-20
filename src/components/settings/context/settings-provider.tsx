@@ -38,7 +38,6 @@ export function SettingsProvider({ children, defaultSettings }: SettingsProvider
       (shouldBeRTL && currentDirection !== 'rtl') ||
       (!shouldBeRTL && currentDirection !== 'ltr')
     ) {
-      console.log('Updating theme direction to:', shouldBeRTL ? 'rtl' : 'ltr');
       onChangeDirectionByLang(currentLang);
     }
   }, [currentLang, state.themeDirection]);

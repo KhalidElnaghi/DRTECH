@@ -36,7 +36,6 @@ export default function Page() {
   if (isLoading) {
     return <LoadingScreen />;
   }
-console.log(doctorsData);
 
   return (
     <AppointmentsPage

@@ -134,7 +134,6 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
   }, [filters.searchTerm]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleOpenAddDialog = () => {
-    console.log('Opening dialog for new room, clearing selectedRoom');
     setSelectedRoom(undefined); // Clear any previously selected room
     setOpenAddDialog(true);
   };

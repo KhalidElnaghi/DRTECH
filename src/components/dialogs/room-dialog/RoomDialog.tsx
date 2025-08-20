@@ -78,68 +78,51 @@ export default function RoomDialog({
 
   const { handleSubmit, reset, control, watch } = methods;
 
-  // Watch the Floor field to debug the issue
-  const floorValue = watch('Floor');
-  const formValues = watch();
-  console.log('Current Floor value:', floorValue);
-  console.log('Current form values:', formValues);
+
+
 
   // Monitor dialog open state
   useEffect(() => {
     if (open && room) {
-      console.log('Dialog opened with room data:', room);
-      console.log('Current form values:', methods.getValues());
+
 
       // Force set the Floor value if it's not set correctly
       if (room.Floor && !methods.getValues().Floor) {
-        console.log('Force setting Floor value:', room.Floor);
         methods.setValue('Floor', room.Floor);
       }
 
       // Also check other fields
       if (room.RoomNumber && !methods.getValues().RoomNumber) {
-        console.log('Force setting RoomNumber value:', room.RoomNumber);
         methods.setValue('RoomNumber', room.RoomNumber);
       }
 
       // Check Type and Status fields
       if (room.Type && !methods.getValues().Type) {
-        console.log('Force setting Type value:', room.Type);
         methods.setValue('Type', room.Type);
       }
 
       if (room.Status && !methods.getValues().Status) {
-        console.log('Force setting Status value:', room.Status);
         methods.setValue('Status', room.Status);
       }
     }
   }, [open, room, methods]);
 
   useEffect(() => {
-    console.log('RoomDialog useEffect - room:', room);
     if (room) {
-      console.log('Setting form for edit mode:', room);
       const formData = {
         RoomNumber: room.RoomNumber || '',
         Floor: room.Floor || '',
         Type: room.Type || 0,
         Status: room.Status || 0,
       };
-      console.log('Form data to set:', formData);
 
       // Reset form with the room data
       reset(formData);
 
-      // Verify the form values were set correctly
-      setTimeout(() => {
-        const currentValues = methods.getValues();
-        console.log('Form values after reset:', currentValues);
-        console.log('Floor value after reset:', currentValues.Floor);
-      }, 100);
+
 
       setIsFormReady(true);
     } else {
-      console.log('Setting form for new room mode');
       // Reset to default values for new room
       reset({
         RoomNumber: '',
@@ -172,7 +155,6 @@ export default function RoomDialog({
           return;
         }
 
-        console.log('data', data);
         await newRoomMutation.mutateAsync(data);
 
         enqueueSnackbar(t('MESSAGE.ROOM_CREATED_SUCCESSFULLY') || 'Room created successfully', {
@@ -182,8 +164,6 @@ export default function RoomDialog({
         reset();
       }
     } catch (error: any) {
-      console.error('Form submission error:', error);
-      console.log('Error object structure:', JSON.stringify(error, null, 2));
 
       // Handle API error responses
       let errorMessage = 'An unexpected error occurred';
@@ -210,7 +190,6 @@ export default function RoomDialog({
         errorMessage = t('ERROR.ROOM_DUPLICATE') || 'A room with the same number already exists';
       }
 
-      console.log('Final error message:', errorMessage);
       enqueueSnackbar(errorMessage, { variant: 'error' });
     } finally {
       setIsSubmitting(false);
