@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 import {
@@ -22,19 +23,18 @@ import {
 } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useDeletePatient, useArchivePatient } from 'src/hooks/use-patients-query';
+import { useDeletePatient } from 'src/hooks/use-patients-query';
 
-import { useTranslate } from 'src/locales';
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 
 import Iconify from 'src/components/iconify';
+import EmptyState from 'src/components/empty-state';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import PatientDialog from 'src/components/dialogs/patient-dialog';
+import SharedHeader from 'src/components/shared-header/empty-state';
 
 import { ILookup } from 'src/types/lookups';
 import { IPatient } from 'src/types/patient';
-import Image from 'next/image';
-import SharedHeader from 'src/components/shared-header/empty-state';
 
 interface IProps {
   patients: IPatient[];
@@ -45,8 +45,8 @@ interface IProps {
 
 interface FilterState {
   searchTerm: string;
-  gender: number; // -1 means no filter, 0+ means specific value
-  bloodType: number; // -1 means no filter, 0+ means specific value
+  gender: number; // 0 means no filter, >0 means specific value
+  bloodType: number; // 0 means no filter, >0 means specific value
 }
 
 const formatDateLocal = (dateString: string) => {
@@ -70,45 +70,43 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
   const [filterAnchorEl, setFilterAnchorEl] = useState<HTMLElement | null>(null);
   const [filters, setFilters] = useState<FilterState>({
     searchTerm: '',
-    gender: -1,
-    bloodType: -1,
+    gender: 0,
+    bloodType: 0,
   });
 
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const prevSearchTermRef = useRef<string>('');
 
-  const { t } = useTranslate();
   const [selectedPatient, setSelectedPatient] = useState<IPatient | undefined>();
   const [selectedId, setSelectedId] = useState<string>('');
   const confirmDelete = useBoolean();
   const [isDeleting, setIsDeleting] = useState(false);
-  const [openArchiveDialog, setOpenArchiveDialog] = useState(false);
 
   // React Query mutations
   const deletePatientMutation = useDeletePatient();
-  const archivePatientMutation = useArchivePatient();
 
-  // Utility function to check if filters match URL params
-  const filtersMatchURL = useCallback(() => {
-    const urlSearch = searchParams.get('SearchTerm') || '';
-    const urlGender = searchParams.get('Gender') !== null ? Number(searchParams.get('Gender')) : -1;
-    const urlBloodType =
-      searchParams.get('BloodType') !== null ? Number(searchParams.get('BloodType')) : -1;
+  // Utility function to check if given filters match URL params
+  const filtersMatchURL = useCallback(
+    (compare: FilterState) => {
+      const urlSearch = searchParams.get('SearchTerm') || '';
+      const urlGender = Number(searchParams.get('Gender')) || 0;
+      const urlBloodType = Number(searchParams.get('BloodType')) || 0;
 
-    return (
-      filters.searchTerm === urlSearch &&
-      filters.gender === urlGender &&
-      filters.bloodType === urlBloodType
-    );
-  }, [filters, searchParams]);
+      return (
+        compare.searchTerm === urlSearch &&
+        compare.gender === urlGender &&
+        compare.bloodType === urlBloodType
+      );
+    },
+    [searchParams]
+  );
 
   // Update URL params when filters change
   const updateURLParams = useCallback(
     (newFilters: FilterState) => {
-      // Don't update if filters already match URL
-      if (filtersMatchURL()) return;
+      // Don't update if provided filters already match URL
+      if (filtersMatchURL(newFilters)) return;
 
       const params = new URLSearchParams(searchParams.toString());
 
@@ -119,15 +117,15 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
         params.delete('SearchTerm');
       }
 
-      // Update gender param - only set if it's a valid filter value (>= 0)
-      if (newFilters.gender >= 0) {
+      // Update gender param - only set if it's a valid filter value (> 0)
+      if (newFilters.gender > 0) {
         params.set('Gender', newFilters.gender.toString());
       } else {
         params.delete('Gender');
       }
 
-      // Update blood type param - only set if it's a valid filter value (>= 0)
-      if (newFilters.bloodType >= 0) {
+      // Update blood type param - only set if it's a valid filter value (> 0)
+      if (newFilters.bloodType > 0) {
         params.set('BloodType', newFilters.bloodType.toString());
       } else {
         params.delete('BloodType');
@@ -145,12 +143,8 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
   // Initialize filters from URL params on component mount
   useEffect(() => {
     const search = searchParams.get('SearchTerm') || '';
-    const genderParam = searchParams.get('Gender');
-    const bloodTypeParam = searchParams.get('BloodType');
-
-    // Handle the case where "0" is a valid filter value
-    const gender = genderParam !== null ? Number(genderParam) : -1;
-    const bloodType = bloodTypeParam !== null ? Number(bloodTypeParam) : -1;
+    const gender = Number(searchParams.get('Gender')) || 0;
+    const bloodType = Number(searchParams.get('BloodType')) || 0;
 
     setFilters({
       searchTerm: search,
@@ -198,15 +192,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
     setSelectedPatient(undefined);
   };
 
-  const handleOpenArchiveDialog = (patientId: string) => {
-    setSelectedId(patientId);
-    setOpenArchiveDialog(true);
-  };
-
-  const handleCloseArchiveDialog = () => {
-    setOpenArchiveDialog(false);
-    setSelectedId('');
-  };
+  // removed archive dialog handlers to match current actions
 
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
     setFilterAnchorEl(event.currentTarget);
@@ -235,8 +221,8 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
   const handleFilterReset = () => {
     const resetFilters = {
       searchTerm: '',
-      gender: -1,
-      bloodType: -1,
+      gender: 0,
+      bloodType: 0,
     };
     setFilters(resetFilters);
     updateURLParams(resetFilters);
@@ -249,8 +235,8 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
     if (key === 'searchTerm') {
       newValue = '';
     } else {
-      // For gender and blood type, use -1 to indicate "no filter"
-      newValue = -1;
+      // For gender and blood type, use 0 to indicate "no filter"
+      newValue = 0;
     }
 
     const newFilters = { ...filters, [key]: newValue };
@@ -275,14 +261,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
     }
   };
 
-  const handleArchivePatient = async (patientId: string) => {
-    try {
-      await archivePatientMutation.mutateAsync(patientId);
-      handleCloseArchiveDialog();
-    } catch (error) {
-      console.error('Archive patient error:', error);
-    }
-  };
+  // removed archive action handler as it's not used in this view
 
   // Table configuration for SharedTable
   const TABLE_HEAD = [
@@ -313,53 +292,26 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
   }, [filterAnchorEl]);
 
   // Check if any filters are currently applied
-  const hasActiveFilters = filters.searchTerm || filters.gender >= 0 || filters.bloodType >= 0;
+  const hasActiveFilters =
+    Boolean(filters.searchTerm) || filters.gender > 0 || filters.bloodType > 0;
 
   // Show no data message if no patients, but keep header and search/filter functionality
-  if (!patients || patients.length === 0) {
+  if (!patients || (patients.length === 0 && !hasActiveFilters)) {
     return (
       <>
         {/* No Data Found Message */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            py: 8,
-            px: 2,
-            textAlign: 'center',
-          }}
-        >
-          {!hasActiveFilters && (
-            <Box
-              component="img"
-              src="/assets/images/patients/icon.svg"
-              alt="No data found"
-              sx={{
-                width: 144,
-                height: 144,
-                mb: 3,
-              }}
-            />
-          )}
-
-          <Typography variant="h5" sx={{ mb: 1, color: 'text.secondary' }}>
-            {hasActiveFilters ? 'No patients found' : 'No patients yet'}
-          </Typography>
-          <Typography variant="body1" sx={{ mb: 3, color: 'text.secondary', maxWidth: 400 }}>
-            {hasActiveFilters
+        <EmptyState
+          icon="/assets/images/patients/icon.svg"
+          header={hasActiveFilters ? 'No patients found' : 'No patients yet'}
+          subheader={
+            hasActiveFilters
               ? 'No patients match your current filters. Try adjusting your search criteria or clearing some filters.'
-              : "You haven't added any patients yet. Start by adding a new one."}
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={hasActiveFilters ? handleFilterReset : handleOpenAddDialog}
-            sx={{ mb: 2 }}
-          >
-            {hasActiveFilters ? 'Clear Filters' : 'Add New Patient'}
-          </Button>
-        </Box>
+              : "You haven't added any patients yet. Start by adding a new one."
+          }
+          buttonText={hasActiveFilters ? 'Clear Filters' : 'Add New Patient'}
+          onButtonClick={hasActiveFilters ? handleFilterReset : handleOpenAddDialog}
+          iconSize={150}
+        />
 
         {/* Patient Dialog */}
         <PatientDialog
@@ -380,11 +332,11 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
         {/* Header Section */}
 
         <SharedHeader
-        header="Patients"
-        subheader="Latest updates from the past 7 days."
-        buttonText="Add New Patient"
-        onButtonClick={handleOpenAddDialog}
-      />
+          header="Patients"
+          subheader="Latest updates from the past 7 days."
+          buttonText="Add New Patient"
+          onButtonClick={handleOpenAddDialog}
+        />
         {/* Search and Filter Bar */}
         <Paper
           elevation={1}
@@ -405,10 +357,37 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
               py: 2,
             }}
           >
-            <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
               <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
                 Patients
               </Typography>
+              {filters.gender > 0 && (
+                <Chip
+                  size="small"
+                  color="default"
+                  label={`Gender: ${genders?.find((gender) => gender.Id === filters.gender)?.Name || ''}`}
+                  onDelete={() => handleClearFilter('gender')}
+                  sx={{ height: 24 }}
+                />
+              )}
+              {filters.bloodType > 0 && (
+                <Chip
+                  size="small"
+                  color="default"
+                  label={`Blood Type: ${bloodTypes?.find((bloodType) => bloodType.Id === filters.bloodType)?.Name || ''}`}
+                  onDelete={() => handleClearFilter('bloodType')}
+                  sx={{ height: 24 }}
+                />
+              )}
+              {filters.searchTerm && (
+                <Chip
+                  size="small"
+                  color="default"
+                  label={`Search: ${filters.searchTerm}`}
+                  onDelete={() => handleClearFilter('searchTerm')}
+                  sx={{ height: 24 }}
+                />
+              )}
             </Box>
 
             {/* Search and Filter Bar */}
@@ -424,28 +403,12 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
                 placeholder="Search patient name"
                 value={filters.searchTerm}
                 onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    updateURLParams(filters);
-                  }
-                }}
                 sx={{ flexGrow: 1, maxWidth: 600, width: '100%' }}
                 size="small"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
                       <Iconify icon="eva:search-fill" />
-                    </InputAdornment>
-                  ),
-                  endAdornment: filters.searchTerm && (
-                    <InputAdornment position="end">
-                      <IconButton
-                        size="small"
-                        onClick={() => handleClearFilter('searchTerm')}
-                        edge="end"
-                      >
-                        <Iconify icon="eva:close-fill" />
-                      </IconButton>
                     </InputAdornment>
                   ),
                 }}
@@ -533,7 +496,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
                       </InputAdornment>
                     }
                   >
-                    <MenuItem value={-1}>All Genders</MenuItem>
+                    <MenuItem value={0}>All Genders</MenuItem>
                     {genders?.map((gender) => (
                       <MenuItem key={gender.Id} value={gender.Id}>
                         {gender.Name}
@@ -556,7 +519,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
                       </InputAdornment>
                     }
                   >
-                    <MenuItem value={-1}>All Blood Types</MenuItem>
+                    <MenuItem value={0}>All Blood Types</MenuItem>
                     {bloodTypes?.map((bloodType) => (
                       <MenuItem key={bloodType.Id} value={bloodType.Id}>
                         {bloodType.Name}
@@ -568,12 +531,12 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
             </Grid>
 
             {/* Active Filters Display */}
-            {(filters.gender >= 0 || filters.bloodType >= 0) && (
+            {(filters.gender > 0 || filters.bloodType > 0) && (
               <Box sx={{ mt: 1.5, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Typography variant="body2" sx={{ alignSelf: 'center', mr: 1 }}>
                   Active filters:
                 </Typography>
-                {filters.gender >= 0 && (
+                {filters.gender > 0 && (
                   <Chip
                     label={`Gender: ${genders?.find((gender) => gender.Id === filters.gender)?.Name || ''}`}
                     onDelete={() => handleClearFilter('gender')}
@@ -582,7 +545,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
                     size="small"
                   />
                 )}
-                {filters.bloodType >= 0 && (
+                {filters.bloodType > 0 && (
                   <Chip
                     label={`Blood Type: ${bloodTypes?.find((bloodType) => bloodType.Id === filters.bloodType)?.Name || ''}`}
                     onDelete={() => handleClearFilter('bloodType')}
@@ -605,61 +568,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
             </Box>
           </Popover>
 
-          {/* Active Filters Display */}
-          {hasActiveFilters && (
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                px: 2,
-                py: 1.5,
-                borderTop: '1px solid',
-                borderColor: 'divider',
-                bgcolor: 'background.neutral',
-                flexWrap: 'wrap',
-              }}
-            >
-              <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 500 }}>
-                Active filters:
-              </Typography>
-              {filters.searchTerm && (
-                <Chip
-                  label={`Search: "${filters.searchTerm}"`}
-                  onDelete={() => handleClearFilter('searchTerm')}
-                  color="primary"
-                  variant="outlined"
-                  size="small"
-                />
-              )}
-              {filters.gender >= 0 && (
-                <Chip
-                  label={`Gender: ${genders?.find((gender) => gender.Id === filters.gender)?.Name || ''}`}
-                  onDelete={() => handleClearFilter('gender')}
-                  color="primary"
-                  variant="outlined"
-                  size="small"
-                />
-              )}
-              {filters.bloodType >= 0 && (
-                <Chip
-                  label={`Blood Type: ${bloodTypes?.find((bloodType) => bloodType.Id === filters.bloodType)?.Name || ''}`}
-                  onDelete={() => handleClearFilter('bloodType')}
-                  color="primary"
-                  variant="outlined"
-                  size="small"
-                />
-              )}
-              <Button
-                variant="text"
-                size="small"
-                onClick={handleFilterReset}
-                sx={{ ml: 'auto', color: 'text.secondary' }}
-              >
-                Clear All
-              </Button>
-            </Box>
-          )}
+          {/* Active filters inline with header; removed bottom bar to match Rooms */}
 
           {/* Patients Table using SharedTable */}
           <SharedTable
@@ -696,6 +605,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
               DateOfBirth: ({ DateOfBirth }: IPatient) => <Box>{formatDateLocal(DateOfBirth)}</Box>,
               CreatedAt: ({ CreatedAt }: IPatient) => <Box>{formatDateLocal(CreatedAt)}</Box>,
             }}
+            emptyIcon="/assets/images/patients/icon.svg"
           />
         </Paper>
       </Stack>

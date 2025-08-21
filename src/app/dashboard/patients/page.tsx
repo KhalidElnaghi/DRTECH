@@ -2,8 +2,8 @@
 
 import { useSearchParams } from 'next/navigation';
 
-import { usePatients } from 'src/hooks/use-patients-query';
 import { useLookups } from 'src/hooks/use-lookups-query';
+import { usePatients } from 'src/hooks/use-patients-query';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
