@@ -1,11 +1,12 @@
 'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
+import { useSnackbar } from 'notistack';
+import { useRef, useMemo, useState, useEffect, useCallback } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 import {
   Box,
-  Card,
   Chip,
   Grid,
   Stack,
@@ -17,27 +18,26 @@ import {
   TextField,
   Typography,
   InputLabel,
+  IconButton,
   FormControl,
   InputAdornment,
-  IconButton,
 } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useDeleteDoctor } from 'src/hooks/use-doctors-query';
-import { useSnackbar } from 'notistack';
 
 import { useTranslate } from 'src/locales';
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 import { cellAlignment } from 'src/CustomSharedComponents/SharedTable/types';
 
 import Iconify from 'src/components/iconify';
+import EmptyState from 'src/components/empty-state';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import DoctorDialog from 'src/components/dialogs/doctor-dialog';
+import SharedHeader from 'src/components/shared-header/empty-state';
 
 import { ILookup } from 'src/types/lookups';
 import { IDoctor, ISpecialization } from 'src/types/doctors';
-import Image from 'next/image';
-import SharedHeader from 'src/components/shared-header/empty-state';
 
 interface IProps {
   doctors: IDoctor[];
@@ -301,57 +301,34 @@ export default function DoctorsPage({
   // Check if any filters are active
   const hasActiveFilters = filters.searchTerm || filters.status > 0 || filters.specializationId > 0;
 
-  // Don't render if required data is not available
-  if (!specializations || !statusOptions) {
-    return null;
-  }
+  const activeSpecializationName = useMemo(() => {
+    if (!filters.specializationId) return undefined;
+    return specializations?.find((s) => s.Id === filters.specializationId)?.Name;
+  }, [specializations, filters.specializationId]);
+
+  const activeStatusName = useMemo(() => {
+    if (!filters.status) return undefined;
+    return statusOptions?.find((s) => s.Id === filters.status)?.Name;
+  }, [statusOptions, filters.status]);
 
   // Show no data message if no doctors, but keep header and search/filter functionality
-  if (!doctors || doctors.length === 0) {
+  if (!doctors || (doctors.length === 0 && !hasActiveFilters)) {
     return (
       <>
         {/* No Data Found Message */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            py: 8,
-            px: 2,
-            textAlign: 'center',
-          }}
-        >
-          {!hasActiveFilters && (
-            <Box
-              component="img"
-              src="/assets/images/doctors/icon.svg"
-              alt="No data found"
-              sx={{
-                width: 144,
-                height: 144,
-                mb: 3,
-              }}
-            />
-          )}
 
-          <Typography variant="h5" sx={{ mb: 1, color: 'text.secondary' }}>
-            {hasActiveFilters ? 'No doctors found' : 'No doctors yet'}
-          </Typography>
-          <Typography variant="body1" sx={{ mb: 3, color: 'text.secondary', maxWidth: 400 }}>
-            {hasActiveFilters
-              ? 'No doctors match your current filters. Try adjusting your search criteria or clearing some filters.'
-              : "You haven't added any doctors yet. Start by adding a new one."}
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={hasActiveFilters ? handleResetFilters : handleOpenAddDialog}
-            sx={{ mb: 2 }}
-          >
-            {hasActiveFilters ? 'Clear Filters' : 'Add New Doctor'}
-          </Button>
-        </Box>
-
+        <EmptyState
+          icon="/assets/images/doctors/icon.svg"
+          header={hasActiveFilters ? 'No appointments found' : 'No appointments yet'}
+          subheader={
+            hasActiveFilters
+              ? 'No appointments match your current filters. Try adjusting your search criteria or clearing some filters.'
+              : "You haven't scheduled any appointments yet. Start by adding a new one."
+          }
+          buttonText="Add New Doctor"
+          onButtonClick={hasActiveFilters ? handleResetFilters : handleOpenAddDialog}
+          iconSize={150}
+        />
         {/* Doctor Dialog */}
         <DoctorDialog
           open={openAddDialog}
@@ -395,10 +372,41 @@ export default function DoctorsPage({
               py: 2,
             }}
           >
-            <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
               <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
                 {t('DOCTOR.DOCTORS') || 'Doctors'}
               </Typography>
+              {!!filters.searchTerm && (
+                <Chip
+                  size="small"
+                  color="default"
+                  label={`Search: ${filters.searchTerm}`}
+                  onDelete={() => {
+                    const next = { ...filters, searchTerm: '' };
+                    setFilters(next);
+                    updateURLParams(next);
+                  }}
+                  sx={{ height: 24 }}
+                />
+              )}
+              {activeSpecializationName && (
+                <Chip
+                  size="small"
+                  color="default"
+                  label={`Specialization: ${activeSpecializationName}`}
+                  onDelete={() => handleFilterChange('specializationId' as const, 0)}
+                  sx={{ height: 24 }}
+                />
+              )}
+              {activeStatusName && (
+                <Chip
+                  size="small"
+                  color="default"
+                  label={`Status: ${activeStatusName}`}
+                  onDelete={() => handleFilterChange('status' as const, 0)}
+                  sx={{ height: 24 }}
+                />
+              )}
             </Box>
 
             {/* Search and Filter Bar */}
@@ -611,6 +619,7 @@ export default function DoctorsPage({
                 </Box>
               ),
             }}
+            emptyIcon="/assets/images/doctors/icon.svg"
           />
         </Paper>
       </Stack>
