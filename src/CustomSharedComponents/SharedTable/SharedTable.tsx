@@ -63,31 +63,37 @@ export default function SharedTable<T extends { id: string | number }>({
                 letterSpacing: '0.02em',
               },
               // Ensure inner elements (e.g., Typography) inherit the cell typography
-          
+
               '& .MuiTableBody-root .MuiTableRow-root:hover': {
                 backgroundColor: 'action.hover',
               },
             }}
           >
-            <TableHeadCustom headLabel={tableHead} headColor={headColor} />
+            {/* Inject auto "No" column at the beginning */}
+            <TableHeadCustom
+              headLabel={[{ id: 'auto_index', label: 'No', width: 25 }, ...tableHead]}
+              headColor={headColor}
+            />
 
             <TableBody>
               {data?.length ? (
-                data.map((row) => (
+                data.map((row, rowIdx) => (
                   <SharedTableRow<T>
                     key={row.id}
                     row={row}
                     actions={actions}
                     customRender={customRender}
-                    headIds={
-                      tableHead
+                    index={page * limit + rowIdx + 1}
+                    headIds={[
+                      'auto_index' as unknown as keyof T,
+                      ...(tableHead
                         .map((x) => x.id)
-                        .filter((x) => x !== '' && x !== 'rowsActions') as (keyof T)[]
-                    }
+                        .filter((x) => x !== '' && x !== 'rowsActions') as (keyof T)[]),
+                    ]}
                   />
                 ))
               ) : (
-                <TableNoData notFound colSpan={tableHead.length} iconUrl={emptyIcon} />
+                <TableNoData notFound colSpan={tableHead.length + 1} iconUrl={emptyIcon} />
               )}
             </TableBody>
           </Table>

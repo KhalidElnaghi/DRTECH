@@ -36,6 +36,8 @@ export interface SharedTableRowProps<T extends { id: string | number }> {
   actions?: Action<T>[];
   customRender?: Partial<Record<keyof T, (row: T) => ReactNode>>;
   headIds: (keyof T)[];
+  // 1-based row index for the current page (used for the auto "No" column)
+  index?: number;
 }
 export type SxStyle = SxProps<Theme>;
 

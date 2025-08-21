@@ -1,17 +1,20 @@
-import Iconify from 'src/components/iconify';
+/* eslint-disable no-nested-ternary */
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
+
+import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import { SharedTableRowProps, SxStyle } from './types';
+import { SxStyle, SharedTableRowProps } from './types';
 
 export default function SharedTableRow<T extends { id: string | number }>({
   row,
   actions,
   customRender,
   headIds,
+  index,
 }: SharedTableRowProps<T>) {
   let rowStyle: SxStyle = {};
 
@@ -24,9 +27,13 @@ export default function SharedTableRow<T extends { id: string | number }>({
   return (
     <>
       <TableRow hover sx={rowStyle}>
-        {headIds.map((x, index) => (
-          <TableCell key={index} sx={{ whiteSpace: 'nowrap', color: 'info.dark' }}>
-            {customRender && x in customRender ? customRender[x]!(row) : (row as any)[x]}
+        {headIds.map((x, cellIdx) => (
+          <TableCell key={cellIdx} sx={{ whiteSpace: 'nowrap', color: 'info.dark' }}>
+            {x === ('auto_index' as unknown as keyof T)
+              ? index
+              : customRender && x in customRender
+                ? customRender[x]!(row)
+                : (row as any)[x]}
           </TableCell>
         ))}
 
@@ -47,6 +54,7 @@ export default function SharedTableRow<T extends { id: string | number }>({
       >
         {actions
           ?.filter((action) => (action.hide ? !action.hide(row) : true))
+          // eslint-disable-next-line @typescript-eslint/no-shadow
           .map((action, index) => (
             <MenuItem
               key={index}
