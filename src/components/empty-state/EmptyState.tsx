@@ -1,4 +1,5 @@
 import { ComponentType } from 'react';
+
 import { Box, Button, Typography } from '@mui/material';
 
 import Iconify from 'src/components/iconify';
@@ -61,14 +62,13 @@ export default function EmptyState({
         alignItems: 'center',
         justifyContent: 'center',
         gap: 2,
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
+        width: '100%',
+        minHeight: { xs: 'calc(100vh - 70px)', lg: 'calc(100vh - 88px)' },
+        textAlign: 'center',
       }}
     >
       {/* Icon */}
-      {icon && <Box>{renderIcon()}</Box>}
+      {icon && renderIcon()}
 
       {/* Header */}
       <Typography

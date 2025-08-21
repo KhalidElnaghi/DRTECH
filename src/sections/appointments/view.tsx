@@ -34,7 +34,9 @@ import { useTranslate } from 'src/locales';
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 
 import Iconify from 'src/components/iconify';
+import EmptyState from 'src/components/empty-state';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import SharedHeader from 'src/components/shared-header/empty-state';
 import AppointmentDialog from 'src/components/dialogs/appointment-dialog';
 import CancelAppointmentDialog from 'src/components/dialogs/cancel-appointment-dialog';
 
@@ -42,7 +44,6 @@ import { IDoctor } from 'src/types/doctors';
 import { ILookup } from 'src/types/lookups';
 import { IPatient } from 'src/types/patients';
 import { IAppointment } from 'src/types/appointment';
-import SharedHeader from 'src/components/shared-header/empty-state';
 
 // ----------------------------------------------------------------------
 interface IProps {
@@ -318,24 +319,24 @@ export default function AppointmentsPage({
   };
 
   // Show no data message if no appointments, but keep header and search/filter functionality
-  if (!appointments || appointments.length === 0) {
+  if (!appointments || (appointments.length === 0 && !hasActiveFilters)) {
     return (
       <>
-        {/* <EmptyState
-          icon="/assets/images/payments/icon.svg"
-          header={hasActiveFilters ? 'No payments found' : 'No payments found'}
+        <EmptyState
+          icon="/assets/images/appointments/icon.svg"
+          header={hasActiveFilters ? 'No appointments found' : 'No appointments yet'}
           subheader={
             hasActiveFilters
-              ? 'Try changing the filters to find matching payments.'
-              : 'Start tracking payments by creating one or linking it to an existing appointment'
+              ? 'No appointments match your current filters. Try adjusting your search criteria or clearing some filters.'
+              : "You haven't scheduled any appointments yet. Start by adding a new one."
           }
           buttonText={hasActiveFilters ? 'Clear Filters' : 'Add New Payment'}
-          onButtonClick={hasActiveFilters ? handleFilterReset : createDialog.onTrue}
+          onButtonClick={hasActiveFilters ? handleResetFilters : handleOpenAddDialog}
           iconSize={150}
-        /> */}
+        />
 
         {/* No Data Found Message */}
-        <Box
+        {/* <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -375,7 +376,7 @@ export default function AppointmentsPage({
           >
             {hasActiveFilters ? 'Clear Filters' : 'Add New Appointment'}
           </Button>
-        </Box>
+        </Box> */}
 
         {/* Appointment Dialog */}
         <AppointmentDialog
@@ -421,10 +422,37 @@ export default function AppointmentsPage({
             py: 2,
           }}
         >
-          <Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
             <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
               Appointments
             </Typography>
+            {filters.doctorName && (
+              <Chip
+                size="small"
+                color="default"
+                label={`Doctor: ${filters.doctorName}`}
+                onDelete={() => handleFilterChange('doctorName', '')}
+                sx={{ height: 24 }}
+              />
+            )}
+            {filters.appointmentDate && (
+              <Chip
+                size="small"
+                color="default"
+                label={`Date: ${filters.appointmentDate}`}
+                onDelete={() => handleFilterChange('appointmentDate', '')}
+                sx={{ height: 24 }}
+              />
+            )}
+            {filters.status && (
+              <Chip
+                size="small"
+                color="default"
+                label={`Status: ${getStatusLabel(filters.status)}`}
+                onDelete={() => handleFilterChange('status', '')}
+                sx={{ height: 24 }}
+              />
+            )}
           </Box>
 
           {/* Search and Filter Bar */}
@@ -437,7 +465,7 @@ export default function AppointmentsPage({
             }}
           >
             {/* Search Bar */}
-            <TextField
+            {/* <TextField
               placeholder="Search..."
               value={filters.search}
               onChange={(e) => handleFilterChange('search', e.target.value)}
@@ -450,7 +478,7 @@ export default function AppointmentsPage({
                   </InputAdornment>
                 ),
               }}
-            />
+            /> */}
 
             {/* Filter Icon Button */}
             <IconButton
@@ -924,6 +952,7 @@ export default function AppointmentsPage({
               );
             },
           }}
+          emptyIcon="/assets/images/appointments/icon.svg"
         />
       </Paper>
 
