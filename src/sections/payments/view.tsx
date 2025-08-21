@@ -9,6 +9,7 @@ import {
   Paper,
   Stack,
   Button,
+  Chip,
   Select,
   Popover,
   MenuItem,
@@ -99,6 +100,16 @@ export default function PaymentsPage({
   const openFilter = Boolean(isFilterOpen && filterButtonRef.current);
   const hasActiveFilters = filters.DoctorId > 0 || filters.Status > 0;
 
+  const activeDoctorName = useMemo(() => {
+    if (!filters.DoctorId) return undefined;
+    return doctors.find((d) => d.Id === filters.DoctorId)?.Name;
+  }, [doctors, filters.DoctorId]);
+
+  const activeStatusName = useMemo(() => {
+    if (!filters.Status) return undefined;
+    return paymentStatus.find((s) => s.Id === filters.Status)?.Name;
+  }, [paymentStatus, filters.Status]);
+
   const updateURLParams = useCallback(
     (next: FilterState) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -140,6 +151,51 @@ export default function PaymentsPage({
     setSelectedId(null);
   };
   console.log(payments);
+  const getStatusColors = (status: string) => {
+    let textColor = 'text.secondary';
+    let bgColor = 'grey.100';
+    let borderColor = 'grey.100';
+
+    switch (status) {
+      case 'Paid':
+        textColor = '#28806F';
+        bgColor = '#EFFEFA';
+        borderColor = '#DDF3EF';
+        break;
+      case 'Pending':
+        textColor = '#A77B2E';
+        bgColor = '#FFF6E0';
+        borderColor = '#FAEDCC';
+        break;
+      case 'Partially Paid':
+        textColor = '#116B97';
+        bgColor = '#F0FBFF';
+        borderColor = '#D1F0FA';
+        break;
+      case 'Cancelled':
+        textColor = '#B21634';
+        bgColor = '#FEF3F2';
+        borderColor = '#FECDCA';
+        break;
+      case 'Failed':
+        textColor = '#B21634';
+        bgColor = '#FEF3F2';
+        borderColor = '#FECDCA';
+        break;
+      case 'Refunded':
+        textColor = '#7C3AED';
+        bgColor = '#F3F4F6';
+        borderColor = '#C4B5FD';
+        break;
+
+      default:
+        textColor = 'text.secondary';
+        bgColor = 'grey.100';
+        borderColor = '#DDF3EF';
+    }
+
+    return { textColor, bgColor, borderColor };
+  };
   // empty state
   if (!payments || (payments.length === 0 && !hasActiveFilters)) {
     return (
@@ -190,10 +246,28 @@ export default function PaymentsPage({
             }}
           >
             {' '}
-            <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
               <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
                 Payments
               </Typography>
+              {activeDoctorName && (
+                <Chip
+                  size="small"
+                  color="default"
+                  label={`Doctor: ${activeDoctorName}`}
+                  onDelete={() => handleFilterChange('DoctorId', 0)}
+                  sx={{ height: 24 }}
+                />
+              )}
+              {activeStatusName && (
+                <Chip
+                  size="small"
+                  color="default"
+                  label={`Status: ${activeStatusName}`}
+                  onDelete={() => handleFilterChange('Status', 0)}
+                  sx={{ height: 24 }}
+                />
+              )}
             </Box>
             <Box>
               <IconButton
@@ -342,11 +416,34 @@ export default function PaymentsPage({
                   {Number(row?.PaymentAmount ?? 0).toFixed(2)}
                 </Typography>
               ),
-              // StatusName: (row: any) => {
-              //   const name =
-              //     row?.StatusName || paymentStatus.find((s) => s.Id === row?.Status)?.Name;
-              //   return <Typography>{name || '-'}</Typography>;
-              // },
+              StatusName: (row: any) => {
+                const status = row?.StatusName;
+                const { textColor, bgColor, borderColor } = getStatusColors(status);
+
+                return (
+                  <Box
+                    sx={{
+                      display: 'inline-block',
+                      px: 1.5,
+                      py: 0.5,
+                      borderRadius: 1,
+                      backgroundColor: bgColor,
+                      color: textColor,
+                      fontSize: '0.8rem',
+                      fontWeight: 600,
+                      textAlign: 'center',
+                      minWidth: 80,
+                      border: `1px solid ${borderColor}`,
+                      '&:hover': {
+                        backgroundColor: bgColor,
+                        opacity: 0.8,
+                      },
+                    }}
+                  >
+                    {status}
+                  </Box>
+                );
+              },
             }}
             emptyIcon="/assets/images/payments/icon.svg"
           />
