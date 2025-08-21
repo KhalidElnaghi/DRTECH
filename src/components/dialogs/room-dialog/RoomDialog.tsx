@@ -78,14 +78,9 @@ export default function RoomDialog({
 
   const { handleSubmit, reset, control, watch } = methods;
 
-
-
-
   // Monitor dialog open state
   useEffect(() => {
     if (open && room) {
-
-
       // Force set the Floor value if it's not set correctly
       if (room.Floor && !methods.getValues().Floor) {
         methods.setValue('Floor', room.Floor);
@@ -118,8 +113,6 @@ export default function RoomDialog({
 
       // Reset form with the room data
       reset(formData);
-
-
 
       setIsFormReady(true);
     } else {
@@ -164,7 +157,6 @@ export default function RoomDialog({
         reset();
       }
     } catch (error: any) {
-
       // Handle API error responses
       let errorMessage = 'An unexpected error occurred';
 
@@ -200,7 +192,7 @@ export default function RoomDialog({
     <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
       <DialogTitle
         sx={{
-          py: 1,
+          py: 2,
           bgcolor: '#F6F8FA',
           borderBottom: '1px solid #DFE1E7',
           display: 'flex',
@@ -227,10 +219,10 @@ export default function RoomDialog({
       </DialogTitle>
 
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogContent sx={{ borderBottom: '1px solid #DFE1E7', py: 4 }}>
+        <DialogContent sx={{ borderBottom: '1px solid #DFE1E7', py: 3 }}>
           <Stack
             spacing={1}
-            sx={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: 2, mt: 1 }}
+            sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2 }}
           >
             <Box>
               <Typography

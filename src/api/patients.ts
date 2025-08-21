@@ -7,7 +7,7 @@ export const fetchPatients = async (params: PatientParams) => {
       page: params.page,
       limit: 10,
       ...(params.SearchTerm && { SearchTerm: params.SearchTerm }),
-      ...(params.Gender&& { Gender: params.Gender }),
+      ...(params.Gender && { Gender: params.Gender }),
       ...(params.BloodType && { BloodType: params.BloodType }),
     },
   });
@@ -31,5 +31,10 @@ export const deletePatient = async (id: string) => {
 
 export const archivePatient = async (id: string) => {
   const response = await axiosInstance.patch(endpoints.patients.archive(id));
+  return response.data;
+};
+
+export const fetchPatientsDropdownClient = async () => {
+  const response = await axiosInstance.get(endpoints.patients.dropdown);
   return response.data;
 };

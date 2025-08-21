@@ -18,6 +18,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  IconButton,
 } from '@mui/material';
 
 import { useCreateInpatient, useUpdateInpatient } from 'src/hooks/use-inpatients-query';
@@ -30,6 +31,7 @@ import RHFTextField from 'src/components/hook-form/rhf-text-field-form';
 import { IRoom } from 'src/types/room';
 import { IPatient } from 'src/types/patient';
 import { IInpatient } from 'src/types/inpatient';
+import Iconify from 'src/components/iconify';
 
 interface InpatientDialogProps {
   open: boolean;
@@ -181,17 +183,37 @@ export default function InpatientDialog({
         },
       }}
     >
-      <DialogTitle sx={{ pb: 1 }}>
+      <DialogTitle
+        sx={{
+          py: 2,
+          bgcolor: '#F6F8FA',
+          borderBottom: '1px solid #DFE1E7',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
         <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
           {inpatient ? 'Edit Inpatient' : 'Add New Inpatient'}
         </Typography>
+        <IconButton
+          onClick={onClose}
+          sx={{
+            color: '#666',
+            '&:hover': {
+              bgcolor: 'rgba(0, 0, 0, 0.04)',
+            },
+          }}
+        >
+          <Iconify icon="eva:close-fill" />
+        </IconButton>
       </DialogTitle>
 
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <DialogContent sx={{ borderBottom: '1px solid #DFE1E7', py: 4 }}>
+        <DialogContent sx={{ borderBottom: '1px solid #DFE1E7', py: 3 }}>
           <Stack
             spacing={1}
-            sx={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: 2, mt: 1 }}
+            sx={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: 2 }}
           >
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
               {' '}
@@ -378,7 +400,7 @@ export default function InpatientDialog({
         </DialogContent>
 
         <DialogActions sx={{ px: 3, pb: 3 }}>
-          <Button variant="outlined" onClick={handleClose}>
+          <Button variant="outlined" color="primary" onClick={handleClose}>
             Cancel
           </Button>
           <LoadingButton

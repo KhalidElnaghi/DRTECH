@@ -183,7 +183,7 @@ export default function PatientDialog({
     <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
       <DialogTitle
         sx={{
-          py: 1,
+          py: 2,
           bgcolor: '#F6F8FA',
           borderBottom: '1px solid #DFE1E7',
           display: 'flex',
@@ -206,10 +206,10 @@ export default function PatientDialog({
       </DialogTitle>
 
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogContent sx={{ borderBottom: '1px solid #DFE1E7', py: 4 }}>
+        <DialogContent sx={{ borderBottom: '1px solid #DFE1E7', py: 3 }}>
           <Stack
             spacing={1}
-            sx={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: 2, mt: 1 }}
+            sx={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: 2, }}
           >
             <Box
               sx={{

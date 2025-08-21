@@ -29,6 +29,7 @@ export interface SharedTableProps<T extends { id: string | number }> {
   customRender?: Partial<Record<keyof T, (row: T) => ReactNode>>;
   count: number;
   headColor?: string;
+  emptyIcon?: string;
 }
 export interface SharedTableRowProps<T extends { id: string | number }> {
   row: T;

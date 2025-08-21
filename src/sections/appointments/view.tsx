@@ -26,7 +26,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useDeleteAppointment, useCancelAppointment } from 'src/hooks/use-appointments-query';
+import { useDeleteAppointment } from 'src/hooks/use-appointments-query';
 
 import { fFullDate } from 'src/utils/format-time';
 
@@ -42,6 +42,7 @@ import { IDoctor } from 'src/types/doctors';
 import { ILookup } from 'src/types/lookups';
 import { IPatient } from 'src/types/patients';
 import { IAppointment } from 'src/types/appointment';
+import SharedHeader from 'src/components/shared-header/empty-state';
 
 // ----------------------------------------------------------------------
 interface IProps {
@@ -152,7 +153,6 @@ export default function AppointmentsPage({
 
   // React Query mutations
   const deleteAppointmentMutation = useDeleteAppointment();
-  const cancelAppointmentMutation = useCancelAppointment();
 
   // Initialize filters from URL params on component mount
   useEffect(() => {
@@ -167,6 +167,11 @@ export default function AppointmentsPage({
       appointmentDate,
       status,
     });
+  }, [searchParams]);
+
+  // Close filter popover when URL params change to prevent stale anchor positioning
+  useEffect(() => {
+    setFilterAnchorEl(null);
   }, [searchParams]);
 
   const handleOpenAddDialog = () => {
@@ -252,9 +257,26 @@ export default function AppointmentsPage({
 
     setFilters(resetFilters);
     updateURLParams(resetFilters);
+    // Ensure popover closes to avoid stale anchorEl and top-left positioning
+    setFilterAnchorEl(null);
   };
 
-  const openFilter = Boolean(filterAnchorEl);
+  const isAnchorValid =
+    typeof document !== 'undefined' &&
+    filterAnchorEl &&
+    (filterAnchorEl as any).ownerDocument?.body.contains(filterAnchorEl);
+  const openFilter = Boolean(isAnchorValid);
+
+  // Auto-close if anchor element unmounts
+  useEffect(() => {
+    if (
+      typeof document !== 'undefined' &&
+      filterAnchorEl &&
+      !(filterAnchorEl as any).ownerDocument?.body.contains(filterAnchorEl)
+    ) {
+      setFilterAnchorEl(null);
+    }
+  }, [filterAnchorEl]);
 
   const TABLE_HEAD = [
     { id: 'PatientName', label: 'LABEL.PATIENT_NAME' },
@@ -280,14 +302,13 @@ export default function AppointmentsPage({
     setIsDeleting(true);
 
     try {
-      const res = await deleteAppointmentMutation.mutateAsync(selectedId);
+      await deleteAppointmentMutation.mutateAsync(selectedId);
 
       enqueueSnackbar(t('MESSAGE.DELETED_SUCCESS'), {
         variant: 'success',
       });
       confirmDelete.onFalse();
     } catch (error: any) {
-
       enqueueSnackbar(error?.message || 'Failed to delete appointment', {
         variant: 'error',
       });
@@ -300,413 +321,18 @@ export default function AppointmentsPage({
   if (!appointments || appointments.length === 0) {
     return (
       <>
-        {/* Header Section */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            mb: 3,
-            pt: 1,
-          }}
-        >
-          <Box>
-            <Typography variant="h4" sx={{ mb: 1, fontWeight: 'bold' }}>
-              Appointments
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Here are all appointments updated in the last 7 days.
-            </Typography>
-          </Box>
-
-          <Button
-            variant="contained"
-            size="large"
-            onClick={handleOpenAddDialog}
-            sx={{
-              bgcolor: 'primary.main',
-              color: 'white',
-              borderRadius: 1,
-              fontWeight: 500,
-              '&:hover': {
-                bgcolor: 'primary.dark',
-              },
-            }}
-          >
-            New Appointment
-          </Button>
-        </Box>
-
-        {/* Search and Filter Bar */}
-        <Paper
-          elevation={1}
-          sx={{
-            border: '1px solid',
-            borderColor: 'divider',
-            borderRadius: 2,
-            px: 0,
-            mb: 1,
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              px: 2,
-              py: 2,
-            }}
-          >
-            <Box>
-              <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
-                Appointments
-              </Typography>
-            </Box>
-
-            {/* Search and Filter Bar */}
-            <Box
-              sx={{
-                display: 'flex',
-                gap: 1.5,
-                alignItems: 'center',
-              }}
-            >
-              {/* Search Bar */}
-              <TextField
-                placeholder="Search..."
-                value={filters.search}
-                onChange={(e) => handleFilterChange('search', e.target.value)}
-                sx={{ flexGrow: 1, maxWidth: 600, width: '100%' }}
-                size="small"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Iconify icon="eva:search-fill" />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-
-              {/* Filter Icon Button */}
-              <IconButton
-                onClick={handleFilterClick}
-                sx={{
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  borderRadius: 1,
-                  p: 1,
-                  boxShadow: '0 2px 12px rgba(25, 118, 210, 0.4), 0 0 20px rgba(25, 118, 210, 0.1)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    borderColor: 'primary.main',
-                    bgcolor: 'primary.50',
-                    boxShadow:
-                      '0 6px 24px rgba(25, 118, 210, 0.6), 0 0 30px rgba(25, 118, 210, 0.2)',
-                    transform: 'translateY(-3px)',
-                  },
-                }}
-              >
-                <Iconify icon="majesticons:filter-line" width={20} height={20} />
-              </IconButton>
-            </Box>
-          </Box>
-
-          {/* Filter Popup */}
-          <Popover
-            open={openFilter}
-            anchorEl={filterAnchorEl}
-            onClose={handleFilterClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            PaperProps={{
-              sx: {
-                width: 400,
-                p: 2,
-                mt: 1,
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
-                borderRadius: 2,
-              },
-            }}
-          >
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-                Filter Appointments
-              </Typography>
-            </Box>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Doctor Name</InputLabel>
-                  <Select
-                    value={filters.doctorName}
-                    onChange={(e) => handleFilterChange('doctorName', e.target.value)}
-                    label="Doctor Name"
-                    placeholder="Select doctor"
-                    sx={{
-                      '& .MuiInputLabel-root': {
-                        backgroundColor: 'background.paper',
-                        px: 0.5,
-                      },
-                    }}
-                  >
-                    <MenuItem value="">All Doctors</MenuItem>
-                    {doctors.map((doctor) => (
-                      <MenuItem key={doctor.Id} value={doctor.FullName}>
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'flex-start',
-                          }}
-                        >
-                          <Typography variant="body2">
-                            Dr.{doctor.FullName}{' '}
-                            <Typography variant="caption" color="text.secondary">
-                              ({doctor.SpecializationName})
-                            </Typography>
-                          </Typography>
-                        </Box>
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={12}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    label="Appointment Date"
-                    value={filters.appointmentDate ? new Date(filters.appointmentDate) : null}
-                    onChange={(newValue) => {
-                      if (newValue) {
-                        handleFilterChange('appointmentDate', formatDateLocal(newValue));
-                      } else {
-                        handleFilterChange('appointmentDate', '');
-                      }
-                    }}
-                    slotProps={{
-                      textField: {
-                        size: 'small',
-                        fullWidth: true,
-                        placeholder: 'Select appointment date',
-                        InputLabelProps: {
-                          shrink: true,
-                        },
-                        sx: {
-                          '& .MuiInputLabel-root': {
-                            backgroundColor: 'background.paper',
-                            px: 0.5,
-                          },
-                        },
-                      },
-                    }}
-                  />
-                </LocalizationProvider>
-              </Grid>
-
-              <Grid item xs={12}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Status</InputLabel>
-                  <Select
-                    value={filters.status}
-                    onChange={(e) => handleFilterChange('status', e.target.value)}
-                    displayEmpty
-                    placeholder="Select status"
-                  >
-                    <MenuItem
-                      value="1"
-                      sx={{
-                        '&:hover': {
-                          backgroundColor: getStatusColors('Scheduled').bgColor,
-                          opacity: 0.8,
-                        },
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'inline-block',
-                          px: 1.5,
-                          py: 0.5,
-                          borderRadius: 1,
-                          backgroundColor: getStatusColors('Scheduled').bgColor,
-                          color: getStatusColors('Scheduled').textColor,
-                          fontSize: '0.8rem',
-                          fontWeight: 500,
-                          textAlign: 'center',
-                          minWidth: 80,
-                          border: `1px solid ${getStatusColors('Scheduled').borderColor}`,
-                        }}
-                      >
-                        Scheduled
-                      </Box>
-                    </MenuItem>
-                    <MenuItem
-                      value="2"
-                      sx={{
-                        '&:hover': {
-                          backgroundColor: getStatusColors('Completed').bgColor,
-                          opacity: 0.8,
-                        },
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'inline-block',
-                          px: 1.5,
-                          py: 0.5,
-                          borderRadius: 1,
-                          backgroundColor: getStatusColors('Completed').bgColor,
-                          color: getStatusColors('Completed').textColor,
-                          fontSize: '0.8rem',
-                          fontWeight: 500,
-                          textAlign: 'center',
-                          minWidth: 80,
-                          border: `1px solid ${getStatusColors('Completed').borderColor}`,
-                        }}
-                      >
-                        Completed
-                      </Box>
-                    </MenuItem>
-                    <MenuItem
-                      value="3"
-                      sx={{
-                        '&:hover': {
-                          backgroundColor: getStatusColors('Cancelled').bgColor,
-                          opacity: 0.8,
-                        },
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'inline-block',
-                          px: 1.5,
-                          py: 0.5,
-                          borderRadius: 1,
-                          backgroundColor: getStatusColors('Cancelled').bgColor,
-                          color: getStatusColors('Cancelled').textColor,
-                          fontSize: '0.8rem',
-                          fontWeight: 500,
-                          textAlign: 'center',
-                          minWidth: 80,
-                          border: `1px solid ${getStatusColors('Cancelled').borderColor}`,
-                        }}
-                      >
-                        Cancelled
-                      </Box>
-                    </MenuItem>
-                    <MenuItem
-                      value="4"
-                      sx={{
-                        '&:hover': {
-                          backgroundColor: getStatusColors('No Show').bgColor,
-                          opacity: 0.8,
-                        },
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'inline-block',
-                          px: 1.5,
-                          py: 0.5,
-                          borderRadius: 1,
-                          backgroundColor: getStatusColors('No Show').bgColor,
-                          color: getStatusColors('No Show').textColor,
-                          fontSize: '0.8rem',
-                          fontWeight: 500,
-                          textAlign: 'center',
-                          minWidth: 80,
-                          border: `1px solid ${getStatusColors('No Show').borderColor}`,
-                        }}
-                      >
-                        No Show
-                      </Box>
-                    </MenuItem>
-                    <MenuItem
-                      value="5"
-                      sx={{
-                        '&:hover': {
-                          backgroundColor: getStatusColors('Rescheduled').bgColor,
-                          opacity: 0.8,
-                        },
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'inline-block',
-                          px: 1.5,
-                          py: 0.5,
-                          borderRadius: 1,
-                          backgroundColor: getStatusColors('Rescheduled').bgColor,
-                          color: getStatusColors('Rescheduled').textColor,
-                          fontSize: '0.8rem',
-                          fontWeight: 500,
-                          textAlign: 'center',
-                          minWidth: 80,
-                          border: `1px solid ${getStatusColors('Rescheduled').borderColor}`,
-                        }}
-                      >
-                        Rescheduled
-                      </Box>
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-
-            {/* Active Filters Display */}
-            {(filters.doctorName || filters.appointmentDate || filters.status) && (
-              <Box sx={{ mt: 1.5, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                <Typography variant="body2" sx={{ alignSelf: 'center', mr: 1 }}>
-                  Active filters:
-                </Typography>
-                {filters.doctorName && (
-                  <Chip
-                    label={`Doctor: ${filters.doctorName}`}
-                    onDelete={() => handleFilterChange('doctorName', '')}
-                    color="primary"
-                    variant="outlined"
-                    size="small"
-                  />
-                )}
-                {filters.appointmentDate && (
-                  <Chip
-                    label={`Date: ${filters.appointmentDate}`}
-                    onDelete={() => handleFilterChange('appointmentDate', '')}
-                    color="primary"
-                    variant="outlined"
-                    size="small"
-                  />
-                )}
-                {filters.status && (
-                  <Chip
-                    label={`Status: ${getStatusLabel(filters.status)}`}
-                    onDelete={() => handleFilterChange('status', '')}
-                    color="primary"
-                    variant="outlined"
-                    size="small"
-                  />
-                )}
-              </Box>
-            )}
-
-            {/* Action Buttons */}
-            <Box sx={{ mt: 2, display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
-              <Button variant="outlined" onClick={handleResetFilters} size="small">
-                Reset
-              </Button>
-              <Button variant="contained" onClick={handleFilterClose} size="small">
-                Apply
-              </Button>
-            </Box>
-          </Popover>
-        </Paper>
+        {/* <EmptyState
+          icon="/assets/images/payments/icon.svg"
+          header={hasActiveFilters ? 'No payments found' : 'No payments found'}
+          subheader={
+            hasActiveFilters
+              ? 'Try changing the filters to find matching payments.'
+              : 'Start tracking payments by creating one or linking it to an existing appointment'
+          }
+          buttonText={hasActiveFilters ? 'Clear Filters' : 'Add New Payment'}
+          onButtonClick={hasActiveFilters ? handleFilterReset : createDialog.onTrue}
+          iconSize={150}
+        /> */}
 
         {/* No Data Found Message */}
         <Box
@@ -768,41 +394,12 @@ export default function AppointmentsPage({
   return (
     <>
       {/* Header Section */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-end',
-          mb: 3,
-          pt: 1,
-        }}
-      >
-        <Box>
-          <Typography variant="h4" sx={{ mb: 1, fontWeight: 'bold' }}>
-            Appointments
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Here are all appointments updated in the last 7 days.
-          </Typography>
-        </Box>
-
-        <Button
-          variant="contained"
-          size="large"
-          onClick={handleOpenAddDialog}
-          sx={{
-            bgcolor: 'primary.main',
-            color: 'white',
-            borderRadius: 1,
-            fontWeight: 500,
-            '&:hover': {
-              bgcolor: 'primary.dark',
-            },
-          }}
-        >
-          New Appointment
-        </Button>
-      </Box>
+      <SharedHeader
+        header="Appointments"
+        subheader="Here are all appointments updated in the last 7 days."
+        buttonText="New Appointment"
+        onButtonClick={handleOpenAddDialog}
+      />
 
       {/* Table Section */}
       <Paper
@@ -1359,7 +956,6 @@ export default function AppointmentsPage({
         title={t('TITLE.DELETE')}
         content={t('MESSAGE.CONFIRM_DELETE_APPOINTMENT')}
         icon={<Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />}
-
         action={
           <LoadingButton
             sx={{

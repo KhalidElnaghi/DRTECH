@@ -66,6 +66,7 @@ const ICONS = {
   banner: icon('solar:bill-linear'),
   appointments: icon('hugeicons:appointment-02'),
   rooms: icon('icon-park-twotone:single-bed'),
+  payments: icon('solar:bill-broken'),
   doctors: icon('fa7-solid:user-doctor'),
   patients: icon('ic:baseline-people'),
   inpatients: icon('fa6-solid:bed-pulse'),
@@ -77,27 +78,35 @@ export function useNavData() {
   const data = useMemo(
     () => [
       {
-        subheader:"Menu",
+        subheader: 'Menu',
         items: [
           { title: t('SIDEBAR.MAIN'), path: paths.dashboard.root, icon: ICONS.home },
-          { title: t('SIDEBAR.APPOINTMENTS'), path: paths.dashboard.appointments, icon: ICONS.appointments },
+          {
+            title: t('SIDEBAR.APPOINTMENTS'),
+            path: paths.dashboard.appointments,
+            icon: ICONS.appointments,
+          },
           { title: t('SIDEBAR.ROOMS'), path: paths.dashboard.rooms, icon: ICONS.rooms },
+          { title: 'Payments', path: paths.dashboard.payments, icon: ICONS.payments },
         ],
       },
       {
-        subheader:"Management",
+        subheader: 'Management',
         items: [
           { title: t('SIDEBAR.DOCTORS'), path: paths.dashboard.doctors, icon: ICONS.doctors },
           { title: t('SIDEBAR.PATIENTS'), path: paths.dashboard.patients, icon: ICONS.patients },
-          { title: t('SIDEBAR.INPATIENTS'), path: paths.dashboard.inpatients, icon: ICONS.inpatients },
+          {
+            title: t('SIDEBAR.INPATIENTS'),
+            path: paths.dashboard.inpatients,
+            icon: ICONS.inpatients,
+          },
         ],
       },
       {
-        subheader:"Settings",
+        subheader: 'Settings',
         items: [
           { title: t('SIDEBAR.USERS'), path: paths.dashboard.users, icon: ICONS.users },
           { title: t('SIDEBAR.SETTINGS'), path: paths.dashboard.settings, icon: ICONS.settings },
-
         ],
       },
     ],

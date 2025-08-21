@@ -37,6 +37,7 @@ import DoctorDialog from 'src/components/dialogs/doctor-dialog';
 import { ILookup } from 'src/types/lookups';
 import { IDoctor, ISpecialization } from 'src/types/doctors';
 import Image from 'next/image';
+import SharedHeader from 'src/components/shared-header/empty-state';
 
 interface IProps {
   doctors: IDoctor[];
@@ -136,6 +137,18 @@ export default function DoctorsPage({
     });
   }, [searchParams]);
 
+  // Close filter popover on URL param change to avoid stale anchor positioning
+  useEffect(() => {
+    setFilterAnchorEl(null);
+  }, [searchParams]);
+
+  // Auto-close if anchor element unmounts
+  useEffect(() => {
+    if (filterAnchorEl && !(filterAnchorEl as any).isConnected) {
+      setFilterAnchorEl(null);
+    }
+  }, [filterAnchorEl]);
+
   // Handle filter changes
   const handleFilterChange = (key: keyof FilterState, value: string | number) => {
     const newFilters = { ...filters, [key]: value };
@@ -166,6 +179,7 @@ export default function DoctorsPage({
     const newFilters = { searchTerm: '', status: 0, specializationId: 0 };
     setFilters(newFilters);
     updateURLParams(newFilters);
+    setFilterAnchorEl(null);
   };
 
   // Open filter popover
@@ -354,41 +368,13 @@ export default function DoctorsPage({
     <>
       <Stack spacing={3}>
         {/* Header Section */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            mb: 3,
-            pt: 1,
-          }}
-        >
-          <Box>
-            <Typography variant="h4" sx={{ mb: 1, fontWeight: 'bold' }}>
-              {t('DOCTOR.DOCTORS') || 'Doctors'}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Manage all doctors, their specializations, and availability status.
-            </Typography>
-          </Box>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={handleOpenAddDialog}
-            sx={{
-              bgcolor: 'primary.main',
-              color: 'white',
-              borderRadius: 1,
-              fontWeight: 500,
-              '&:hover': {
-                bgcolor: 'primary.dark',
-              },
-            }}
-          >
-            {t('DOCTOR.ADD_DOCTOR') || 'Add New Doctor'}
-          </Button>
-        </Box>
 
+        <SharedHeader
+          header={t('DOCTOR.DOCTORS') || 'Doctors'}
+          subheader="Manage all doctors, their specializations, and availability status."
+          buttonText={t('DOCTOR.ADD_DOCTOR') || 'Add New Doctor'}
+          onButtonClick={handleOpenAddDialog}
+        />
         {/* Search and Filter Bar */}
         <Paper
           elevation={1}
@@ -465,7 +451,7 @@ export default function DoctorsPage({
 
           {/* Filter Popup */}
           <Popover
-            open={Boolean(filterAnchorEl)}
+            open={Boolean(filterAnchorEl && (filterAnchorEl as any).isConnected)}
             anchorEl={filterAnchorEl}
             onClose={handleCloseFilterPopover}
             anchorOrigin={{
@@ -577,6 +563,9 @@ export default function DoctorsPage({
               </Button>
             </Box>
           </Popover>
+
+          {/* Auto-close popover when URL params change or anchor unmounts */}
+          {null}
 
           {/* Doctors Table using SharedTable */}
           <SharedTable

@@ -7,8 +7,6 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
-import { useTranslate } from 'src/locales';
-
 import Scrollbar from 'src/components/scrollbar';
 
 import useTable from './use-table';
@@ -26,13 +24,12 @@ export default function SharedTable<T extends { id: string | number }>({
   customRender,
   count,
   headColor,
+  emptyIcon,
 }: SharedTableProps<T>) {
   const table = useTable();
   const searchParams = useSearchParams();
-  const { t } = useTranslate();
 
   const hasPage = searchParams.get('page');
-  const hasLimit = searchParams.get('limit');
 
   const page = hasPage ? Number(searchParams.get('page')) - 1 : 0;
   const limit = Number(searchParams.get('limit')) || 10;
@@ -50,6 +47,11 @@ export default function SharedTable<T extends { id: string | number }>({
                 borderColor: 'divider',
                 padding: '12px 16px',
               },
+              // Restore bottom border that MUI removes on last row by default
+              '& .MuiTableRow-root:last-child .MuiTableCell-root': {
+                borderBottom: '1px solid',
+                borderColor: 'divider',
+              },
 
               '& .MuiTableBody-root .MuiTableCell-root': {
                 color: 'black',
@@ -66,8 +68,8 @@ export default function SharedTable<T extends { id: string | number }>({
             <TableHeadCustom headLabel={tableHead} headColor={headColor} />
 
             <TableBody>
-              {data &&
-                data?.map((row) => (
+              {data?.length ? (
+                data.map((row) => (
                   <SharedTableRow<T>
                     key={row.id}
                     row={row}
@@ -79,15 +81,16 @@ export default function SharedTable<T extends { id: string | number }>({
                         .filter((x) => x !== '' && x !== 'rowsActions') as (keyof T)[]
                     }
                   />
-                ))}
-
-              <TableNoData notFound={!data} />
+                ))
+              ) : (
+                <TableNoData notFound colSpan={tableHead.length} iconUrl={emptyIcon} />
+              )}
             </TableBody>
           </Table>
         </Scrollbar>
       </TableContainer>
 
-      {!disablePagination && (
+      {!disablePagination && (data?.length ?? 0) > 0 && (
         <CustomPagination
           count={count}
           page={page}

@@ -19,6 +19,7 @@ import {
   FormControl,
   DialogActions,
   DialogContent,
+  IconButton,
 } from '@mui/material';
 
 import { useCreateDoctor, useUpdateDoctor } from 'src/hooks/use-doctors-query';
@@ -27,6 +28,7 @@ import { useTranslate } from 'src/locales';
 
 import { ILookup } from 'src/types/lookups';
 import { IDoctor, ICreateDoctor, IUpdateDoctor, ISpecialization } from 'src/types/doctors';
+import Iconify from 'src/components/iconify';
 
 interface DoctorDialogProps {
   open: boolean;
@@ -211,15 +213,37 @@ const DoctorDialog = ({
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-      <DialogTitle>
-        {isEditing
-          ? t('DOCTOR.EDIT_DOCTOR') || 'Edit Doctor'
-          : t('DOCTOR.ADD_DOCTOR') || 'Add New Doctor'}
+    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+      <DialogTitle
+        sx={{
+          py: 2,
+          bgcolor: '#F6F8FA',
+          borderBottom: '1px solid #DFE1E7',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="h6">
+          {isEditing
+            ? t('DOCTOR.EDIT_DOCTOR') || 'Edit Doctor'
+            : t('DOCTOR.ADD_DOCTOR') || 'Add New Doctor'}
+        </Typography>
+        <IconButton
+          onClick={onClose}
+          sx={{
+            color: '#666',
+            '&:hover': {
+              bgcolor: 'rgba(0, 0, 0, 0.04)',
+            },
+          }}
+        >
+          <Iconify icon="eva:close-fill" />
+        </IconButton>
       </DialogTitle>
 
       <form onSubmit={handleSubmit(onSubmit as any)}>
-        <DialogContent>
+        <DialogContent sx={{ borderBottom: '1px solid #DFE1E7', py: 3 }}>
           <Stack spacing={1} sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
             <Box>
               <Typography
@@ -435,7 +459,7 @@ const DoctorDialog = ({
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleClose} color="inherit">
+          <Button onClick={handleClose} color="primary" variant="outlined">
             {t('COMMON.CANCEL') || 'Cancel'}
           </Button>
           <Button

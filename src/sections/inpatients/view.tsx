@@ -23,6 +23,7 @@ import InpatientDialog from 'src/components/dialogs/inpatient-dialog';
 import { IRoom } from 'src/types/room';
 import { IPatient } from 'src/types/patient';
 import { IInpatient } from 'src/types/inpatient';
+import SharedHeader from 'src/components/shared-header/empty-state';
 
 interface IProps {
   inpatients: IInpatient[];
@@ -144,41 +145,13 @@ export default function InpatientsPage({ inpatients, totalCount, patients, rooms
     <>
       <Stack spacing={3}>
         {/* Header Section */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            mb: 3,
-            pt: 1,
-          }}
-        >
-          <Box>
-            <Typography variant="h4" sx={{ mb: 1, fontWeight: 'bold' }}>
-              Inpatients
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Latest updates from the past 7 days.{' '}
-            </Typography>
-          </Box>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={handleOpenAddDialog}
-            sx={{
-              bgcolor: 'primary.main',
-              color: 'white',
-              borderRadius: 1,
-              fontWeight: 500,
-              '&:hover': {
-                bgcolor: 'primary.dark',
-              },
-            }}
-          >
-            Add New Inpatient
-          </Button>
-        </Box>
 
+        <SharedHeader
+        header="Inpatients"
+        subheader="Latest updates from the past 7 days."
+        buttonText="Add New Inpatient"
+        onButtonClick={handleOpenAddDialog}
+      />
         {/* Search and Filter Bar */}
         <Paper
           elevation={1}

@@ -34,6 +34,7 @@ import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 
 import { IRoom } from 'src/types/room';
 import { ILookup } from 'src/types/lookups';
+import SharedHeader from 'src/components/shared-header/empty-state';
 
 interface IProps {
   rooms: IRoom[];
@@ -119,6 +120,11 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
       searchTerm: search,
       status,
     });
+  }, [searchParams]);
+
+  // Close filter popover when URL params change to prevent stale anchor positioning
+  useEffect(() => {
+    setFilterAnchorEl(null);
   }, [searchParams]);
 
   // Debounced search effect
@@ -289,7 +295,22 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
     { id: '', label: '', width: 80 },
   ];
 
-  const openFilter = Boolean(filterAnchorEl);
+  const isAnchorValid =
+    typeof document !== 'undefined' &&
+    filterAnchorEl &&
+    (filterAnchorEl as any).ownerDocument?.body.contains(filterAnchorEl);
+  const openFilter = Boolean(isAnchorValid);
+
+  // Auto-close if anchor element unmounts
+  useEffect(() => {
+    if (
+      typeof document !== 'undefined' &&
+      filterAnchorEl &&
+      !(filterAnchorEl as any).ownerDocument?.body.contains(filterAnchorEl)
+    ) {
+      setFilterAnchorEl(null);
+    }
+  }, [filterAnchorEl]);
 
   // Check if any filters are currently applied
   const hasActiveFilters = filters.searchTerm || filters.status > 0;
@@ -357,41 +378,13 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
     <>
       <Stack spacing={3}>
         {/* Header Section */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            mb: 3,
-            pt: 1,
-          }}
-        >
-          <Box>
-            <Typography variant="h4" sx={{ mb: 1, fontWeight: 'bold' }}>
-              {t('ROOM.ROOMS') || 'Rooms'}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Latest updates from the past 7 days.{' '}
-            </Typography>
-          </Box>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={handleOpenAddDialog}
-            sx={{
-              bgcolor: 'primary.main',
-              color: 'white',
-              borderRadius: 1,
-              fontWeight: 500,
-              '&:hover': {
-                bgcolor: 'primary.dark',
-              },
-            }}
-          >
-            {t('ROOM.ADD_ROOM') || 'Add New Room'}
-          </Button>
-        </Box>
 
+        <SharedHeader
+          header={t('ROOM.ROOMS') || 'Rooms'}
+          subheader="Latest updates from the past 7 days."
+          buttonText={t('ROOM.ADD_ROOM') || 'Add New Room'}
+          onButtonClick={handleOpenAddDialog}
+        />
         {/* Search and Filter Bar */}
         <Paper
           elevation={1}
@@ -664,7 +657,8 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
               '&:hover': {
                 bgcolor: '#DF1C60',
               },
-            }}            onClick={() => handleDisableRoom(selectedId)}
+            }}
+            onClick={() => handleDisableRoom(selectedId)}
           >
             {t('COMMON.DISABLE') || 'Disable'}
           </Button>

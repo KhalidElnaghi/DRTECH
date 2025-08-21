@@ -34,6 +34,7 @@ import PatientDialog from 'src/components/dialogs/patient-dialog';
 import { ILookup } from 'src/types/lookups';
 import { IPatient } from 'src/types/patient';
 import Image from 'next/image';
+import SharedHeader from 'src/components/shared-header/empty-state';
 
 interface IProps {
   patients: IPatient[];
@@ -156,6 +157,11 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
       gender,
       bloodType,
     });
+  }, [searchParams]);
+
+  // Close filter popover when URL params change to prevent stale anchor positioning
+  useEffect(() => {
+    setFilterAnchorEl(null);
   }, [searchParams]);
 
   // Handle browser navigation (back/forward buttons)
@@ -289,7 +295,22 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
     { id: '', label: '', width: 80 },
   ];
 
-  const openFilter = Boolean(filterAnchorEl);
+  const isAnchorValid =
+    typeof document !== 'undefined' &&
+    filterAnchorEl &&
+    (filterAnchorEl as any).ownerDocument?.body.contains(filterAnchorEl);
+  const openFilter = Boolean(isAnchorValid);
+
+  // Auto-close if anchor element unmounts
+  useEffect(() => {
+    if (
+      typeof document !== 'undefined' &&
+      filterAnchorEl &&
+      !(filterAnchorEl as any).ownerDocument?.body.contains(filterAnchorEl)
+    ) {
+      setFilterAnchorEl(null);
+    }
+  }, [filterAnchorEl]);
 
   // Check if any filters are currently applied
   const hasActiveFilters = filters.searchTerm || filters.gender >= 0 || filters.bloodType >= 0;
@@ -357,41 +378,13 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
     <>
       <Stack spacing={3}>
         {/* Header Section */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            mb: 3,
-            pt: 1,
-          }}
-        >
-          <Box>
-            <Typography variant="h4" sx={{ mb: 1, fontWeight: 'bold' }}>
-              Patients
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Latest updates from the past 7 days.
-            </Typography>
-          </Box>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={handleOpenAddDialog}
-            sx={{
-              bgcolor: 'primary.main',
-              color: 'white',
-              borderRadius: 1,
-              fontWeight: 500,
-              '&:hover': {
-                bgcolor: 'primary.dark',
-              },
-            }}
-          >
-            Add New Patient
-          </Button>
-        </Box>
 
+        <SharedHeader
+        header="Patients"
+        subheader="Latest updates from the past 7 days."
+        buttonText="Add New Patient"
+        onButtonClick={handleOpenAddDialog}
+      />
         {/* Search and Filter Bar */}
         <Paper
           elevation={1}
@@ -428,7 +421,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
             >
               {/* Search Bar */}
               <TextField
-                placeholder="Search patient name, phone, or address..."
+                placeholder="Search patient name"
                 value={filters.searchTerm}
                 onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
                 onKeyDown={(e) => {
@@ -459,7 +452,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
               />
 
               {/* Search Button */}
-              <Button
+              {/* <Button
                 variant="contained"
                 size="small"
                 onClick={() => updateURLParams(filters)}
@@ -471,7 +464,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
                 }}
               >
                 Search
-              </Button>
+              </Button> */}
 
               {/* Filter Icon Button */}
               <IconButton

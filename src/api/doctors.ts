@@ -7,7 +7,6 @@ export const fetchDoctorsClient = async (params?: {
   Status?: number;
   specializationId?: number;
 }) => {
-
   const response = await axiosInstance.get(endpoints.doctors.fetch, {
     params: {
       page: params?.page,
@@ -39,5 +38,10 @@ export const deleteDoctorClient = async (id: string) => {
 
 export const fetchSpecializationsClient = async () => {
   const response = await axiosInstance.get(endpoints.doctors.specializations);
+  return response.data;
+};
+
+export const fetchDoctorsDropdownClient = async () => {
+  const response = await axiosInstance.get(endpoints.doctors.dropdown);
   return response.data;
 };

@@ -14,6 +14,7 @@ import {
   MenuItem,
   TextField,
   Typography,
+  IconButton,
   DialogTitle,
   DialogContent,
   DialogActions,
@@ -23,6 +24,7 @@ import { useCreateUser, useUpdateUser } from 'src/hooks/use-users-query';
 
 import { useTranslate } from 'src/locales';
 
+import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
 
 import { ILookup } from 'src/types/lookups';
@@ -196,8 +198,30 @@ export default function UserDialog({
   };
 
   return (
-    <Dialog fullWidth maxWidth="md" open={open} onClose={onClose}>
-      <DialogTitle>{user ? 'Edit User' : 'Add User'}</DialogTitle>
+    <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
+      <DialogTitle
+        sx={{
+          py: 2,
+          bgcolor: '#F6F8FA',
+          borderBottom: '1px solid #DFE1E7',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="h6">{user ? 'Edit User' : 'Add User'}</Typography>
+        <IconButton
+          onClick={onClose}
+          sx={{
+            color: '#666',
+            '&:hover': {
+              bgcolor: 'rgba(0, 0, 0, 0.04)',
+            },
+          }}
+        >
+          <Iconify icon="eva:close-fill" />
+        </IconButton>
+      </DialogTitle>
       <FormProvider methods={methods} onSubmit={onSubmit}>
         <DialogContent sx={{ borderBottom: '1px solid #DFE1E7', py: 3 }}>
           <Stack spacing={2} sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>

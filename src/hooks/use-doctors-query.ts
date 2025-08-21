@@ -5,6 +5,7 @@ import {
   updateDoctorClient,
   deleteDoctorClient,
   fetchSpecializationsClient,
+  fetchDoctorsDropdownClient,
 } from 'src/api/doctors';
 import { ICreateDoctor, IUpdateDoctor } from 'src/types/doctors';
 
@@ -13,6 +14,7 @@ export const doctorKeys = {
   lists: () => [...doctorKeys.all, 'list'] as const,
   list: (filters: any) => [...doctorKeys.lists(), filters] as const,
   specializations: () => [...doctorKeys.all, 'specializations'] as const,
+  dropdown: () => [...doctorKeys.all, 'dropdown'] as const,
 };
 
 export const useDoctors = (
@@ -34,6 +36,13 @@ export const useSpecializations = () =>
     queryKey: doctorKeys.specializations(),
     queryFn: fetchSpecializationsClient,
     staleTime: 10 * 60 * 1000, // 10 minutes
+  });
+
+export const useDoctorsDropdown = () =>
+  useQuery({
+    queryKey: doctorKeys.dropdown(),
+    queryFn: fetchDoctorsDropdownClient,
+    staleTime: 10 * 60 * 1000,
   });
 
 export const useCreateDoctor = () => {

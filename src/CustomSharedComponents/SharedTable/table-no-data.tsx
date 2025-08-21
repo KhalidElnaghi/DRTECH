@@ -8,16 +8,19 @@ import EmptyContent from 'src/components/empty-content';
 type Props = {
   notFound: boolean;
   sx?: SxProps<Theme>;
+  colSpan?: number;
+  iconUrl?: string;
 };
 
-export default function TableNoData({ notFound, sx }: Props) {
+export default function TableNoData({ notFound, sx, colSpan = 12, iconUrl }: Props) {
   return (
     <TableRow>
       {notFound ? (
-        <TableCell colSpan={12}>
+        <TableCell colSpan={colSpan}>
           <EmptyContent
             filled
             title="No Data"
+            imgUrl={iconUrl}
             sx={{
               py: 10,
               ...sx,
@@ -25,7 +28,7 @@ export default function TableNoData({ notFound, sx }: Props) {
           />
         </TableCell>
       ) : (
-        <TableCell colSpan={12} sx={{ p: 0 }} />
+        <TableCell colSpan={colSpan} sx={{ p: 12 }} />
       )}
     </TableRow>
   );

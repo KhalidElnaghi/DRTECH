@@ -117,6 +117,7 @@ export const endpoints = {
     edit: (doctorId: string) => `/doctors/${doctorId}`,
     delete: (doctorId: string) => `/doctors/${doctorId}`,
     specializations: '/doctors/dropdown-specializations',
+    dropdown: '/doctors/dropdown',
   },
   patients: {
     fetch: '/patients',
@@ -124,6 +125,7 @@ export const endpoints = {
     edit: (patientId: string) => `/patients/${patientId}`,
     delete: (patientId: string) => `/patients/${patientId}`,
     archive: (patientId: string) => `/patients/${patientId}/archive`,
+    dropdown: '/patients/dropdown',
   },
   inpatients: {
     fetch: '/inpatients',
@@ -133,5 +135,10 @@ export const endpoints = {
   },
   lookups: {
     fetch: (type: string) => `/lookups/${type}`,
+  },
+  payments: {
+    fetch: '/payments',
+    new: '/payments/create',
+    delete: (paymentId: number) => `/payments/${paymentId}`,
   },
 };

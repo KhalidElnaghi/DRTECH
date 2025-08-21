@@ -242,7 +242,7 @@ export default function AppointmentDialog({
     <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
       <DialogTitle
         sx={{
-          py: 1,
+          py: 2,
           bgcolor: '#F6F8FA',
           borderBottom: '1px solid #DFE1E7',
           display: 'flex',
@@ -267,10 +267,10 @@ export default function AppointmentDialog({
       </DialogTitle>
 
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogContent sx={{ borderBottom: '1px solid #DFE1E7', py: 4 }}>
+        <DialogContent sx={{ borderBottom: '1px solid #DFE1E7', py: 3 }}>
           <Stack
             spacing={1}
-            sx={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: 2, mt: 1 }}
+            sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, }}
           >
             <Box>
               <Typography
@@ -418,85 +418,6 @@ export default function AppointmentDialog({
                 )}
               />
             </Box>
-
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                gap: 1,
-                justifyContent: 'space-between',
-              }}
-            >
-              <Box sx={{ flex: 1 }}>
-                <Typography
-                  sx={{
-                    fontFamily: 'Inter Tight',
-                    fontWeight: 400,
-                    fontStyle: 'normal',
-                    fontSize: '12px',
-                    lineHeight: '150%',
-                    letterSpacing: '2%',
-                    mb: 1,
-                    color: '#666D80',
-                  }}
-                >
-                  Latitude
-                </Typography>
-                <Controller
-                  name="ClinicLocation.lat"
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <RHFTextField
-                      {...field}
-                      placeholder="0.0"
-                      InputLabelProps={{ shrink: true }}
-                      sx={{ flexGrow: 1 }}
-                      error={!!error}
-                      helperText={error?.message}
-                      onChange={(e) => {
-                        const value = parseFloat(e.target.value) || 0;
-                        field.onChange(value);
-                      }}
-                    />
-                  )}
-                />
-              </Box>
-              <Box sx={{ flex: 1 }}>
-                <Typography
-                  sx={{
-                    fontFamily: 'Inter Tight',
-                    fontWeight: 400,
-                    fontStyle: 'normal',
-                    fontSize: '12px',
-                    lineHeight: '150%',
-                    letterSpacing: '2%',
-                    mb: 1,
-                    color: '#666D80',
-                  }}
-                >
-                  Longitude
-                </Typography>
-                <Controller
-                  name="ClinicLocation.lng"
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <RHFTextField
-                      {...field}
-                      placeholder="0.0"
-                      InputLabelProps={{ shrink: true }}
-                      sx={{ flexGrow: 1 }}
-                      error={!!error}
-                      helperText={error?.message}
-                      onChange={(e) => {
-                        const value = parseFloat(e.target.value) || 0;
-                        field.onChange(value);
-                      }}
-                    />
-                  )}
-                />
-              </Box>
-            </Box>
-
             <Box>
               <Typography
                 sx={{
@@ -525,92 +446,154 @@ export default function AppointmentDialog({
                 ))}
               </RHFSelect>
             </Box>
-
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                gap: 1,
-                justifyContent: 'space-between',
-              }}
-            >
-              <Box sx={{ flex: 1 }}>
-                <Typography
-                  sx={{
-                    fontFamily: 'Inter Tight',
-                    fontWeight: 400,
-                    fontStyle: 'normal',
-                    fontSize: '12px',
-                    lineHeight: '150%',
-                    letterSpacing: '2%',
-                    mb: 1,
-                    color: '#666D80',
-                  }}
-                >
-                  Appointment Date
-                </Typography>
-                <Controller
-                  name="AppointmentDate"
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <DatePicker
-                      format="dd-MM-yyyy"
-                      value={field.value}
-                      onChange={(newValue) => {
-                        field.onChange(newValue);
-                        trigger(['AppointmentDate']);
-                      }}
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          error: !!error,
-                          helperText: error?.message,
-                          placeholder: t('LABEL.APPOINTMENT_DATE'),
-                        },
-                      }}
-                    />
-                  )}
-                />
-              </Box>
-              <Box sx={{ flex: 1 }}>
-                <Typography
-                  sx={{
-                    fontFamily: 'Inter Tight',
-                    fontWeight: 400,
-                    fontStyle: 'normal',
-                    fontSize: '12px',
-                    lineHeight: '150%',
-                    letterSpacing: '2%',
-                    mb: 1,
-                    color: '#666D80',
-                  }}
-                >
-                  Appointment Time
-                </Typography>
-                <Controller
-                  name="ScheduledTime"
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <TimePicker
-                      value={field.value}
-                      onChange={(newValue) => {
-                        field.onChange(newValue);
-                      }}
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                          error: !!error,
-                          helperText: error?.message,
-                          placeholder: t('LABEL.APPOINTMENT_TIME'),
-                        },
-                      }}
-                    />
-                  )}
-                />
-              </Box>
+            <Box>
+              <Typography
+                sx={{
+                  fontFamily: 'Inter Tight',
+                  fontWeight: 400,
+                  fontStyle: 'normal',
+                  fontSize: '12px',
+                  lineHeight: '150%',
+                  letterSpacing: '2%',
+                  mb: 1,
+                  color: '#666D80',
+                }}
+              >
+                Latitude
+              </Typography>
+              <Controller
+                name="ClinicLocation.lat"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFTextField
+                    {...field}
+                    placeholder="0.0"
+                    InputLabelProps={{ shrink: true }}
+                    sx={{ flexGrow: 1 }}
+                    error={!!error}
+                    helperText={error?.message}
+                    onChange={(e) => {
+                      const value = parseFloat(e.target.value) || 0;
+                      field.onChange(value);
+                    }}
+                  />
+                )}
+              />
             </Box>
 
             <Box>
+              <Typography
+                sx={{
+                  fontFamily: 'Inter Tight',
+                  fontWeight: 400,
+                  fontStyle: 'normal',
+                  fontSize: '12px',
+                  lineHeight: '150%',
+                  letterSpacing: '2%',
+                  mb: 1,
+                  color: '#666D80',
+                }}
+              >
+                Longitude
+              </Typography>
+              <Controller
+                name="ClinicLocation.lng"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFTextField
+                    {...field}
+                    placeholder="0.0"
+                    InputLabelProps={{ shrink: true }}
+                    sx={{ flexGrow: 1 }}
+                    error={!!error}
+                    helperText={error?.message}
+                    onChange={(e) => {
+                      const value = parseFloat(e.target.value) || 0;
+                      field.onChange(value);
+                    }}
+                  />
+                )}
+              />
+            </Box>
+
+
+
+            <Box>
+              <Typography
+                sx={{
+                  fontFamily: 'Inter Tight',
+                  fontWeight: 400,
+                  fontStyle: 'normal',
+                  fontSize: '12px',
+                  lineHeight: '150%',
+                  letterSpacing: '2%',
+                  mb: 1,
+                  color: '#666D80',
+                }}
+              >
+                Appointment Date
+              </Typography>
+              <Controller
+                name="AppointmentDate"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <DatePicker
+                    format="dd-MM-yyyy"
+                    value={field.value}
+                    onChange={(newValue) => {
+                      field.onChange(newValue);
+                      trigger(['AppointmentDate']);
+                    }}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        error: !!error,
+                        helperText: error?.message,
+                        placeholder: t('LABEL.APPOINTMENT_DATE'),
+                      },
+                    }}
+                  />
+                )}
+              />
+            </Box>
+            <Box>
+              <Typography
+                sx={{
+                  fontFamily: 'Inter Tight',
+                  fontWeight: 400,
+                  fontStyle: 'normal',
+                  fontSize: '12px',
+                  lineHeight: '150%',
+                  letterSpacing: '2%',
+                  mb: 1,
+                  color: '#666D80',
+                }}
+              >
+                Appointment Time
+              </Typography>
+              <Controller
+                name="ScheduledTime"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <TimePicker
+                    value={field.value}
+                    onChange={(newValue) => {
+                      field.onChange(newValue);
+                    }}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        error: !!error,
+                        helperText: error?.message,
+                        placeholder: t('LABEL.APPOINTMENT_TIME'),
+                      },
+                    }}
+                  />
+                )}
+              />
+            </Box>
+
+            <Box sx={{ gridColumn: 'span 2' }}>
               <Typography
                 sx={{
                   fontFamily: 'Inter Tight',

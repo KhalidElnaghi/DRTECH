@@ -45,7 +45,7 @@ export default function EmptyState({
       }
 
       // Treat as iconify icon
-      return <Iconify icon={icon} width={iconSize} sx={{ color: iconColor }} />;
+      return <Iconify icon={icon} width={iconSize} sx={{ color: iconColor, mb: 3 }} />;
     }
 
     // If it's a component, render it
@@ -60,24 +60,25 @@ export default function EmptyState({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        textAlign: 'center',
-        py: 8,
-        px: 2,
-        minHeight: '400px',
-        width: '100%',
-        height: '100%',
+        gap: 2,
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
       }}
     >
       {/* Icon */}
-      {icon && <Box sx={{ mb: 3 }}>{renderIcon()}</Box>}
+      {icon && <Box>{renderIcon()}</Box>}
 
       {/* Header */}
       <Typography
         sx={{
-          mb: 1,
-          fontWeight: 'bold',
-          color: 'text.primary',
+          fontFamily: '"Inter Tight", sans-serif',
+          fontWeight: 600,
+          fontStyle: 'normal',
           fontSize: '32px',
+          lineHeight: 1.25,
+          letterSpacing: 0,
         }}
       >
         {header}
@@ -86,10 +87,12 @@ export default function EmptyState({
       {/* Subheader */}
       <Typography
         sx={{
-          mb: 4,
-          color: 'text.secondary',
-
-          fontSize: '16px',
+          fontFamily: '"Inter Tight", sans-serif',
+          fontWeight: 400,
+          fontStyle: 'normal',
+          fontSize: '15px',
+          lineHeight: 1.5,
+          letterSpacing: '0.02em',
         }}
       >
         {subheader}
@@ -105,8 +108,8 @@ export default function EmptyState({
           color: 'white',
           borderRadius: 1,
           fontWeight: 500,
-          px: 3,
-          py: 1.5,
+          px: 4,
+          py: 2,
           '&:hover': {
             bgcolor: 'primary.dark',
           },

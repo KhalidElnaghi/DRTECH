@@ -21,6 +21,7 @@ import { ILookup } from 'src/types/lookups';
 import { TableUser } from 'src/types/users';
 import { enqueueSnackbar } from 'notistack';
 import Image from 'next/image';
+import SharedHeader from 'src/components/shared-header/empty-state';
 
 interface IProps {
   users: TableUser[];
@@ -176,28 +177,13 @@ export default function UsersPage({ users, totalCount, roles, statuses, speciali
 
   return (
     <>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-end',
-          mb: 3,
-          pt: 1,
-        }}
-      >
-        <Box>
-          <Typography variant="h4" sx={{ mb: 1, fontWeight: 'bold' }}>
-            Users
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Manage roles and access for all users in the system.{' '}
-          </Typography>
-        </Box>
-        <Button variant="contained" size="medium" color="primary" onClick={handleOpenDialog}>
-          Add New User
-        </Button>
-      </Box>
 
+      <SharedHeader
+        header="Users"
+        subheader="Manage roles and access for all users in the system."
+        buttonText="Add New User"
+        onButtonClick={handleOpenDialog}
+      />
       <Paper
         elevation={1}
         sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, px: 0, mb: 1 }}
