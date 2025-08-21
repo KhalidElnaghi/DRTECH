@@ -66,7 +66,7 @@ const ICONS = {
   banner: icon('solar:bill-linear'),
   appointments: icon('hugeicons:appointment-02'),
   rooms: icon('icon-park-twotone:single-bed'),
-  payments: icon('solar:bill-broken'),
+  payments: icon('healthicons:money-bag-outline'),
   doctors: icon('fa7-solid:user-doctor'),
   patients: icon('ic:baseline-people'),
   inpatients: icon('fa6-solid:bed-pulse'),
