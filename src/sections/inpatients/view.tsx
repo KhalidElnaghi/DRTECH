@@ -24,6 +24,7 @@ import { IRoom } from 'src/types/room';
 import { IPatient } from 'src/types/patient';
 import { IInpatient } from 'src/types/inpatient';
 import SharedHeader from 'src/components/shared-header/empty-state';
+import EmptyState from 'src/components/empty-state';
 
 interface IProps {
   inpatients: IInpatient[];
@@ -91,42 +92,18 @@ export default function InpatientsPage({ inpatients, totalCount, patients, rooms
   ];
 
   // Show no data message if no inpatients, but keep header and search/filter functionality
-  if (!inpatients || inpatients.length === 0) {
+  if (!inpatients || (inpatients.length === 0 )) {
     return (
       <>
         {/* No Data Found Message */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            py: 8,
-            px: 2,
-            textAlign: 'center',
-          }}
-        >
-          <Box
-            component="img"
-            src="/assets/images/inpatients/icon.svg"
-            alt="No data found"
-            sx={{
-              width: 144,
-              height: 144,
-              mb: 3,
-            }}
-          />
-
-          <Typography variant="h5" sx={{ mb: 1, color: 'text.secondary' }}>
-            No inpatients yet
-          </Typography>
-          <Typography variant="body1" sx={{ mb: 3, color: 'text.secondary', maxWidth: 400 }}>
-            You haven&apos;t added any inpatients yet. Start by adding a new one.
-          </Typography>
-          <Button variant="contained" onClick={handleOpenAddDialog} sx={{ mb: 2 }}>
-            Add New Inpatient
-          </Button>
-        </Box>
+        <EmptyState
+          icon="/assets/images/inpatients/icon.svg"
+          header="No inpatients yet"
+          subheader="You haven&apos;t added any inpatients yet. Start by adding a new one."
+          buttonText="Add New Inpatient"
+          onButtonClick={ handleOpenAddDialog}
+          iconSize={150}
+        />
 
         {/* Inpatient Dialog */}
         <InpatientDialog

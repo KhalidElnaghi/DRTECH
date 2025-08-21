@@ -2,9 +2,9 @@
 
 import { useSearchParams } from 'next/navigation';
 
-import { useInpatients } from 'src/hooks/use-inpatients-query';
-import { usePatients } from 'src/hooks/use-patients-query';
 import { useRooms } from 'src/hooks/use-rooms-query';
+import { usePatients } from 'src/hooks/use-patients-query';
+import { useInpatients } from 'src/hooks/use-inpatients-query';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
