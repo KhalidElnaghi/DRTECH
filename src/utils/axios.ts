@@ -139,6 +139,7 @@ export const endpoints = {
   payments: {
     fetch: '/payments',
     new: '/payments/create',
+    edit: (paymentId: number) => `/payments/${paymentId}`,
     delete: (paymentId: number) => `/payments/${paymentId}`,
   },
 };

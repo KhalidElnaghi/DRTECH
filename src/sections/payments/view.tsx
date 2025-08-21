@@ -64,6 +64,7 @@ export default function PaymentsPage({
   const prevParamsRef = useRef<string>('');
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedPayment, setSelectedPayment] = useState<IPayment | null>(null);
   const confirmDelete = useBoolean();
   const createDialog = useBoolean();
   const deletePaymentMutation = useDeletePayment();
@@ -87,10 +88,9 @@ export default function PaymentsPage({
     () => [
       { id: 'PatientName', label: 'Patient' },
       { id: 'DoctorName', label: 'Doctor' },
-      { id: 'PaymentAmount', label: 'Amount' },
       { id: 'PaymentMethodName', label: 'Method' },
+      { id: 'PaymentAmount', label: 'Amount' },
       { id: 'StatusName', label: 'Status' },
-      { id: 'CreatedAt', label: 'Created At' },
       { id: '', label: '', width: 80 },
     ],
     []
@@ -303,6 +303,15 @@ export default function PaymentsPage({
             tableHead={TABLE_HEAD}
             actions={[
               {
+                sx: { color: 'primary.main' },
+                label: 'Edit',
+                icon: 'solar:pen-bold',
+                onClick: (row: IPayment) => {
+                  setSelectedPayment(row);
+                  createDialog.onTrue();
+                },
+              },
+              {
                 sx: { color: 'error.dark' },
                 label: 'Delete',
                 icon: 'material-symbols:delete-outline-rounded',
@@ -314,24 +323,30 @@ export default function PaymentsPage({
             ]}
             customRender={{
               PaymentAmount: (row: any) => (
-                <Typography sx={{ fontWeight: 600 }}>
-                  ${Number(row?.PaymentAmount ?? 0).toFixed(2)}
+                <Typography
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 0.5,
+                    fontFamily: 'Inter Tight',
+                    fontSize: '14px',
+                  }}
+                >
+                  <Image
+                    src="/assets/images/payments/Sar.svg"
+                    alt="sar"
+                    width={16}
+                    height={16}
+                    style={{ marginLeft: 4 }}
+                  />{' '}
+                  {Number(row?.PaymentAmount ?? 0).toFixed(2)}
                 </Typography>
               ),
-              CreatedAt: ({ CreatedAt }: any) => (
-                <Typography>{CreatedAt ? new Date(CreatedAt).toLocaleString() : '-'}</Typography>
-              ),
-              PaymentMethodName: (row: any) => {
-                const name =
-                  row?.PaymentMethodName ||
-                  paymentMethods.find((m) => m.Id === row?.PaymentMethod)?.Name;
-                return <Typography>{name || '-'}</Typography>;
-              },
-              StatusName: (row: any) => {
-                const name =
-                  row?.StatusName || paymentStatus.find((s) => s.Id === row?.Status)?.Name;
-                return <Typography>{name || '-'}</Typography>;
-              },
+              // StatusName: (row: any) => {
+              //   const name =
+              //     row?.StatusName || paymentStatus.find((s) => s.Id === row?.Status)?.Name;
+              //   return <Typography>{name || '-'}</Typography>;
+              // },
             }}
             emptyIcon="/assets/images/payments/icon.svg"
           />
@@ -365,10 +380,15 @@ export default function PaymentsPage({
         }
       />
       <PaymentDialog
+        key={selectedPayment ? `edit-${selectedPayment.Id}` : 'new-payment'}
         open={createDialog.value}
-        onClose={createDialog.onFalse}
+        onClose={() => {
+          createDialog.onFalse();
+          setSelectedPayment(null);
+        }}
         paymentMethods={paymentMethods}
         paymentStatus={paymentStatus}
+        payment={selectedPayment}
       />
     </>
   );

@@ -55,11 +55,15 @@ export default function SharedTable<T extends { id: string | number }>({
 
               '& .MuiTableBody-root .MuiTableCell-root': {
                 color: 'black',
-                fontWeight: 500,
+                fontFamily: 'Inter Tight',
+                fontWeight: '500',
+                fontStyle: 'normal',
                 fontSize: '14px',
                 lineHeight: '150%',
-                letterSpacing: '2%',
+                letterSpacing: '0.02em',
               },
+              // Ensure inner elements (e.g., Typography) inherit the cell typography
+          
               '& .MuiTableBody-root .MuiTableRow-root:hover': {
                 backgroundColor: 'action.hover',
               },

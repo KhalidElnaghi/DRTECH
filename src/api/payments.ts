@@ -16,6 +16,14 @@ export type CreatePaymentData = {
   description: string;
 };
 
+export type UpdatePaymentData = {
+  patientId: number;
+  doctorId: number;
+  paymentAmount: number;
+  status: number;
+  description: string;
+};
+
 export const fetchPaymentsClient = async (params: PaymentParams) => {
   const response = await axiosInstance.get(endpoints.payments.fetch, {
     params: {
@@ -30,6 +38,11 @@ export const fetchPaymentsClient = async (params: PaymentParams) => {
 
 export const createPaymentClient = async (data: CreatePaymentData) => {
   const response = await axiosInstance.post(endpoints.payments.new, data);
+  return response.data;
+};
+
+export const updatePaymentClient = async (id: number, data: UpdatePaymentData) => {
+  const response = await axiosInstance.put(endpoints.payments.edit(id), data);
   return response.data;
 };
 

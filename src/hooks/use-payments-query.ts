@@ -4,7 +4,9 @@ import {
   createPaymentClient,
   deletePaymentClient,
   fetchPaymentsClient,
+  updatePaymentClient,
   type CreatePaymentData,
+  type UpdatePaymentData,
   type PaymentParams,
 } from 'src/api/payments';
 
@@ -35,6 +37,17 @@ export const useDeletePayment = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: number) => deletePaymentClient(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: paymentKeys.lists() });
+    },
+  });
+};
+
+export const useUpdatePayment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: number; data: UpdatePaymentData }) =>
+      updatePaymentClient(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: paymentKeys.lists() });
     },
