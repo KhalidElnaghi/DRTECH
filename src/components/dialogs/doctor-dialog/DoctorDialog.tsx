@@ -65,7 +65,9 @@ const DoctorDialog = ({
         t('DOCTOR.PHONE_INVALID') || 'Phone number must be in format +966XXXXXXXXX'
       )
       .required(t('DOCTOR.PHONE_REQUIRED') || 'Phone number is required'),
-    Status: Yup.number().required(t('DOCTOR.STATUS_REQUIRED') || 'Status is required'),
+    Status: Yup.number()
+      .required(t('DOCTOR.STATUS_REQUIRED') || 'Status is required')
+      .min(1, t('DOCTOR.STATUS_REQUIRED') || 'Status is required'),
     email: isEditing
       ? Yup.string().optional()
       : Yup.string()
@@ -188,7 +190,6 @@ const DoctorDialog = ({
         // Generic error message
         errorMessage = error.message;
       }
-
 
       enqueueSnackbar(errorMessage, {
         variant: 'error',
@@ -345,7 +346,6 @@ const DoctorDialog = ({
                 render={({ field }) => (
                   <FormControl fullWidth error={!!errors.Status}>
                     <Select {...field}>
-                      <MenuItem value={0}>{t('DOCTOR.SELECT_STATUS') || 'Select Status'}</MenuItem>
                       {statusOptions?.map((status) => (
                         <MenuItem key={status.Id} value={status.Id}>
                           {status.Name}

@@ -87,7 +87,7 @@ export default function DoctorsPage({
 
   // React Query mutations
   const deleteDoctorMutation = useDeleteDoctor();
-
+  console.log(doctors);
   // Update URL params when filters change
   const updateURLParams = useCallback(
     (newFilters: FilterState) => {
@@ -251,27 +251,27 @@ export default function DoctorsPage({
     let bgColor = 'grey.100';
     let borderColor = 'grey.100';
     switch (status) {
-      case 0:
+      case 1:
         textColor = '#28806F';
         bgColor = '#EFFEFA';
         borderColor = '#DDF3EF';
         break;
-      case 1:
+      case 2:
         textColor = '#A52A2A';
         bgColor = '#FFF0F0';
         borderColor = '#FF8080';
         break;
-      case 2:
+      case 3:
         textColor = '#B21634';
         bgColor = '#FEF3F2';
         borderColor = '#FECDCA';
         break;
-      case 3:
+      case 4:
         textColor = '#A77B2E';
         bgColor = '#FFF6E0';
         borderColor = '#FAEDCC';
         break;
-      case 4:
+      case 5:
         textColor = '#003768';
         bgColor = '#F0F8FF';
         borderColor = '#B3D9FF';

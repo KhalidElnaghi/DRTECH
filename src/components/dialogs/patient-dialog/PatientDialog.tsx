@@ -77,11 +77,13 @@ export default function PatientDialog({
         Gender: yup
           .number()
           .nullable()
-          .required(t('LABEL.THIS_FIELD_IS_REQUIRED') || 'Gender is required'),
+          .required(t('LABEL.THIS_FIELD_IS_REQUIRED') || 'Gender is required')
+          .min(1, t('LABEL.THIS_FIELD_IS_REQUIRED') || 'Gender is required'),
         BloodType: yup
           .number()
           .nullable()
-          .required(t('LABEL.THIS_FIELD_IS_REQUIRED') || 'Blood type is required'),
+          .required(t('LABEL.THIS_FIELD_IS_REQUIRED') || 'Blood type is required')
+          .min(1, t('LABEL.THIS_FIELD_IS_REQUIRED') || 'Blood type is required'),
         PhoneNumber: yup
           .string()
           .required(t('LABEL.THIS_FIELD_IS_REQUIRED') || 'Phone number is required')

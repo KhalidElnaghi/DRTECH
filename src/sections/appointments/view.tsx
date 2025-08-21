@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
@@ -25,11 +26,11 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useDeleteAppointment, useCancelAppointment } from 'src/hooks/use-appointments-query';
 
 import { fFullDate } from 'src/utils/format-time';
 
 import { useTranslate } from 'src/locales';
-import { useDeleteAppointment, useCancelAppointment } from 'src/hooks/use-appointments-query';
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 
 import Iconify from 'src/components/iconify';
@@ -41,7 +42,6 @@ import { IDoctor } from 'src/types/doctors';
 import { ILookup } from 'src/types/lookups';
 import { IPatient } from 'src/types/patients';
 import { IAppointment } from 'src/types/appointment';
-import Image from 'next/image';
 
 // ----------------------------------------------------------------------
 interface IProps {

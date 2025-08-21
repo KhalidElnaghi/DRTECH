@@ -88,7 +88,7 @@ export default function UserDialog({
               'At least 8 characters, one lowercase, one uppercase, and one non-alphanumeric'
             )
             .required('Required'),
-      userRole: Yup.number().required('Role is required').min(0, 'Role is required'),
+      userRole: Yup.number().required('Role is required').min(1, 'Role is required'),
       // phoneNumber: Yup.string().matches(phoneRegex, 'Phone number must be in format +966XXXXXXXXX'),
 
       doctor: Yup.object({
