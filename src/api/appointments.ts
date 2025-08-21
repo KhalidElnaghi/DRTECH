@@ -57,3 +57,15 @@ export const cancelAppointmentClient = async (appointmentId: number, reason: str
   const response = await axiosInstance.put(`/appointments/${appointmentId}/cancel`, { reason });
   return response.data;
 };
+
+export const rescheduleAppointmentClient = async (
+  appointmentId: number,
+  NewAppointmentDate: string,
+  NewScheduledTime: string
+) => {
+  const response = await axiosInstance.put(endpoints.appointments.reschedule(appointmentId), {
+    NewAppointmentDate,
+    NewScheduledTime,
+  });
+  return response.data;
+};

@@ -8,6 +8,7 @@ import {
   fetchAppointmentsClient,
   deleteAppointmentClient,
   cancelAppointmentClient,
+  rescheduleAppointmentClient,
 } from 'src/api/appointments';
 
 // Query keys for caching
@@ -101,6 +102,25 @@ export const useCancelAppointment = () => {
   return useMutation({
     mutationFn: ({ appointmentId, reason }: { appointmentId: number; reason: string }) =>
       cancelAppointmentClient(appointmentId, reason),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: appointmentKeys.lists() });
+    },
+  });
+};
+
+export const useRescheduleAppointment = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      appointmentId,
+      NewAppointmentDate,
+      NewScheduledTime,
+    }: {
+      appointmentId: number;
+      NewAppointmentDate: string;
+      NewScheduledTime: string;
+    }) => rescheduleAppointmentClient(appointmentId, NewAppointmentDate, NewScheduledTime),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: appointmentKeys.lists() });
     },

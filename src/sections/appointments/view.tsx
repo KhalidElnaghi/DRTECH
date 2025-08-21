@@ -13,7 +13,6 @@ import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
 import Popover from '@mui/material/Popover';
 import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
 // import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -39,6 +38,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import SharedHeader from 'src/components/shared-header/empty-state';
 import AppointmentDialog from 'src/components/dialogs/appointment-dialog';
 import CancelAppointmentDialog from 'src/components/dialogs/cancel-appointment-dialog';
+import RescheduleAppointmentDialog from 'src/components/dialogs/reschedule-appointment-dialog';
 
 import { IDoctor } from 'src/types/doctors';
 import { ILookup } from 'src/types/lookups';
@@ -151,6 +151,7 @@ export default function AppointmentsPage({
   const confirmDelete = useBoolean();
   const [isDeleting, setIsDeleting] = useState(false);
   const [openCancelDialog, setOpenCancelDialog] = useState(false);
+  const [openRescheduleDialog, setOpenRescheduleDialog] = useState(false);
 
   // React Query mutations
   const deleteAppointmentMutation = useDeleteAppointment();
@@ -191,6 +192,18 @@ export default function AppointmentsPage({
 
   const handleCloseCancelDialog = () => {
     setOpenCancelDialog(false);
+    setSelectedId(0);
+  };
+
+  const handleOpenRescheduleDialog = (appointment: IAppointment) => {
+    setSelectedAppointment(appointment);
+    setSelectedId(appointment.Id);
+    setOpenRescheduleDialog(true);
+  };
+
+  const handleCloseRescheduleDialog = () => {
+    setOpenRescheduleDialog(false);
+    setSelectedAppointment(undefined);
     setSelectedId(0);
   };
 
@@ -832,6 +845,18 @@ export default function AppointmentsPage({
                 item.AppointmenStatusName === 'Cancelled' ||
                 item.AppointmenStatusName === 'Completed',
             },
+            {
+              sx: { color: 'info.dark' },
+              label: 'Reschedule',
+              icon: 'mdi:calendar-clock',
+              onClick: (item: any) => {
+                const appointment = appointments.find((a) => a.Id === item.id);
+                if (appointment) handleOpenRescheduleDialog(appointment);
+              },
+              hide: (item: IAppointment) =>
+                item.AppointmenStatusName === 'Cancelled' ||
+                item.AppointmenStatusName === 'Completed',
+            },
             // {
             //   sx: { color: 'info.dark' },
             //   label: t('LABEL.UNBLOCK'),
@@ -917,6 +942,16 @@ export default function AppointmentsPage({
           // Close the dialog and let the parent component handle refresh
           // The appointment list will be updated via the API call
           handleCloseCancelDialog();
+        }}
+      />
+
+      <RescheduleAppointmentDialog
+        open={openRescheduleDialog}
+        onClose={handleCloseRescheduleDialog}
+        appointmentId={selectedId}
+        appointment={selectedAppointment as any}
+        onSuccess={() => {
+          handleCloseRescheduleDialog();
         }}
       />
 

@@ -94,6 +94,7 @@ export const endpoints = {
     edit: (appointmentId: number) => `/appointments/${appointmentId}`,
     deleteAppointment: (appointmentId: number) => `/appointments/${appointmentId}`,
     cancel: (appointmentId: number) => `/appointments/${appointmentId}/cancel`,
+    reschedule: (appointmentId: number) => `/appointments/${appointmentId}/reschedule`,
   },
   users: {
     fetch: '/users',
