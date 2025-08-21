@@ -23,6 +23,7 @@ interface UserRoleDialogProps {
   onChange: (roleId: number) => void;
   onSubmit: () => void | Promise<void>;
   submitting?: boolean;
+  title?: string;
 }
 
 export default function UserRoleDialog({
@@ -33,12 +34,13 @@ export default function UserRoleDialog({
   onChange,
   onSubmit,
   submitting,
+  title,
 }: UserRoleDialogProps) {
   const { t } = useTranslate();
 
   return (
-    <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
-      <DialogTitle>Update User Role</DialogTitle>
+    <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
+      <DialogTitle>{title || 'Update User Role'}</DialogTitle>
       <DialogContent sx={{ pt: 1 }}>
         <Box sx={{ width: 1, mt: 1 }}>
           <TextField
@@ -57,20 +59,10 @@ export default function UserRoleDialog({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={onClose}
-        >
+        <Button variant="outlined" color="primary" onClick={onClose}>
           {t('BUTTON.CANCEL')}
         </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={!!submitting}
-          onClick={onSubmit}
-
-        >
+        <Button variant="contained" color="primary" disabled={!!submitting} onClick={onSubmit}>
           {submitting ? 'Updating...' : 'Update'}
         </Button>
       </DialogActions>

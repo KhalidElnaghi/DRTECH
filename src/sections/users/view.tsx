@@ -1,27 +1,29 @@
 'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
+import { enqueueSnackbar } from 'notistack';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
-import { enqueueSnackbar } from 'notistack';
-
-import { Typography, TextField, Paper, InputAdornment, Chip, Button, Box } from '@mui/material';
+import { Box, Chip, Paper, TextField, Button, InputAdornment, Typography } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useDeleteUser, useUpdateUserRole } from 'src/hooks/use-users-query';
+import {
+  useDeleteUser,
+  useUpdateUserRole,
+  useChangeAccountStatus,
+} from 'src/hooks/use-users-query';
 
 import { useTranslate } from 'src/locales';
-
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 import { cellAlignment } from 'src/CustomSharedComponents/SharedTable/types';
 
+import Iconify from 'src/components/iconify';
 import EmptyState from 'src/components/empty-state';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import SharedHeader from 'src/components/shared-header/empty-state';
 import UserDialog from 'src/components/dialogs/user-dialog/UserDialog';
 import UserRoleDialog from 'src/components/dialogs/user-role-dialog/UserRoleDialog';
-import SharedHeader from 'src/components/shared-header/empty-state';
-import Iconify from 'src/components/iconify';
 
 import { ILookup } from 'src/types/lookups';
 import { TableUser } from 'src/types/users';
@@ -32,6 +34,7 @@ interface IProps {
   roles: ILookup[];
   statuses: ILookup[];
   specializations: { Id: number; Name: string }[];
+  accountStatuses: ILookup[];
 }
 
 interface FilterState {
@@ -46,7 +49,14 @@ const TABLE_HEAD = [
   { id: '', label: '', width: 80 },
 ];
 
-export default function UsersPage({ users, totalCount, roles, statuses, specializations }: IProps) {
+export default function UsersPage({
+  users,
+  totalCount,
+  roles,
+  statuses,
+  specializations,
+  accountStatuses,
+}: IProps) {
   const [openDialog, setOpenDialog] = useState(false);
   // const [filterAnchorEl, setFilterAnchorEl] = useState<HTMLElement | null>(null);
   const [filters, setFilters] = useState<FilterState>({ searchTerm: '' });
@@ -65,9 +75,14 @@ export default function UsersPage({ users, totalCount, roles, statuses, speciali
     open: false,
   });
   const [newRoleId, setNewRoleId] = useState<number>(0);
+  const [statusDialog, setStatusDialog] = useState<{ open: boolean; user?: TableUser }>({
+    open: false,
+  });
+  const [newAccountStatus, setNewAccountStatus] = useState<number>(0);
 
   const deleteUserMutation = useDeleteUser();
   const updateUserRoleMutation = useUpdateUserRole();
+  const changeAccountStatusMutation = useChangeAccountStatus();
 
   useEffect(() => {
     const searchTerm = searchParams.get('SearchTerm') || '';
@@ -293,6 +308,15 @@ export default function UsersPage({ users, totalCount, roles, statuses, speciali
               },
             },
             {
+              sx: { color: 'warning.dark' },
+              label: 'Change Account Status',
+              icon: 'mdi:account-cog-outline',
+              onClick: (user: TableUser) => {
+                setStatusDialog({ open: true, user });
+                setNewAccountStatus(user.AccountStatus);
+              },
+            },
+            {
               sx: { color: 'error.dark' },
               label: t('COMMON.DELETE') || 'Delete',
               icon: 'material-symbols:delete-outline-rounded',
@@ -384,6 +408,24 @@ export default function UsersPage({ users, totalCount, roles, statuses, speciali
           });
           setRoleDialog({ open: false });
         }}
+      />
+
+      <UserRoleDialog
+        open={statusDialog.open}
+        onClose={() => setStatusDialog({ open: false })}
+        roles={accountStatuses}
+        value={newAccountStatus}
+        onChange={setNewAccountStatus}
+        submitting={changeAccountStatusMutation.isPending || !statusDialog.user}
+        onSubmit={async () => {
+          if (!statusDialog.user) return;
+          await changeAccountStatusMutation.mutateAsync({
+            UserId: statusDialog.user.Id,
+            AccountStatus: newAccountStatus,
+          });
+          setStatusDialog({ open: false });
+        }}
+        title="Change Account Status"
       />
     </>
   );

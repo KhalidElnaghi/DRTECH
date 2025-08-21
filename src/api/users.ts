@@ -41,3 +41,11 @@ export const updateUserRoleClient = async (payload: {
   const response = await axiosInstance.post(endpoints.users.updateRole, payload);
   return response.data;
 };
+
+export const changeAccountStatusClient = async (payload: {
+  UserId: string | number;
+  AccountStatus: number;
+}) => {
+  const response = await axiosInstance.post(endpoints.users.changeAccountStatus, payload);
+  return response.data;
+};

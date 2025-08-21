@@ -102,6 +102,7 @@ export const endpoints = {
     edit: (userId: string | number) => `/users/${userId}`,
     delete: (userId: string | number) => `/users/remove-user/${userId}`,
     updateRole: '/users/update-user-role',
+    changeAccountStatus: '/users/change-account-status',
   },
   rooms: {
     fetch: '/rooms',

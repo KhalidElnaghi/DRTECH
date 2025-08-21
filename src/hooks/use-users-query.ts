@@ -7,6 +7,7 @@ import {
   deleteUserClient,
   type UserFilters,
   updateUserRoleClient,
+  changeAccountStatusClient,
 } from 'src/api/users';
 
 import { CreateUserData, UpdateUserData } from 'src/types/users';
@@ -62,6 +63,17 @@ export const useUpdateUserRole = () => {
   return useMutation({
     mutationFn: (payload: { UserId: string | number; UserNewRole: number }) =>
       updateUserRoleClient(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+    },
+  });
+};
+
+export const useChangeAccountStatus = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: { UserId: string | number; AccountStatus: number }) =>
+      changeAccountStatusClient(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
     },

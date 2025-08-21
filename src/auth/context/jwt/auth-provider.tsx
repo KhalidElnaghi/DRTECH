@@ -148,8 +148,6 @@ export function AuthProvider({ children }: Readonly<Props>) {
       const accessToken = Cookie.get(ACCESS_TOKEN);
       const userStr = Cookie.get(USER_KEY);
 
-
-
       const user = userStr ? (JSON.parse(userStr) as User) : null;
 
       if (accessToken && isValidToken(accessToken) && user) {
@@ -216,8 +214,6 @@ export function AuthProvider({ children }: Readonly<Props>) {
         path: '/',
       });
 
-
-
       dispatch({
         type: Types.LOGIN,
         payload: {
@@ -230,8 +226,8 @@ export function AuthProvider({ children }: Readonly<Props>) {
       // Extract error message from the error response
       let errorMessage = 'Login failed. Please try again.';
 
-      if (error?.error?.message) {
-        errorMessage = error.error.message;
+      if (error?.Error?.Message) {
+        errorMessage = error.Error.Message;
       } else if (error?.message) {
         errorMessage = error.message;
       }

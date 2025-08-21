@@ -18,9 +18,11 @@ export default function Page() {
   const { data: usersData, isLoading: usersLoading } = useUsers({ page, SearchTerm });
   const { data: roles, isLoading: rolesLoading } = useLookups('user-roles');
   const { data: statuses, isLoading: statusesLoading } = useLookups('availability-status');
+  const { data: accountStatuses, isLoading: accountStatusesLoading } = useLookups('account-status');
   const { data: specs, isLoading: specsLoading } = useSpecializations();
 
-  const isLoading = usersLoading || rolesLoading || statusesLoading || specsLoading;
+  const isLoading =
+    usersLoading || rolesLoading || statusesLoading || specsLoading || accountStatusesLoading;
 
   if (isLoading) return <LoadingScreen />;
 
@@ -31,6 +33,7 @@ export default function Page() {
       roles={roles || []}
       statuses={statuses || []}
       specializations={specs?.Data || []}
+      accountStatuses={accountStatuses || []}
     />
   );
 }
