@@ -335,49 +335,6 @@ export default function AppointmentsPage({
           iconSize={150}
         />
 
-        {/* No Data Found Message */}
-        {/* <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            py: 8,
-            px: 2,
-            textAlign: 'center',
-          }}
-        >
-          {!hasActiveFilters && (
-            <Box
-              component="img"
-              src="/assets/images/appointments/icon.svg"
-              alt="No data found"
-              sx={{
-                width: 144,
-                height: 144,
-                mb: 3,
-                opacity: 0.6,
-              }}
-            />
-          )}
-
-          <Typography variant="h5" sx={{ mb: 1, color: 'text.secondary' }}>
-            {hasActiveFilters ? 'No appointments found' : 'No appointments yet'}
-          </Typography>
-          <Typography variant="body1" sx={{ mb: 3, color: 'text.secondary', maxWidth: 400 }}>
-            {hasActiveFilters
-              ? 'No appointments match your current filters. Try adjusting your search criteria or clearing some filters.'
-              : "You haven't scheduled any appointments yet. Start by adding a new one."}
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={hasActiveFilters ? handleResetFilters : handleOpenAddDialog}
-            sx={{ mb: 2 }}
-          >
-            {hasActiveFilters ? 'Clear Filters' : 'Add New Appointment'}
-          </Button>
-        </Box> */}
-
         {/* Appointment Dialog */}
         <AppointmentDialog
           open={openAddDialog}
@@ -464,22 +421,6 @@ export default function AppointmentsPage({
               alignItems: 'center',
             }}
           >
-            {/* Search Bar */}
-            {/* <TextField
-              placeholder="Search..."
-              value={filters.search}
-              onChange={(e) => handleFilterChange('search', e.target.value)}
-              sx={{ flexGrow: 1, maxWidth: 600, width: '100%' }}
-              size="small"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Iconify icon="eva:search-fill" />
-                  </InputAdornment>
-                ),
-              }}
-            /> */}
-
             {/* Filter Icon Button */}
             <IconButton
               onClick={handleFilterClick}
