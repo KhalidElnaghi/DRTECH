@@ -33,7 +33,6 @@ export const fetchAppointmentsClient = async (params: AppointmentParams) => {
       Status: params.Status || '',
     },
   });
-  console.log(response);
   return response.data;
 };
 

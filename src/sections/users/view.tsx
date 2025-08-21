@@ -1,27 +1,30 @@
 'use client';
 
 import { useRef, useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
-import { Box, Paper, Button, TextField, Typography, InputAdornment } from '@mui/material';
+import { enqueueSnackbar } from 'notistack';
+
+import { Typography, TextField, Paper, InputAdornment, Chip, Button, Box } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useDeleteUser, useUpdateUserRole } from 'src/hooks/use-users-query';
 
 import { useTranslate } from 'src/locales';
+
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 import { cellAlignment } from 'src/CustomSharedComponents/SharedTable/types';
 
-import Iconify from 'src/components/iconify';
+import EmptyState from 'src/components/empty-state';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import UserDialog from 'src/components/dialogs/user-dialog/UserDialog';
 import UserRoleDialog from 'src/components/dialogs/user-role-dialog/UserRoleDialog';
+import SharedHeader from 'src/components/shared-header/empty-state';
+import Iconify from 'src/components/iconify';
 
 import { ILookup } from 'src/types/lookups';
 import { TableUser } from 'src/types/users';
-import { enqueueSnackbar } from 'notistack';
-import Image from 'next/image';
-import SharedHeader from 'src/components/shared-header/empty-state';
 
 interface IProps {
   users: TableUser[];
@@ -81,6 +84,12 @@ export default function UsersPage({ users, totalCount, roles, statuses, speciali
     },
     [searchParams, pathname, router]
   );
+
+  const handleClearSearch = () => {
+    const reset = { searchTerm: '' };
+    setFilters(reset);
+    updateURLParams(reset);
+  };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -174,10 +183,44 @@ export default function UsersPage({ users, totalCount, roles, statuses, speciali
     }
     return { textColor, bgColor, borderColor };
   };
+  const hasActiveFilters = filters.searchTerm;
+
+  if (!users || (users.length === 0 && !hasActiveFilters)) {
+    return (
+      <>
+        {/* No Data Found Message */}
+        <EmptyState
+          icon="/assets/images/users/icon.svg"
+          header="No users yet"
+          subheader="Click “Add New User” to invite an admin, doctor, nurse, or staff member to your system"
+          buttonText="Add New User"
+          onButtonClick={handleOpenDialog}
+          iconSize={150}
+        />
+
+        {/* users Dialog */}
+        <UserRoleDialog
+          open={roleDialog.open}
+          onClose={() => setRoleDialog({ open: false })}
+          roles={roles}
+          value={newRoleId}
+          onChange={setNewRoleId}
+          submitting={updateUserRoleMutation.isPending || !roleDialog.user}
+          onSubmit={async () => {
+            if (!roleDialog.user) return;
+            await updateUserRoleMutation.mutateAsync({
+              UserId: roleDialog.user.Id,
+              UserNewRole: newRoleId,
+            });
+            setRoleDialog({ open: false });
+          }}
+        />
+      </>
+    );
+  }
 
   return (
     <>
-
       <SharedHeader
         header="Users"
         subheader="Manage roles and access for all users in the system."
@@ -197,10 +240,19 @@ export default function UsersPage({ users, totalCount, roles, statuses, speciali
             py: 2,
           }}
         >
-          <Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
             <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
               Users
             </Typography>
+            {filters.searchTerm ? (
+              <Chip
+                size="small"
+                color="default"
+                label={`Search: ${filters.searchTerm}`}
+                onDelete={handleClearSearch}
+                sx={{ height: 24 }}
+              />
+            ) : null}
           </Box>
           <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
             <TextField
@@ -276,6 +328,7 @@ export default function UsersPage({ users, totalCount, roles, statuses, speciali
             // ),
             // StatusName: (user: IUser) => <Box>{user.Doctor?.StatusName || '-'}</Box>,
           }}
+          emptyIcon="/assets/images/users/icon.svg"
         />
       </Paper>
 
@@ -294,7 +347,6 @@ export default function UsersPage({ users, totalCount, roles, statuses, speciali
         title="Delete User"
         content="Are you sure you want to delete this user?"
         icon={<Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />}
-
         action={
           <Button
             variant="contained"

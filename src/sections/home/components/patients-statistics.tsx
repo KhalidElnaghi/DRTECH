@@ -1,19 +1,22 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
+
 import {
   Box,
   Paper,
-  Typography,
+  alpha,
   Select,
   MenuItem,
-  FormControl,
+  Typography,
   InputLabel,
-  alpha,
+  FormControl,
 } from '@mui/material';
+
 import { useDashboardPatientsStatistics } from 'src/hooks/use-dashboard-query';
-import Chart, { useChart } from 'src/components/chart';
+
 import Iconify from 'src/components/iconify';
+import Chart, { useChart } from 'src/components/chart';
 
 type ApiChartDataPoint = {
   Date: string;
@@ -33,8 +36,6 @@ export default function PatientsStatistics() {
   const { data, isLoading } = useDashboardPatientsStatistics({ period });
 
   const stats = data?.Data || data || {};
-  console.log('API Data:', stats);
-  console.log('Chart Data:', stats.ChartData);
 
   // Process API data based on selected period
   const processedChartData = useMemo(() => {
@@ -48,8 +49,7 @@ export default function PatientsStatistics() {
       // Group by month for monthly view
       const monthlyData = apiData.reduce((acc: ChartDataPoint[], item) => {
         const date = new Date(item.Date);
-        const monthKey =
-          date.toLocaleDateString('en-US', { month: 'short' }) + ', ' + date.getFullYear();
+        const monthKey = `${date.toLocaleDateString('en-US', { month: 'short' })}, ${date.getFullYear()}`;
 
         const existingMonth = acc.find((m) => m.month === monthKey);
         if (existingMonth) {
@@ -71,7 +71,7 @@ export default function PatientsStatistics() {
           apiData.find((item) => {
             const date = new Date(item.Date);
             return (
-              date.toLocaleDateString('en-US', { month: 'short' }) + ', ' + date.getFullYear() ===
+              `${date.toLocaleDateString('en-US', { month: 'short' })  }, ${  date.getFullYear()}` ===
               a.month
             );
           })?.Date || ''
@@ -80,7 +80,7 @@ export default function PatientsStatistics() {
           apiData.find((item) => {
             const date = new Date(item.Date);
             return (
-              date.toLocaleDateString('en-US', { month: 'short' }) + ', ' + date.getFullYear() ===
+              `${date.toLocaleDateString('en-US', { month: 'short' })  }, ${  date.getFullYear()}` ===
               b.month
             );
           })?.Date || ''

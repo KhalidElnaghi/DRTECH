@@ -64,10 +64,6 @@ export default function JwtResetPasswordView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      // Call the reset password function - you may need to implement this in your auth context
-      // await resetPassword?.(data.newPassword);
-      console.log('Password reset with:', data.newPassword);
-      // Redirect to login page after successful password reset
       router.push(paths.auth.jwt.login);
     } catch (error) {
       console.error(error);

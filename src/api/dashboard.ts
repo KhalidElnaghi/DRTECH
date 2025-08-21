@@ -9,7 +9,6 @@ export const fetchDashboardUpcomingAppointmentsClient = async (params?: { limit?
   const response = await axiosInstance.get(endpoints.dashboard.upcomingAppointments, {
     params: { limit: params?.limit ?? 100 },
   });
-  console.log(response);
 
   return response.data;
 };

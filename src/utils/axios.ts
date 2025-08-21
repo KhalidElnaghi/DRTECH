@@ -36,7 +36,6 @@ axiosInstance.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
-console.log(Cookies.get('access_token'));
 
 axiosInstance.interceptors.response.use(
   (response) => response,

@@ -148,12 +148,7 @@ export function AuthProvider({ children }: Readonly<Props>) {
       const accessToken = Cookie.get(ACCESS_TOKEN);
       const userStr = Cookie.get(USER_KEY);
 
-      // Debug logging
-      console.log('Initializing auth with:', {
-        accessToken: accessToken ? 'exists' : 'missing',
-        userStr: userStr ? 'exists' : 'missing',
-        allCookies: document.cookie,
-      });
+
 
       const user = userStr ? (JSON.parse(userStr) as User) : null;
 
@@ -221,12 +216,7 @@ export function AuthProvider({ children }: Readonly<Props>) {
         path: '/',
       });
 
-      // Debug logging after setting cookies
-      console.log('Login successful, cookies set:', {
-        accessToken: Cookie.get(ACCESS_TOKEN) ? 'exists' : 'missing',
-        user: Cookie.get(USER_KEY) ? 'exists' : 'missing',
-        allCookies: document.cookie,
-      });
+
 
       dispatch({
         type: Types.LOGIN,

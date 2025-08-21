@@ -88,7 +88,6 @@ export default function DoctorsPage({
 
   // React Query mutations
   const deleteDoctorMutation = useDeleteDoctor();
-  console.log(doctors);
   // Update URL params when filters change
   const updateURLParams = useCallback(
     (newFilters: FilterState) => {

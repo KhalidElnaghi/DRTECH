@@ -1,60 +1,28 @@
 import { m } from 'framer-motion';
 
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
 import { alpha } from '@mui/material/styles';
-import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
-import { useRouter } from 'src/routes/hooks';
 
 // import { useMockedUser } from 'src/hooks/use-mocked-user';
 
 import { useAuthContext } from 'src/auth/hooks';
 
 import { varHover } from 'src/components/animate';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useTranslate } from 'src/locales';
+import { usePopover } from 'src/components/custom-popover';
 
-// ----------------------------------------------------------------------
-
-// const OPTIONS = [
-//   {
-//     label: 'CHANGE_PHONE',
-//     linkTo: '/dashboard/change-phone',
-//   },
-
-// ];
-
-// ----------------------------------------------------------------------
 
 export default function AccountPopover() {
-  const router = useRouter();
 
-  // const { userData } = useMockedUser();
-  const { logout } = useAuthContext();
-  const { t } = useTranslate();
   const { user } = useAuthContext();
   const popover = usePopover();
-  console.log(user);
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      popover.onClose();
-      router.replace('/');
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  const handleClickItem = (path: string) => {
-    popover.onClose();
-    router.push(path);
-  };
+
+
   const getUserRole = (role: number) => {
     switch (role) {
       case 0:

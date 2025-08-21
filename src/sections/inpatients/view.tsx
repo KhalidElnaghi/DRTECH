@@ -202,6 +202,7 @@ export default function InpatientsPage({ inpatients, totalCount, patients, rooms
                 </Box>
               ),
             }}
+            emptyIcon="/assets/images/inpatients/icon.svg"
           />
         </Paper>
       </Stack>

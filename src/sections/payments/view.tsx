@@ -150,7 +150,6 @@ export default function PaymentsPage({
     confirmDelete.onFalse();
     setSelectedId(null);
   };
-  console.log(payments);
   const getStatusColors = (status: string) => {
     let textColor = 'text.secondary';
     let bgColor = 'grey.100';
