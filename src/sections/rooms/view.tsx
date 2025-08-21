@@ -1,25 +1,24 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 import {
   Box,
-  Card,
-  Chip,
-  Stack,
   Button,
-  Select,
+  Chip,
+  FormControl,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
   MenuItem,
+  Paper,
+  Popover,
+  Select,
+  Stack,
   TextField,
   Typography,
-  InputLabel,
-  FormControl,
-  InputAdornment,
-  IconButton,
-  Popover,
-  Grid,
-  Paper,
 } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -29,12 +28,13 @@ import { useTranslate } from 'src/locales';
 
 import Iconify from 'src/components/iconify';
 import RoomDialog from 'src/components/dialogs/room-dialog';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
+import { ConfirmDialog } from 'src/components/custom-dialog';
+import EmptyState from 'src/components/empty-state';
+import SharedHeader from 'src/components/shared-header/empty-state';
 
 import { IRoom } from 'src/types/room';
 import { ILookup } from 'src/types/lookups';
-import SharedHeader from 'src/components/shared-header/empty-state';
 
 interface IProps {
   rooms: IRoom[];
@@ -68,7 +68,6 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const prevSearchTermRef = useRef<string>('');
 
   const { t } = useTranslate();
   const [selectedRoom, setSelectedRoom] = useState<IRoom | undefined>();
@@ -315,52 +314,28 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
   // Check if any filters are currently applied
   const hasActiveFilters = filters.searchTerm || filters.status > 0;
 
+  // Derive active filter names to display next to title
+  const activeStatusName =
+    filters.status > 0 ? roomStatus?.find((s) => s.Id === filters.status)?.Name : undefined;
+
   // Show no data message if no rooms, but keep header and search/filter functionality
-  if (!rooms || rooms.length === 0) {
+  if (!rooms || (rooms.length === 0 && !hasActiveFilters)) {
     return (
       <>
         {/* No Data Found Message */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            py: 8,
-            px: 2,
-            textAlign: 'center',
-          }}
-        >
-          {!hasActiveFilters && (
-            <Box
-              component="img"
-              src="/assets/images/rooms/icon.svg"
-              alt="No data found"
-              sx={{
-                width: 144,
-                height: 144,
-                mb: 3,
-              }}
-            />
-          )}
 
-          <Typography variant="h5" sx={{ mb: 1, color: 'text.secondary' }}>
-            {hasActiveFilters ? 'No rooms found' : 'No rooms yet'}
-          </Typography>
-          <Typography variant="body1" sx={{ mb: 3, color: 'text.secondary', maxWidth: 400 }}>
-            {hasActiveFilters
+        <EmptyState
+          icon="/assets/images/rooms/icon.svg"
+          header={hasActiveFilters ? 'No rooms found' : 'No rooms yet'}
+          subheader={
+            hasActiveFilters
               ? 'No rooms match your current filters. Try adjusting your search criteria or clearing some filters.'
-              : "You haven't added any rooms yet. Start by adding a new one."}
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={hasActiveFilters ? handleFilterReset : handleOpenAddDialog}
-            sx={{ mb: 2 }}
-          >
-            {hasActiveFilters ? 'Clear Filters' : 'Add New Room'}
-          </Button>
-        </Box>
-
+              : "You haven't added any rooms yet. Start by adding a new one."
+          }
+          buttonText={hasActiveFilters ? 'Clear Filters' : 'Add New Room'}
+          onButtonClick={hasActiveFilters ? handleFilterReset : handleOpenAddDialog}
+          iconSize={150}
+        />
         {/* Room Dialog */}
         <RoomDialog
           key={selectedRoom ? `edit-${selectedRoom.Id}` : 'new-room'}
@@ -405,10 +380,32 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
               py: 2,
             }}
           >
-            <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
               <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
                 {t('ROOM.ROOMS') || 'Rooms'}
               </Typography>
+              {activeStatusName && (
+                <Chip
+                  size="small"
+                  color="default"
+                  label={`Status: ${activeStatusName}`}
+                  onDelete={() => handleFilterChange('status', 0)}
+                  sx={{ height: 24 }}
+                />
+              )}
+              {filters.searchTerm && (
+                <Chip
+                  size="small"
+                  color="default"
+                  label={`Search: ${filters.searchTerm}`}
+                  onDelete={() => {
+                    const next = { ...filters, searchTerm: '' };
+                    setFilters(next);
+                    updateURLParams(next);
+                  }}
+                  sx={{ height: 24 }}
+                />
+              )}
             </Box>
 
             {/* Search and Filter Bar */}
@@ -421,7 +418,7 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
             >
               {/* Search Bar */}
               <TextField
-                placeholder="Search room number, floor, or type..."
+                placeholder="Search by room number"
                 value={filters.searchTerm}
                 onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
                 sx={{ flexGrow: 1, maxWidth: 600, width: '100%' }}
@@ -605,6 +602,7 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
               ),
               CreatedAt: ({ CreatedAt }: IRoom) => <Box>{formatDateLocal(CreatedAt)}</Box>,
             }}
+            emptyIcon="/assets/images/rooms/icon.svg"
           />
         </Paper>
       </Stack>
