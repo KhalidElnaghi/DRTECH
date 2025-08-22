@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { Box, Paper, Typography } from '@mui/material';
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 import { useDashboardPatients } from 'src/hooks/use-dashboard-query';
+import DashboardPatientsTableSkeleton from './skeletons/dashboard-patients-table-skeleton';
 
 const TABLE_HEAD = [
   { id: 'FullName', label: 'Full Name' },
@@ -23,6 +24,10 @@ export default function DashboardPatientsTable() {
 
   const items = data?.Data?.Items || data?.Data?.items || [];
   const totalCount = data?.Data?.TotalCount || data?.Data?.totalCount || 0;
+
+  if (isLoading) {
+    return <DashboardPatientsTableSkeleton />;
+  }
 
   return (
     <Paper

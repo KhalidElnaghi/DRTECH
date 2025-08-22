@@ -17,6 +17,7 @@ import { useDashboardPatientsStatistics } from 'src/hooks/use-dashboard-query';
 
 import Iconify from 'src/components/iconify';
 import Chart, { useChart } from 'src/components/chart';
+import PatientsStatisticsSkeleton from './skeletons/patients-statistics-skeleton';
 
 type ApiChartDataPoint = {
   Date: string;
@@ -71,7 +72,7 @@ export default function PatientsStatistics() {
           apiData.find((item) => {
             const date = new Date(item.Date);
             return (
-              `${date.toLocaleDateString('en-US', { month: 'short' })  }, ${  date.getFullYear()}` ===
+              `${date.toLocaleDateString('en-US', { month: 'short' })}, ${date.getFullYear()}` ===
               a.month
             );
           })?.Date || ''
@@ -80,7 +81,7 @@ export default function PatientsStatistics() {
           apiData.find((item) => {
             const date = new Date(item.Date);
             return (
-              `${date.toLocaleDateString('en-US', { month: 'short' })  }, ${  date.getFullYear()}` ===
+              `${date.toLocaleDateString('en-US', { month: 'short' })}, ${date.getFullYear()}` ===
               b.month
             );
           })?.Date || ''
@@ -299,6 +300,10 @@ export default function PatientsStatistics() {
     },
   ];
 
+  if (isLoading) {
+    return <PatientsStatisticsSkeleton />;
+  }
+
   return (
     <Paper
       elevation={1}
@@ -388,17 +393,7 @@ export default function PatientsStatistics() {
 
       {/* Chart */}
       <Box sx={{ flex: 1, minHeight: 300 }}>
-        {isLoading ? (
-          <Box
-            sx={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            <Typography variant="body2" color="text.secondary">
-              Loading...
-            </Typography>
-          </Box>
-        ) : (
-          <Chart type="line" series={chartSeries} options={chartOptions} height={300} />
-        )}
+        <Chart type="line" series={chartSeries} options={chartOptions} height={300} />
       </Box>
     </Paper>
   );

@@ -3,6 +3,7 @@
 import { Box, Paper, List, ListItem, ListItemText, Typography } from '@mui/material';
 
 import { useDashboardUpcomingAppointments } from 'src/hooks/use-dashboard-query';
+import UpcomingAppointmentsSkeleton from './skeletons/upcoming-appointments-skeleton';
 
 type Props = { limit?: number };
 
@@ -10,6 +11,10 @@ export default function UpcomingAppointments({ limit = 5 }: Props) {
   const { data, isLoading } = useDashboardUpcomingAppointments({ limit });
 
   const items = data?.Data?.Items || data?.Data || data?.items || [];
+
+  if (isLoading) {
+    return <UpcomingAppointmentsSkeleton />;
+  }
 
   return (
     <Paper
@@ -28,17 +33,11 @@ export default function UpcomingAppointments({ limit = 5 }: Props) {
         Upcoming Appointments
       </Typography>
       <Box sx={{ flex: 1, minHeight: 0 }}>
-        {isLoading && (
-          <Typography variant="body2" color="text.secondary">
-            Loading...
-          </Typography>
-        )}
-        {!isLoading && items.length === 0 && (
+        {items.length === 0 ? (
           <Typography variant="body2" color="text.secondary">
             No upcoming appointments
           </Typography>
-        )}
-        {!isLoading && items.length > 0 && (
+        ) : (
           <List dense sx={{ maxHeight: '100%', overflow: 'auto' }}>
             {items.slice(0, limit).map((apt: any) => (
               <ListItem key={apt.Id || apt.id} sx={{ px: 0 }}>

@@ -12,6 +12,7 @@ import { fDateTime } from 'src/utils/format-time';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
+import DashboardSummarySkeleton from './skeletons/dashboard-summary-skeleton';
 
 export default function DashboardSummary() {
   const { user } = useAuthContext();
@@ -67,7 +68,7 @@ export default function DashboardSummary() {
               mt: 1,
             }}
           >
-            Here’s a quick summary of hospital’s performance this week.
+            Here's a quick summary of hospital's performance this week.
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
@@ -159,25 +160,25 @@ export default function DashboardSummary() {
           </Button>
         </Box>
       </Box>
-      <Grid container spacing={2} sx={{ mt: 2 }}>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' },
-            gap: 2,
-          }}
-        >
-          <Paper
-            elevation={1}
-            sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
+
+      {isLoading ? (
+        <DashboardSummarySkeleton />
+      ) : (
+        <Grid container spacing={2} sx={{ mt: 2 }}>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' },
+              gap: 2,
+            }}
           >
-            {isLoading ? (
-              <Typography variant="body2" color="text.secondary">
-                Loading...
-              </Typography>
-            ) : (
+            {/* Total Patients */}
+            <Paper
+              elevation={1}
+              sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
+            >
               <Box sx={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 1 }}>
                   <Image
@@ -202,7 +203,6 @@ export default function DashboardSummary() {
                     {' '}
                     Total Patient
                   </Typography>
-
                   <Typography
                     variant="caption"
                     sx={{
@@ -232,35 +232,29 @@ export default function DashboardSummary() {
                   ) : (
                     <Iconify icon="lucide:arrow-down" color="#D92C20" width={16} height={16} />
                   )}
-
                   <Typography
                     variant="caption"
                     color={data?.Data?.TotalPatientsIsIncrease ? '#40C4AA' : '#D92C20'}
                   >
-                    {data.Data.TotalPatientsChangePercentage}%
+                    {data?.Data?.TotalPatientsChangePercentage}%
                   </Typography>
                 </Box>
               </Box>
-            )}
-          </Paper>
-          <Paper
-            elevation={1}
-            sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
-          >
-            {isLoading ? (
-              <Typography variant="body2" color="text.secondary">
-                Loading...
-              </Typography>
-            ) : (
+            </Paper>
+
+            {/* Total Doctors */}
+            <Paper
+              elevation={1}
+              sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
+            >
               <Box sx={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 1 }}>
                   <Image
                     src="/assets/images/home/doctor.svg"
-                    alt="patients"
+                    alt="doctors"
                     width={45}
                     height={45}
                   />
-
                   <Typography
                     sx={{
                       fontFamily: 'Inter Tight',
@@ -276,7 +270,6 @@ export default function DashboardSummary() {
                     {' '}
                     Total Doctors
                   </Typography>
-
                   <Typography
                     variant="caption"
                     sx={{
@@ -306,35 +299,29 @@ export default function DashboardSummary() {
                   ) : (
                     <Iconify icon="lucide:arrow-down" color="#D92C20" width={16} height={16} />
                   )}
-
                   <Typography
                     variant="caption"
                     color={data?.Data?.TotalDoctorsIsIncrease ? '#40C4AA' : '#D92C20'}
                   >
-                    {data.Data.TotalDoctorsChangePercentage}%
+                    {data?.Data?.TotalDoctorsChangePercentage}%
                   </Typography>
                 </Box>
               </Box>
-            )}
-          </Paper>
-          <Paper
-            elevation={1}
-            sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
-          >
-            {isLoading ? (
-              <Typography variant="body2" color="text.secondary">
-                Loading...
-              </Typography>
-            ) : (
+            </Paper>
+
+            {/* New Appointments */}
+            <Paper
+              elevation={1}
+              sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
+            >
               <Box sx={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 1 }}>
                   <Image
                     src="/assets/images/home/appointment.svg"
-                    alt="patients"
+                    alt="appointments"
                     width={45}
                     height={45}
                   />
-
                   <Typography
                     sx={{
                       fontFamily: 'Inter Tight',
@@ -350,7 +337,6 @@ export default function DashboardSummary() {
                     {' '}
                     New Appointments
                   </Typography>
-
                   <Typography
                     variant="caption"
                     sx={{
@@ -380,30 +366,24 @@ export default function DashboardSummary() {
                   ) : (
                     <Iconify icon="lucide:arrow-down" color="#D92C20" width={16} height={16} />
                   )}
-
                   <Typography
                     variant="caption"
                     color={data?.Data?.NewAppointmentsIsIncrease ? '#40C4AA' : '#D92C20'}
                   >
-                    {data.Data.NewAppointmentsChangePercentage}%
+                    {data?.Data?.NewAppointmentsChangePercentage}%
                   </Typography>
                 </Box>
               </Box>
-            )}
-          </Paper>
-          <Paper
-            elevation={1}
-            sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
-          >
-            {isLoading ? (
-              <Typography variant="body2" color="text.secondary">
-                Loading...
-              </Typography>
-            ) : (
+            </Paper>
+
+            {/* Rooms Available */}
+            <Paper
+              elevation={1}
+              sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
+            >
               <Box sx={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 1 }}>
-                  {' '}
-                  <Image src="/assets/images/home/room.svg" alt="patients" width={45} height={45} />
+                  <Image src="/assets/images/home/room.svg" alt="rooms" width={45} height={45} />
                   <Typography
                     sx={{
                       fontFamily: 'Inter Tight',
@@ -447,19 +427,18 @@ export default function DashboardSummary() {
                   ) : (
                     <Iconify icon="lucide:arrow-down" color="#D92C20" width={16} height={16} />
                   )}
-
                   <Typography
                     variant="caption"
                     color={data?.Data?.RoomsAvailableIsIncrease ? '#40C4AA' : '#D92C20'}
                   >
-                    {data.Data.RoomsAvailableChangePercentage}%
+                    {data?.Data?.RoomsAvailableChangePercentage}%
                   </Typography>
                 </Box>
               </Box>
-            )}
-          </Paper>
+            </Paper>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
     </>
   );
 }
