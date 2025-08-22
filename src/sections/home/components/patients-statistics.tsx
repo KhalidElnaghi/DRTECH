@@ -249,17 +249,23 @@ export default function PatientsStatistics() {
         return `
           <div style="
             background: white;
-            border: 1px solid #E0E3E7;
+            border: 1px solid #DFE1E7;
             border-radius: 8px;
             padding: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             font-family: 'Inter Tight', sans-serif;
+            width: 200px;
           ">
             <div style="font-weight: 600; color: #212B36; margin-bottom: 8px;">Total Patient</div>
-            <div style="color: #637381; font-size: 12px; margin-bottom: 4px;">${timeLabel}</div>
-            <div style="color: #2065D1; font-weight: 600;">${chartDataPoint.patients}</div>
-            <div style="color: #637381; font-size: 12px; margin-bottom: 4px;">${timeLabel}</div>
-            <div style="color: #54B435; font-weight: 600;">${chartDataPoint.inpatients}</div>
+            <div style="font-weight: 600; border-bottom: 1.5px solid #E0E3E7; margin-bottom: 8px;"></div>
+            <div style="display: flex; justify-content: space-between;">
+              <div style="color: #637381; font-size: 12px; margin-bottom: 4px;">${timeLabel}</div>
+              <div style="color: #2065D1; font-weight: 600;">${chartDataPoint.patients}</div>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <div style="color: #637381; font-size: 12px; margin-bottom: 4px;">${timeLabel}</div>
+              <div style="color: #54B435; font-weight: 600;">${chartDataPoint.inpatients}</div>
+           </div>
           </div>
         `;
       },

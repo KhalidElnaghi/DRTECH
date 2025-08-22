@@ -35,6 +35,7 @@ import SharedHeader from 'src/components/shared-header/empty-state';
 
 import { IRoom } from 'src/types/room';
 import { ILookup } from 'src/types/lookups';
+import { formatDateLocal } from 'src/utils/format-time';
 
 interface IProps {
   rooms: IRoom[];
@@ -48,14 +49,7 @@ interface FilterState {
   status: number;
 }
 
-const formatDateLocal = (dateString: string) => {
-  const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
 
-  return `${year}-${month}-${day}`;
-};
 
 export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: IProps) {
   const [openAddDialog, setOpenAddDialog] = useState(false);

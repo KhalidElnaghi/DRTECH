@@ -1,6 +1,9 @@
+/* eslint-disable no-nested-ternary */
+
 'use client';
 
 import { Paper, Typography, List, ListItem, ListItemText } from '@mui/material';
+
 import { useDashboardPatients } from 'src/hooks/use-dashboard-query';
 
 type Props = { limit?: number };

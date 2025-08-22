@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { Box, Grid, Paper, Button, Typography, IconButton } from '@mui/material';
 
@@ -12,12 +13,18 @@ import { fDateTime } from 'src/utils/format-time';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
+
+import { paths } from 'src/routes/paths';
+
+import axiosInstance from 'src/utils/axios';
+
 import DashboardSummarySkeleton from './skeletons/dashboard-summary-skeleton';
 
 export default function DashboardSummary() {
   const { user } = useAuthContext();
   const { data, isLoading, refetch } = useDashboardSummary();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const router = useRouter();
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -25,6 +32,58 @@ export default function DashboardSummary() {
       await refetch();
     } finally {
       setIsRefreshing(false);
+    }
+  };
+
+  const handleCardClick = (route: string) => {
+    router.push(route);
+  };
+
+  const handleExportCSV = async () => {
+    try {
+      const response = await axiosInstance.get('/dashboard/export-csv', {
+        responseType: 'blob',
+      });
+
+      if (response.status === 200) {
+        const blob = response.data;
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `dashboard-summary-${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error('Failed to export CSV');
+      }
+    } catch (error) {
+      console.error('Error exporting CSV:', error);
+    }
+  };
+
+  const handleExportExcel = async () => {
+    try {
+      const response = await axiosInstance.get('/dashboard/export-excel', {
+        responseType: 'blob',
+      });
+
+      if (response.status === 200) {
+        const blob = response.data;
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `dashboard-summary-${new Date().toISOString().split('T')[0]}.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error('Failed to export Excel');
+      }
+    } catch (error) {
+      console.error('Error exporting Excel:', error);
     }
   };
 
@@ -68,7 +127,7 @@ export default function DashboardSummary() {
               mt: 1,
             }}
           >
-            Here's a quick summary of hospital's performance this week.
+            Here&apos;s a quick summary of hospital&apos;s performance this week.
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
@@ -92,7 +151,7 @@ export default function DashboardSummary() {
                 fontFamily: 'Inter Tight',
                 fontWeight: 600,
                 fontStyle: 'SemiBold',
-                fontSize: { xs: '10px', md: '12px', lg: '16px' },
+                fontSize: { xs: '12px', md: '12px', lg: '16px' },
                 lineHeight: '150%',
                 letterSpacing: '2%',
                 textAlign: 'center',
@@ -139,7 +198,12 @@ export default function DashboardSummary() {
               />
             </IconButton>
           </Box>
-          <Button variant="contained" color="primary" sx={{ display: { sm: 'none', md: 'flex' } }}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ display: { sm: 'none', md: 'flex' } }}
+            onClick={handleExportCSV}
+          >
             <Iconify icon="tabler:file-download-filled" />
             <Typography
               variant="body1"
@@ -156,6 +220,30 @@ export default function DashboardSummary() {
               }}
             >
               Export CSV
+            </Typography>
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ display: { sm: 'none', md: 'flex' } }}
+            onClick={handleExportExcel}
+          >
+            <Iconify icon="vscode-icons:file-type-excel" />
+            <Typography
+              variant="body1"
+              sx={{
+                mx: 1,
+                py: { xs: '5px', md: '4px', lg: '1px' },
+                fontFamily: 'Inter Tight',
+                fontWeight: 600,
+                fontStyle: 'SemiBold',
+                fontSize: { xs: '10px', md: '12px', lg: '16px' },
+                lineHeight: '150%',
+                letterSpacing: '2%',
+                textAlign: 'center',
+              }}
+            >
+              Export Excel
             </Typography>
           </Button>
         </Box>
@@ -177,7 +265,20 @@ export default function DashboardSummary() {
             {/* Total Patients */}
             <Paper
               elevation={1}
-              sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
+              sx={{
+                p: 2,
+                border: '1px solid',
+                borderColor: 'divider',
+                borderRadius: 2,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  elevation: 3,
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
+                },
+              }}
+              onClick={() => handleCardClick(paths.dashboard.patients)}
             >
               <Box sx={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 1 }}>
@@ -245,7 +346,20 @@ export default function DashboardSummary() {
             {/* Total Doctors */}
             <Paper
               elevation={1}
-              sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
+              sx={{
+                p: 2,
+                border: '1px solid',
+                borderColor: 'divider',
+                borderRadius: 2,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  elevation: 3,
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
+                },
+              }}
+              onClick={() => handleCardClick(paths.dashboard.doctors)}
             >
               <Box sx={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 1 }}>
@@ -312,7 +426,20 @@ export default function DashboardSummary() {
             {/* New Appointments */}
             <Paper
               elevation={1}
-              sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
+              sx={{
+                p: 2,
+                border: '1px solid',
+                borderColor: 'divider',
+                borderRadius: 2,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  elevation: 3,
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
+                },
+              }}
+              onClick={() => handleCardClick(paths.dashboard.appointments)}
             >
               <Box sx={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 1 }}>
@@ -379,7 +506,20 @@ export default function DashboardSummary() {
             {/* Rooms Available */}
             <Paper
               elevation={1}
-              sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2 }}
+              sx={{
+                p: 2,
+                border: '1px solid',
+                borderColor: 'divider',
+                borderRadius: 2,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  elevation: 3,
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
+                },
+              }}
+              onClick={() => handleCardClick(paths.dashboard.rooms)}
             >
               <Box sx={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 1 }}>

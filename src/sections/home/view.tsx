@@ -1,22 +1,23 @@
 'use client';
 
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import { Skeleton } from '@mui/material';
+import Container from '@mui/material/Container';
 
-import { useSettingsContext } from 'src/components/settings';
 import {
   useDashboardSummary,
+  useDashboardPatients,
   useDashboardPatientsStatistics,
   useDashboardUpcomingAppointments,
-  useDashboardPatients,
 } from 'src/hooks/use-dashboard-query';
 
+import { useSettingsContext } from 'src/components/settings';
+
+import LoadingOverlay from './components/loading-overlay';
 import DashboardSummary from './components/dashboard-summary';
 import PatientsStatistics from './components/patients-statistics';
 import UpcomingAppointments from './components/upcoming-appointments';
 import DashboardPatientsTable from './components/dashboard-patients-table';
-import LoadingOverlay from './components/loading-overlay';
 
 // ----------------------------------------------------------------------
 // type IProps = {};
@@ -49,7 +50,7 @@ export default function MainPage() {
         message="Refreshing dashboard data..."
         isVisible={isAnyRefetching && !isAnyLoading}
       />
-      <Container maxWidth={settings.themeStretch ? false : 'xl'} sx={{ px: 1 }}>
+      <Container maxWidth={settings.themeStretch ? false : 'xl'} sx={{ px: 1, py: 2 }}>
         {isAnyLoading ? (
           // Show skeleton loading for the entire page
           <Box sx={{ mt: 2 }}>
