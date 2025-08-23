@@ -82,7 +82,17 @@
     "NO_USERS_YET": "No users yet",
     "CLICK_ADD_NEW_USER": "Click “Add New User” to invite an admin, doctor, nurse, or staff member to your system",
     "USERS": "Users",
-    "MANAGE_ROLES_AND_ACCESS_FOR_ALL_USERS_IN_THE_SYSTEM": "Manage roles and access for all users in the system."
+    "MANAGE_ROLES_AND_ACCESS_FOR_ALL_USERS_IN_THE_SYSTEM": "Manage roles and access for all users in the system.",
+    "WELCOME_BACK": "Welcome back",
+    "LOGIN_TO_MANAGE_YOUR_HOSPITAL_DASHBOARD": "Login to manage your hospital dashboard",
+    "FORGOT_PASSWORD": "Forgot Password?",
+    "ENTER_YOUR_REGISTERED_EMAIL_AND_WE_LL_SEND_YOU_A_RESET_CODE": "Enter your registered email and we'll send you a reset code",
+    "ENTER_THE_6_DIGIT_CODE_SENT_TO_YOUR_EMAIL": "Enter the 6-digit code sent to your email",
+    "ENTER_YOUR_NEW_PASSWORD": "Enter your new password",
+    "DID_NOT_RECEIVE_THE_CODE": "Didn't receive the code?",
+    "RESEND_OTP": "Resend OTP",
+    "NO_NOTIFICATIONS_YET": "No notifications yet",
+    "NOTIFICATIONS": "Notifications"
   },
   "LABEL": {
     "HELP_CENTER": "Help Center",
@@ -166,7 +176,15 @@
     "ROOM_NUMBER": "Room Number",
     "SEARCH_BY_NAME": "Search by name ...",
     "ROLE": "Role",
-    "CREATED_AT": "Created At"
+    "CREATED_AT": "Created At",
+    "PASSWORD_REQUIRED": "Password is required",
+    "PASSWORD_MIN": "Password must be at least 8 characters",
+    "OTP_CODE": "OTP Code",
+    "NEW_PASSWORD": "New Password",
+    "CONFIRM_PASSWORD": "Confirm Password",
+    "CONFIRM_NEW_PASSWORD": "Confirm new password",
+    "ENTER_NEW_PASSWORD": "Enter new password",
+    "LOAD_MORE": "Load more"
   },
   "BUTTON": {
     "LOGIN": "Login",
@@ -216,7 +234,15 @@
     "DELETING": "Deleting...",
     "ADD_NEW_INPATIENT": "Add New Inpatient",
     "UPDATE_INPATIENT": "Update Inpatient",
-    "ADD_NEW_USER": "Add New User"
+    "ADD_NEW_USER": "Add New User",
+    "SEND_OTP": "Send OTP",
+    "VERIFY_OTP": "Verify OTP",
+    "RESET_PASSWORD": "Reset Password",
+    "BACK_TO_LOGIN": "Back to Login",
+    "RESEND_IN": "Resend in",
+    "MARK_ALL_AS_READ": "Mark all as read",
+    "NOTIFICATIONS": "Notifications",
+    "LOAD_MORE": "Load more"
   },
   "SIDEBAR": {
     "MAIN": "Main",

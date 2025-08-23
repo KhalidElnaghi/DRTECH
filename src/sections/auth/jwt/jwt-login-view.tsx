@@ -102,7 +102,7 @@ export default function JwtLoginView() {
           textAlign: 'center',
         }}
       >
-        Welcome Back
+        {t('TITLE.WELCOME_BACK') }
       </Typography>
       <Typography
         sx={{
@@ -116,7 +116,7 @@ export default function JwtLoginView() {
           textAlign: 'center',
         }}
       >
-        Login to manage your hospital dashboard
+        {t('TITLE.LOGIN_TO_MANAGE_YOUR_HOSPITAL_DASHBOARD')}
       </Typography>
     </Stack>
   );

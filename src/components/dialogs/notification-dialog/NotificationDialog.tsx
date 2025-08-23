@@ -14,6 +14,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import { useNotifications } from 'src/hooks/use-notifications-query';
 
+import { useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 
 import { INotification } from 'src/types/notification';
@@ -28,6 +30,7 @@ interface NotificationDialogProps {
 
 export default function NotificationDialog({ open, onClose, anchorEl }: NotificationDialogProps) {
   const theme = useTheme();
+  const { t } = useTranslate();
   const { data: notificationsData, isLoading, error } = useNotifications();
 
   const notifications = notificationsData?.Data || [];
@@ -113,7 +116,7 @@ export default function NotificationDialog({ open, onClose, anchorEl }: Notifica
         }}
       >
         <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary' }}>
-          Notifications
+          {t('TITLE.NOTIFICATIONS') || 'Notifications'}
         </Typography>
         <Typography
           component="button"
@@ -130,7 +133,7 @@ export default function NotificationDialog({ open, onClose, anchorEl }: Notifica
             },
           }}
         >
-          Mark all as read
+          {t('BUTTON.MARK_ALL_AS_READ') || 'Mark all as read'}
         </Typography>
       </Box>
 
@@ -161,7 +164,7 @@ export default function NotificationDialog({ open, onClose, anchorEl }: Notifica
           >
             <Iconify icon="eva:alert-circle-outline" width={32} />
             <Typography variant="body2" sx={{ mt: 1 }}>
-              Failed to load notifications
+              {t('TITLE.NO_NOTIFICATIONS_YET') || 'No notifications yet'}
             </Typography>
           </Box>
         ) : notifications.length === 0 ? (
@@ -178,7 +181,7 @@ export default function NotificationDialog({ open, onClose, anchorEl }: Notifica
           >
             <Iconify icon="eva:bell-off-outline" width={32} />
             <Typography variant="body2" sx={{ mt: 1 }}>
-              No notifications yet
+              {t('TITLE.NO_NOTIFICATIONS_YET') || 'No notifications yet'}
             </Typography>
           </Box>
         ) : (
@@ -302,7 +305,7 @@ export default function NotificationDialog({ open, onClose, anchorEl }: Notifica
               },
             }}
           >
-            View all notifications
+            {t('BUTTON.LOAD_MORE') || 'Load more'}
           </Typography>
         </Box>
       )}

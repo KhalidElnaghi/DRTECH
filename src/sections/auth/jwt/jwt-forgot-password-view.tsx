@@ -295,7 +295,7 @@ export default function JwtForgotPasswordView() {
           textAlign: 'center',
         }}
       >
-        Forgot Password
+        {t('TITLE.FORGOT_PASSWORD') || 'Forgot Password'}
       </Typography>
       <Typography
         sx={{
@@ -309,9 +309,10 @@ export default function JwtForgotPasswordView() {
           textAlign: 'center',
         }}
       >
-        {currentStep === 'email' && "Enter your registered email and we'll send you a reset code"}
-        {currentStep === 'otp' && 'Enter the 6-digit code sent to your email'}
-        {currentStep === 'password' && 'Enter your new password'}
+        {currentStep === 'email' &&
+          t('TITLE.ENTER_YOUR_REGISTERED_EMAIL_AND_WE_LL_SEND_YOU_A_RESET_CODE')}
+        {currentStep === 'otp' && t('TITLE.ENTER_THE_6_DIGIT_CODE_SENT_TO_YOUR_EMAIL')}
+        {currentStep === 'password' && t('TITLE.ENTER_YOUR_NEW_PASSWORD')}
       </Typography>
     </Stack>
   );
@@ -349,7 +350,7 @@ export default function JwtForgotPasswordView() {
             mx: 0.5,
           }}
         >
-          Email
+          {t('LABEL.EMAIL') || 'Email'}
         </Typography>
         <RHFTextField
           name="email"
@@ -377,7 +378,7 @@ export default function JwtForgotPasswordView() {
         variant="contained"
         loading={isLoading}
       >
-        Send OTP
+        {t('BUTTON.SEND_OTP') || 'Send OTP'}
       </LoadingButton>
     </Stack>
   );
@@ -397,7 +398,7 @@ export default function JwtForgotPasswordView() {
             mx: 0.5,
           }}
         >
-          OTP Code
+          {t('LABEL.OTP_CODE') || 'OTP Code'}
         </Typography>
         <TextField
           fullWidth
@@ -430,7 +431,8 @@ export default function JwtForgotPasswordView() {
         variant="contained"
         loading={isLoading}
       >
-        Verify OTP
+        {t('BUTTON.VERIFY_OTP') || 'Verify OTP'}
+        {}{' '}
       </LoadingButton>
 
       {/* <LoadingButton
@@ -446,7 +448,7 @@ export default function JwtForgotPasswordView() {
 
       <Box sx={{ textAlign: 'center', mt: 1 }}>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-          Didn&apos;t receive the code?
+          {t('TITLE.DID_NOT_RECEIVE_THE_CODE') || 'Didn&apos;t receive the code?'}
         </Typography>
         <LoadingButton
           variant="text"
@@ -455,7 +457,9 @@ export default function JwtForgotPasswordView() {
           disabled={!canResendOtp || isLoading}
           loading={isLoading}
         >
-          {canResendOtp ? 'Resend OTP' : `Resend in ${resendCountdown}s`}
+          {canResendOtp
+            ? t('BUTTON.RESEND_OTP') || 'Resend OTP'
+            : `${t('BUTTON.RESEND_IN')} ${resendCountdown}`}
         </LoadingButton>
       </Box>
     </Stack>
@@ -476,12 +480,12 @@ export default function JwtForgotPasswordView() {
             mx: 0.5,
           }}
         >
-          New Password
+          {t('LABEL.NEW_PASSWORD') || 'New Password'}
         </Typography>
         <RHFTextField
           name="newPassword"
           type="password"
-          placeholder="Enter new password"
+          placeholder={t('LABEL.ENTER_NEW_PASSWORD') || 'Enter new password'}
           error={!!passwordMethods.formState.errors.newPassword}
           helperText={passwordMethods.formState.errors.newPassword?.message}
           sx={{
@@ -510,12 +514,12 @@ export default function JwtForgotPasswordView() {
             mx: 0.5,
           }}
         >
-          Confirm Password
+          {t('LABEL.CONFIRM_PASSWORD') || 'Confirm Password'}
         </Typography>
         <RHFTextField
           name="confirmPassword"
           type="password"
-          placeholder="Confirm new password"
+          placeholder={t('LABEL.CONFIRM_NEW_PASSWORD') || 'Confirm new password'}
           error={!!passwordMethods.formState.errors.confirmPassword}
           helperText={passwordMethods.formState.errors.confirmPassword?.message}
           sx={{
@@ -539,7 +543,7 @@ export default function JwtForgotPasswordView() {
         variant="contained"
         loading={isLoading}
       >
-        Reset Password
+        {t('BUTTON.RESET_PASSWORD') || 'Reset Password'}
       </LoadingButton>
 
       {/* <LoadingButton
@@ -644,7 +648,7 @@ export default function JwtForgotPasswordView() {
               },
             }}
           >
-            Back to Login
+            {t('BUTTON.BACK_TO_LOGIN') || 'Back to Login'}
           </Link>
         </Card>
       </Box>

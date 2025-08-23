@@ -86,7 +86,17 @@
     "NO_USERS_YET": "لا يوجد مستخدمين",
     "CLICK_ADD_NEW_USER": "اضافة مستخدم جديد لتضيف مستخدم جديد للنظام",
     "USERS": "المستخدمين",
-    "MANAGE_ROLES_AND_ACCESS_FOR_ALL_USERS_IN_THE_SYSTEM": "إدارة الأدوار والوصول لجميع المستخدمين في النظام"
+    "MANAGE_ROLES_AND_ACCESS_FOR_ALL_USERS_IN_THE_SYSTEM": "إدارة الأدوار والوصول لجميع المستخدمين في النظام",
+    "WELCOME_BACK": "مرحبا بعودتك",
+    "LOGIN_TO_MANAGE_YOUR_HOSPITAL_DASHBOARD": "تسجيل الدخول لإدارة لوحة التحكم لمركزك",
+    "FORGOT_PASSWORD": "هل نسيت كلمة المرور؟",
+    "ENTER_YOUR_REGISTERED_EMAIL_AND_WE_LL_SEND_YOU_A_RESET_CODE": "أدخل بريدك الإلكتروني المسجل وسنرسل لك رمز إعادة التعيين",
+    "ENTER_THE_6_DIGIT_CODE_SENT_TO_YOUR_EMAIL": "أدخل الرمز الست أرقامي المرسل إلى بريدك الإلكتروني",
+    "ENTER_YOUR_NEW_PASSWORD": "أدخل كلمة المرور الجديدة",
+    "DID_NOT_RECEIVE_THE_CODE": "لم تستلم الرمز؟",
+    "RESEND_OTP": "إعادة ارسال رمز التحقق",
+    "NO_NOTIFICATIONS_YET": "لا يوجد إشعارات",
+    "NOTIFICATIONS": "الإشعارات"
   },
   "LABEL": {
     "HELP_CENTER": "مركز المساعدة",
@@ -170,7 +180,12 @@
     "ROLE": "الدور",
     "CREATED_AT": "تاريخ الإنشاء",
     "PASSWORD_REQUIRED": "كلمة المرور مطلوبة",
-    "PASSWORD_MIN": "كلمة المرور يجب أن تكون على الأقل 8 أحرف"
+    "PASSWORD_MIN": "كلمة المرور يجب أن تكون على الأقل 8 أحرف",
+    "OTP_CODE": "رمز التحقق",
+    "NEW_PASSWORD": "كلمة المرور الجديدة",
+    "CONFIRM_PASSWORD": "تأكيد كلمة المرور",
+    "CONFIRM_NEW_PASSWORD": "تأكيد كلمة المرور الجديدة",
+    "ENTER_NEW_PASSWORD": "أدخل كلمة المرور الجديدة"
   },
   "BUTTON": {
     "LOGIN": "تسجيل الدخول",
@@ -226,7 +241,17 @@
     "DELETING": "جاري الحذف...",
     "ADD_NEW_INPATIENT": "اضافة مريض مقيم جديد",
     "UPDATE_INPATIENT": "تحديث المريض الداخلي",
-    "ADD_NEW_USER": "اضافة مستخدم جديد"
+    "ADD_NEW_USER": "اضافة مستخدم جديد",
+    "SEND_OTP": "ارسال رمز التحقق",
+    "VERIFY_OTP": "تحقق من رمز التحقق",
+    "RESET_PASSWORD": "إعادة تعيين كلمة المرور",
+    "BACK_TO_LOGIN": "العودة إلى تسجيل الدخول",
+    "DID_NOT_RECEIVE_THE_CODE": "لم تستلم الرمز؟",
+    "RESEND_OTP": "إعادة ارسال رمز التحقق",
+    "RESEND_IN": "إعادة ارسال خلال",
+    "MARK_ALL_AS_READ": "تحديد الكل كمقروء",
+    "NOTIFICATIONS": "الإشعارات",
+    "LOAD_MORE": "تحميل المزيد"
   },
   "SIDEBAR": {
     "MAIN": "الرئيسية",
