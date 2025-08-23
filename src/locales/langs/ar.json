@@ -82,7 +82,11 @@
     "NO_INPATIENTS_YET_START_BY_ADDING_NEW_ONE": "لم تقم بإضافة مرضى داخليين بعد. ابدأ بإضافة مريض داخلي جديد.",
     "INPATIENTS": "المرضى الداخليين",
     "DELETE_INPATIENT": "حذف المريض الداخلي",
-    "DELETE_INPATIENT_CONFIRMATION": "هل أنت متأكد من حذف هذا المريض الداخلي؟"
+    "DELETE_INPATIENT_CONFIRMATION": "هل أنت متأكد من حذف هذا المريض الداخلي؟",
+    "NO_USERS_YET": "لا يوجد مستخدمين",
+    "CLICK_ADD_NEW_USER": "اضافة مستخدم جديد لتضيف مستخدم جديد للنظام",
+    "USERS": "المستخدمين",
+    "MANAGE_ROLES_AND_ACCESS_FOR_ALL_USERS_IN_THE_SYSTEM": "إدارة الأدوار والوصول لجميع المستخدمين في النظام"
   },
   "LABEL": {
     "HELP_CENTER": "مركز المساعدة",
@@ -161,7 +165,12 @@
     "ADMISSION_DATE": "تاريخ القبول",
     "DISCHARGE_DATE": "تاريخ الاعادة",
     "DIAGNOSIS": "التشخيص",
-    "ROOM_NUMBER": "رقم الغرفة"
+    "ROOM_NUMBER": "رقم الغرفة",
+    "SEARCH_BY_NAME": "ابحث بالاسم ...",
+    "ROLE": "الدور",
+    "CREATED_AT": "تاريخ الإنشاء",
+    "PASSWORD_REQUIRED": "كلمة المرور مطلوبة",
+    "PASSWORD_MIN": "كلمة المرور يجب أن تكون على الأقل 8 أحرف"
   },
   "BUTTON": {
     "LOGIN": "تسجيل الدخول",
@@ -216,7 +225,8 @@
     "ADD_PATIENT": "اضافة المريض",
     "DELETING": "جاري الحذف...",
     "ADD_NEW_INPATIENT": "اضافة مريض مقيم جديد",
-    "UPDATE_INPATIENT": "تحديث المريض الداخلي"
+    "UPDATE_INPATIENT": "تحديث المريض الداخلي",
+    "ADD_NEW_USER": "اضافة مستخدم جديد"
   },
   "SIDEBAR": {
     "MAIN": "الرئيسية",

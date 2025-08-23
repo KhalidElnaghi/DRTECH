@@ -72,8 +72,10 @@ export default function UserDialog({
 
   const getSchema = (isEditing: boolean) =>
     Yup.object().shape({
-      fullName: Yup.string().required('Full name is required'),
-      email: Yup.string().email('Invalid email').required('Email is required'),
+      fullName: Yup.string().required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
+      email: Yup.string()
+        .email(t('LABEL.THIS_FIELD_IS_REQUIRED'))
+        .required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
       password: isEditing
         ? Yup.string()
             .trim()
@@ -87,24 +89,26 @@ export default function UserDialog({
         : Yup.string()
             .matches(
               passwordRegex,
-              'At least 8 characters, one lowercase, one uppercase, and one non-alphanumeric'
+              t('LABEL.PASSWORD_REQUIRED') || 'At least 8 characters, one lowercase, one uppercase, and one non-alphanumeric'
             )
-            .required('Required'),
-      userRole: Yup.number().required('Role is required').min(1, 'Role is required'),
+            .required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
+      userRole: Yup.number()
+        .required(t('LABEL.THIS_FIELD_IS_REQUIRED'))
+        .min(1, t('LABEL.THIS_FIELD_IS_REQUIRED')),
       // phoneNumber: Yup.string().matches(phoneRegex, 'Phone number must be in format +966XXXXXXXXX'),
 
       doctor: Yup.object({
         phoneNumber: Yup.string()
           .matches(phoneRegex, 'Phone number must be in format +966XXXXXXXXX')
-          .required('Phone number is required'),
+          .required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
         specializationId: Yup.number()
-          .typeError('Specialization is required')
-          .required('Specialization is required')
-          .min(1, 'Specialization is required'),
+          .typeError(t('LABEL.THIS_FIELD_IS_REQUIRED'))
+          .required(t('LABEL.THIS_FIELD_IS_REQUIRED'))
+          .min(1, t('LABEL.THIS_FIELD_IS_REQUIRED')),
         status: Yup.number()
-          .typeError('Status is required')
-          .required('Status is required')
-          .min(0, 'Status is required'),
+          .typeError(t('LABEL.THIS_FIELD_IS_REQUIRED'))
+          .required(t('LABEL.THIS_FIELD_IS_REQUIRED'))
+          .min(0, t('LABEL.THIS_FIELD_IS_REQUIRED')),
       }).when('userRole', {
         is: (role: number) => (doctorRoleId ? role === doctorRoleId : false),
         then: (schema) => schema.required(),
@@ -193,7 +197,9 @@ export default function UserDialog({
   });
 
   const isDoctorRole = () => {
-    const doctorRole = roles.find((r) => r.Name?.toLowerCase?.() === 'doctor');
+    const doctorRole = roles.find(
+      (r) => r.Name?.toLowerCase?.() === 'doctor' || r.Name?.toLowerCase?.() === 'طبيب'
+    );
     return doctorRole ? selectedRole === doctorRole.Id : false;
   };
 
@@ -227,7 +233,7 @@ export default function UserDialog({
           <Stack spacing={2} sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' }}>
             <Box>
               <Typography sx={{ mb: 0.5, color: '#666D80', fontSize: '14px' }}>
-                Full Name
+                {t('LABEL.FULL_NAME') || 'Full Name'}
               </Typography>
               <Controller
                 name="fullName"
@@ -245,7 +251,9 @@ export default function UserDialog({
             </Box>
             {!user && (
               <Box>
-                <Typography sx={{ mb: 0.5, color: '#666D80', fontSize: '14px' }}>Role</Typography>
+                <Typography sx={{ mb: 0.5, color: '#666D80', fontSize: '14px' }}>
+                  {t('LABEL.ROLE') || 'Role'}
+                </Typography>
                 <Controller
                   name="userRole"
                   control={control}
@@ -267,7 +275,9 @@ export default function UserDialog({
               </Box>
             )}
             <Box>
-              <Typography sx={{ mb: 0.5, color: '#666D80', fontSize: '14px' }}>Email</Typography>
+              <Typography sx={{ mb: 0.5, color: '#666D80', fontSize: '14px' }}>
+                {t('LABEL.EMAIL') || 'Email'}
+              </Typography>
               <Controller
                 name="email"
                 control={control}
@@ -286,7 +296,7 @@ export default function UserDialog({
             {!user && (
               <Box>
                 <Typography sx={{ mb: 0.5, color: '#666D80', fontSize: '14px' }}>
-                  Password
+                  {t('LABEL.PASSWORD') || 'Password'}
                 </Typography>
                 <Controller
                   name="password"
@@ -308,7 +318,7 @@ export default function UserDialog({
               <>
                 <Box>
                   <Typography sx={{ mb: 0.5, color: '#666D80', fontSize: '14px' }}>
-                    Specialization
+                    {t('LABEL.SPECIALIZATION') || 'Specialization'}
                   </Typography>
                   <Controller
                     name="doctor.specializationId"
@@ -331,7 +341,7 @@ export default function UserDialog({
                 </Box>
                 <Box>
                   <Typography sx={{ mb: 0.5, color: '#666D80', fontSize: '14px' }}>
-                    Status
+                    {t('LABEL.STATUS') || 'Status'}
                   </Typography>
                   <Controller
                     name="doctor.status"
@@ -354,7 +364,7 @@ export default function UserDialog({
                 </Box>
                 <Box>
                   <Typography sx={{ mb: 0.5, color: '#666D80', fontSize: '12px' }}>
-                    Phone Number
+                    {t('LABEL.PHONE_NUMBER') || 'Phone Number'}
                   </Typography>
                   <Controller
                     name="doctor.phoneNumber"

@@ -78,7 +78,11 @@
     "NO_INPATIENTS_YET_START_BY_ADDING_NEW_ONE": "You haven't added any inpatients yet. Start by adding a new one.",
     "INPATIENTS": "Inpatients",
     "DELETE_INPATIENT": "Delete Inpatient",
-    "DELETE_INPATIENT_CONFIRMATION": "Are you sure you want to delete this inpatient?"
+    "DELETE_INPATIENT_CONFIRMATION": "Are you sure you want to delete this inpatient?",
+    "NO_USERS_YET": "No users yet",
+    "CLICK_ADD_NEW_USER": "Click “Add New User” to invite an admin, doctor, nurse, or staff member to your system",
+    "USERS": "Users",
+    "MANAGE_ROLES_AND_ACCESS_FOR_ALL_USERS_IN_THE_SYSTEM": "Manage roles and access for all users in the system."
   },
   "LABEL": {
     "HELP_CENTER": "Help Center",
@@ -159,7 +163,10 @@
     "ADMISSION_DATE": "Admission Date",
     "DISCHARGE_DATE": "Discharge Date",
     "DIAGNOSIS": "Diagnosis",
-    "ROOM_NUMBER": "Room Number"
+    "ROOM_NUMBER": "Room Number",
+    "SEARCH_BY_NAME": "Search by name ...",
+    "ROLE": "Role",
+    "CREATED_AT": "Created At"
   },
   "BUTTON": {
     "LOGIN": "Login",
@@ -208,7 +215,8 @@
     "ADD_PATIENT": "Add Patient",
     "DELETING": "Deleting...",
     "ADD_NEW_INPATIENT": "Add New Inpatient",
-    "UPDATE_INPATIENT": "Update Inpatient"
+    "UPDATE_INPATIENT": "Update Inpatient",
+    "ADD_NEW_USER": "Add New User"
   },
   "SIDEBAR": {
     "MAIN": "Main",

@@ -41,14 +41,6 @@ interface FilterState {
   searchTerm: string;
 }
 
-const TABLE_HEAD = [
-  { id: 'FullName', label: 'Full Name', align: cellAlignment.left },
-  { id: 'Email', label: 'Email', align: cellAlignment.left },
-  { id: 'RoleName', label: 'Role', align: cellAlignment.left },
-  { id: 'CreatedAt', label: 'Created At', align: cellAlignment.left },
-  { id: '', label: '', width: 80 },
-];
-
 export default function UsersPage({
   users,
   totalCount,
@@ -115,6 +107,14 @@ export default function UsersPage({
     }
   };
 
+  const TABLE_HEAD = [
+    { id: 'FullName', label: t('LABEL.FULL_NAME') || 'Full Name', align: cellAlignment.left },
+    { id: 'Email', label: t('LABEL.EMAIL') || 'Email', align: cellAlignment.left },
+    { id: 'RoleName', label: t('LABEL.ROLE') || 'Role', align: cellAlignment.left },
+    { id: 'CreatedAt', label: t('LABEL.CREATED_AT') || 'Created At', align: cellAlignment.left },
+    { id: '', label: '', width: 80 },
+  ];
+
   const handleOpenDialog = () => {
     setSelectedUser(undefined);
     setOpenDialog(true);
@@ -162,31 +162,37 @@ export default function UsersPage({
     let borderColor = 'grey.100';
     switch (status) {
       case 'Super Admin':
+      case 'مشرف عام':
         textColor = '#FFFFFF';
         bgColor = 'linear-gradient(90deg, #000000 0%, #434343 100%)';
         borderColor = '#1F1F1F';
         break;
       case 'Admin':
+      case 'مدير':
         textColor = '#003768';
         bgColor = '#F0F8FF';
         borderColor = '#B3D9FF';
         break;
       case 'Doctor':
+      case 'طبيب':
         textColor = '#28806F';
         bgColor = '#EFFEFA';
         borderColor = '#DDF3EF';
         break;
       case 'Nurse':
+      case 'ممرضة':
         textColor = '#A77B2E';
         bgColor = '#FFF6E0';
         borderColor = '#FAEDCC';
         break;
       case 'Receptionist':
+      case 'موظف استقبال':
         textColor = '#003768';
         bgColor = '#F0F8FF';
         borderColor = '#B3D9FF';
         break;
       case 'Pharmacist':
+      case 'صيدلي':
         textColor = '#A52A2A';
         bgColor = '#FFF0F0';
         borderColor = '#FF8080';
@@ -206,9 +212,12 @@ export default function UsersPage({
         {/* No Data Found Message */}
         <EmptyState
           icon="/assets/images/users/icon.svg"
-          header="No users yet"
-          subheader="Click “Add New User” to invite an admin, doctor, nurse, or staff member to your system"
-          buttonText="Add New User"
+          header={t('TITLE.NO_USERS_YET') || 'No users yet'}
+          subheader={
+            t('TITLE.CLICK_ADD_NEW_USER') ||
+            'Click “Add New User” to invite an admin, doctor, nurse, or staff member to your system'
+          }
+          buttonText={t('BUTTON.ADD_NEW_USER') || 'Add New User'}
           onButtonClick={handleOpenDialog}
           iconSize={150}
         />
@@ -230,6 +239,15 @@ export default function UsersPage({
             setRoleDialog({ open: false });
           }}
         />
+        {/* User Dialog */}
+        <UserDialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          user={selectedUser}
+          roles={roles}
+          statuses={statuses}
+          specializations={specializations}
+        />
       </>
     );
   }
@@ -237,9 +255,12 @@ export default function UsersPage({
   return (
     <>
       <SharedHeader
-        header="Users"
-        subheader="Manage roles and access for all users in the system."
-        buttonText="Add New User"
+        header={t('TITLE.USERS') || 'Users'}
+        subheader={
+          t('TITLE.MANAGE_ROLES_AND_ACCESS_FOR_ALL_USERS_IN_THE_SYSTEM') ||
+          'Manage roles and access for all users in the system.'
+        }
+        buttonText={t('BUTTON.ADD_NEW_USER') || 'Add New User'}
         onButtonClick={handleOpenDialog}
       />
       <Paper
@@ -257,7 +278,7 @@ export default function UsersPage({
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
             <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
-              Users
+              {t('TITLE.USERS') || 'Users'}
             </Typography>
             {filters.searchTerm ? (
               <Chip
@@ -271,7 +292,7 @@ export default function UsersPage({
           </Box>
           <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
             <TextField
-              placeholder="Search by name or email..."
+              placeholder={t('LABEL.SEARCH_BY_NAME') || 'Search by name ...'}
               value={filters.searchTerm}
               onChange={handleSearchChange}
               sx={{ flexGrow: 1, maxWidth: 600, width: '100%' }}
