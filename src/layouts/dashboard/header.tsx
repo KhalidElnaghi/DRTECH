@@ -1,21 +1,26 @@
-import Image from 'next/image';
+import { useState } from 'react';
 import { m } from 'framer-motion';
 
 import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import { Box, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
+import { Box, Badge, Divider } from '@mui/material';
 
 import { useOffSetTop } from 'src/hooks/use-off-set-top';
 import { useResponsive } from 'src/hooks/use-responsive';
+import { useNotifications } from 'src/hooks/use-notifications-query';
 
 import { bgBlur } from 'src/theme/css';
 
 import Logo from 'src/components/logo';
+import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 import { useSettingsContext } from 'src/components/settings';
+import NotificationDialog from 'src/components/dialogs/notification-dialog';
+
+import { INotification } from 'src/types/notification';
 
 import { NAV, HEADER } from '../config-layout';
 import AccountPopover from '../common/account-popover';
@@ -28,6 +33,9 @@ type Props = {
 
 export default function Header({ onOpenNav }: Props) {
   const theme = useTheme();
+  const [openNotifications, setOpenNotifications] = useState(false);
+  const [notificationAnchorEl, setNotificationAnchorEl] = useState<HTMLElement | null>(null);
+  const { data: notificationsData } = useNotifications();
 
   const settings = useSettingsContext();
 
@@ -62,23 +70,36 @@ export default function Header({ onOpenNav }: Props) {
       >
         {/* <LanguagePopover /> */}
 
-        <IconButton
-          component={m.button}
-          whileTap="tap"
-          whileHover="hover"
+        <Badge
+          onClick={(event) => {
+            setNotificationAnchorEl(event.currentTarget);
+            setOpenNotifications(true);
+          }}
+          badgeContent={
+            notificationsData?.Data?.filter((n: INotification) => !n.IsRead).length || 0
+          }
+          color="error"
+          max={99}
           sx={{
-            width: 40,
-            height: 40,
-
+            '& .MuiBadge-badge': {
+              top: 9,
+              right: 9,
+            },
+            cursor: 'pointer',
           }}
         >
-          <Image
-            src="/assets/images/nav/notification.svg"
-            alt="notification"
-            width={24}
-            height={24}
-          />
-        </IconButton>
+          <IconButton
+            component={m.button}
+            whileTap="tap"
+            whileHover="hover"
+            sx={{
+              width: 40,
+              height: 40,
+            }}
+          >
+            <Iconify icon="famicons:notifications" width={24} />
+          </IconButton>
+        </Badge>
 
         {/* <ContactsPopover /> */}
 
@@ -91,43 +112,54 @@ export default function Header({ onOpenNav }: Props) {
   );
 
   return (
-    <AppBar
-      sx={{
-        height: HEADER.H_MOBILE,
-        zIndex: theme.zIndex.appBar + 1,
-        ...bgBlur({
-          color: theme.palette.background.default,
-        }),
-        transition: theme.transitions.create(['height'], {
-          duration: theme.transitions.duration.shorter,
-        }),
-        ...(lgUp && {
-          width: `calc(100% - ${NAV.W_VERTICAL + 1}px)`,
-          height: HEADER.H_DESKTOP,
-          ...(offsetTop && {
-            height: HEADER.H_DESKTOP_OFFSET,
-          }),
-          ...(isNavHorizontal && {
-            width: 1,
-            bgcolor: 'background.default',
-            height: HEADER.H_DESKTOP_OFFSET,
-            borderBottom: `dashed 1px ${theme.palette.divider}`,
-          }),
-          ...(isNavMini && {
-            width: `calc(100% - ${NAV.W_MINI + 1}px)`,
-          }),
-        }),
-      }}
-    >
-      <Toolbar
+    <>
+      <AppBar
         sx={{
-          height: 1,
-          px: { lg: 5 },
+          height: HEADER.H_MOBILE,
+          zIndex: theme.zIndex.appBar + 1,
+          ...bgBlur({
+            color: theme.palette.background.default,
+          }),
+          transition: theme.transitions.create(['height'], {
+            duration: theme.transitions.duration.shorter,
+          }),
+          ...(lgUp && {
+            width: `calc(100% - ${NAV.W_VERTICAL + 1}px)`,
+            height: HEADER.H_DESKTOP,
+            ...(offsetTop && {
+              height: HEADER.H_DESKTOP_OFFSET,
+            }),
+            ...(isNavHorizontal && {
+              width: 1,
+              bgcolor: 'background.default',
+              height: HEADER.H_DESKTOP_OFFSET,
+              borderBottom: `dashed 1px ${theme.palette.divider}`,
+            }),
+            ...(isNavMini && {
+              width: `calc(100% - ${NAV.W_VERTICAL + 1}px)`,
+            }),
+          }),
         }}
       >
-        {renderContent}
-      </Toolbar>
-      <Divider sx={{ mx: 4.5 }} />
-    </AppBar>
+        <Toolbar
+          sx={{
+            height: 1,
+            px: { lg: 5 },
+          }}
+        >
+          {renderContent}
+        </Toolbar>
+        <Divider sx={{ mx: 4.5 }} />
+      </AppBar>
+
+      <NotificationDialog
+        open={openNotifications}
+        onClose={() => {
+          setOpenNotifications(false);
+          setNotificationAnchorEl(null);
+        }}
+        anchorEl={notificationAnchorEl}
+      />
+    </>
   );
 }

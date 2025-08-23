@@ -143,4 +143,7 @@ export const endpoints = {
     edit: (paymentId: number) => `/payments/${paymentId}`,
     delete: (paymentId: number) => `/payments/${paymentId}`,
   },
+  notifications: {
+    fetch: '/notification',
+  },
 };
