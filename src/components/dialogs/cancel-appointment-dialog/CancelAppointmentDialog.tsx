@@ -143,7 +143,12 @@ export default function CancelAppointmentDialog({
                 checked={confirmCancellation}
                 onChange={(e) => setConfirmCancellation(e.target.checked)}
                 disabled={isSubmitting}
-                color="error"
+                sx={{
+                  color: '#B21634',
+                  '&.Mui-checked': {
+                    color: '#B21634',
+                  },
+                }}
               />
             }
             label={t('MESSAGE.CONFIRMATION_CHECKBOX_LABEL')}
@@ -161,9 +166,9 @@ export default function CancelAppointmentDialog({
           variant="contained"
           disabled={!reason.trim() || reason.trim().length < 10 || !confirmCancellation}
           sx={{
-            bgcolor: 'error.main',
+            bgcolor: '#B21634',
             '&:hover': {
-              bgcolor: 'error.dark',
+              bgcolor: '#B21634',
             },
             '&:disabled': {
               bgcolor: 'grey.400',

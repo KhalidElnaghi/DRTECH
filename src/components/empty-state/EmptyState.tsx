@@ -2,6 +2,8 @@ import { ComponentType } from 'react';
 
 import { Box, Button, Typography } from '@mui/material';
 
+import { useTranslate } from 'src/locales';
+
 import Iconify from 'src/components/iconify';
 import { IconifyProps } from 'src/components/iconify/types';
 
@@ -24,6 +26,7 @@ export default function EmptyState({
   iconSize = 120,
   iconColor = 'text.secondary',
 }: EmptyStateProps) {
+  const { t } = useTranslate();
   const renderIcon = () => {
     if (!icon) return null;
 
@@ -80,7 +83,7 @@ export default function EmptyState({
           letterSpacing: 0,
         }}
       >
-        {header}
+        {t(header)}
       </Typography>
 
       {/* Subheader */}

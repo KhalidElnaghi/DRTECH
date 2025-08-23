@@ -56,6 +56,12 @@ export default function AppointmentDialog({
   const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
 
+  // Custom close handler that ensures form is reset
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
+
   // React Query mutations
   const editAppointmentMutation = useEditAppointment();
   const newAppointmentMutation = useNewAppointment();
@@ -114,32 +120,19 @@ export default function AppointmentDialog({
       })
     ),
     defaultValues: {
-      PatientId: appointment?.PatientId || 0,
-      DoctorId: appointment?.DoctorId || 0,
-      AppointmentDate: appointment?.AppointmentDate
-        ? new Date(appointment.AppointmentDate)
-        : new Date(),
-      ScheduledTime: (() => {
-        if (appointment?.AppointmentDate) {
-          const appointmentDate = new Date(appointment.AppointmentDate);
-          const scheduledTime = new Date();
-          scheduledTime.setHours(appointmentDate.getHours());
-          scheduledTime.setMinutes(appointmentDate.getMinutes());
-          scheduledTime.setSeconds(appointmentDate.getSeconds());
-          scheduledTime.setMilliseconds(appointmentDate.getMilliseconds());
-          return scheduledTime;
-        }
-        return new Date();
-      })(),
-      Status: appointment?.Status || 0,
-      ServiceType: appointment?.ServiceType || 0,
-      ClinicName: appointment?.ClinicName || '',
+      PatientId: 0,
+      DoctorId: 0,
+      AppointmentDate: new Date(),
+      ScheduledTime: new Date(),
+      Status: 0,
+      ServiceType: 0,
+      ClinicName: '',
       ClinicLocation: {
-        lat: appointment?.ClinicLocation?.lat || 0,
-        lng: appointment?.ClinicLocation?.lng || 0,
-        location: appointment?.ClinicLocation?.location || '',
+        lat: 0,
+        lng: 0,
+        location: '',
       },
-      Notes: appointment?.Notes || '',
+      Notes: '',
     },
     mode: 'onChange',
   });
@@ -152,7 +145,7 @@ export default function AppointmentDialog({
     formState: { isSubmitting },
   } = methods;
 
-  // // Reset form when appointment changes (for edit mode)
+  // Reset form when appointment changes (for edit mode) or when opening new appointment
   useEffect(() => {
     if (appointment) {
       // Set appointmentDate from appointment.appointmentDate
@@ -193,9 +186,48 @@ export default function AppointmentDialog({
       };
       reset(formData);
     } else {
-      reset();
+      // Reset form with empty values for new appointment
+      const emptyFormData = {
+        PatientId: 0,
+        DoctorId: 0,
+        AppointmentDate: new Date(),
+        ScheduledTime: new Date(),
+        Status: 0,
+        ServiceType: 0,
+        ClinicName: '',
+        ClinicLocation: {
+          lat: 0,
+          lng: 0,
+          location: '',
+        },
+        Notes: '',
+      };
+      reset(emptyFormData);
     }
   }, [appointment, reset]);
+
+  // Reset form when dialog opens to ensure clean state for new appointments
+  useEffect(() => {
+    if (open && !appointment) {
+      // Dialog is opening for new appointment, reset to empty values
+      const emptyFormData = {
+        PatientId: 0,
+        DoctorId: 0,
+        AppointmentDate: new Date(),
+        ScheduledTime: new Date(),
+        Status: 0,
+        ServiceType: 0,
+        ClinicName: '',
+        ClinicLocation: {
+          lat: 0,
+          lng: 0,
+          location: '',
+        },
+        Notes: '',
+      };
+      reset(emptyFormData);
+    }
+  }, [open, appointment, reset]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -214,8 +246,7 @@ export default function AppointmentDialog({
           t('MESSAGE.APPOINTMENT_UPDATED_SUCCESSFULLY') || 'Appointment updated successfully',
           { variant: 'success' }
         );
-        onClose();
-        reset();
+        handleClose();
       } else {
         // Combine the user's selected date with their selected time
         const combinedDateTime = combineDateAndTime(data.AppointmentDate, data.ScheduledTime);
@@ -233,8 +264,7 @@ export default function AppointmentDialog({
           t('MESSAGE.APPOINTMENT_CREATED_SUCCESSFULLY') || 'Appointment created successfully',
           { variant: 'success' }
         );
-        onClose();
-        reset();
+        handleClose();
       }
     } catch (error) {
       console.error('Form submission error:', error);
@@ -242,7 +272,7 @@ export default function AppointmentDialog({
     }
   });
   return (
-    <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
+    <Dialog fullWidth maxWidth="sm" open={open} onClose={handleClose}>
       <DialogTitle
         sx={{
           py: 2,
@@ -257,7 +287,7 @@ export default function AppointmentDialog({
           {appointment ? t('LABEL.EDIT_APPOINTMENT') : t('LABEL.CREATE_APPOINTMENT')}
         </Typography>
         <IconButton
-          onClick={onClose}
+          onClick={handleClose}
           sx={{
             color: '#666',
             '&:hover': {
@@ -287,7 +317,7 @@ export default function AppointmentDialog({
                   color: '#666D80',
                 }}
               >
-                Patient Name
+                {t('LABEL.PATIENT_NAME')}
               </Typography>
               <RHFSelect
                 placeholder={t('LABEL.PATIENT_NAME')}
@@ -315,7 +345,7 @@ export default function AppointmentDialog({
                   color: '#666D80',
                 }}
               >
-                Doctor Name
+                {t('LABEL.DOCTOR_NAME')}
               </Typography>
               <RHFSelect
                 placeholder={t('LABEL.DOCTOR_NAME')}
@@ -343,7 +373,7 @@ export default function AppointmentDialog({
                   color: '#666D80',
                 }}
               >
-                Service Type
+                {t('LABEL.SERVICE_TYPE')}
               </Typography>
               <RHFSelect
                 placeholder={t('LABEL.SERVICE_TYPE')}
@@ -372,7 +402,7 @@ export default function AppointmentDialog({
                   color: '#666D80',
                 }}
               >
-                Clinic Name
+                {t('LABEL.CLINIC_NAME')}
               </Typography>
               <Controller
                 name="ClinicName"
@@ -401,7 +431,7 @@ export default function AppointmentDialog({
                   color: '#666D80',
                 }}
               >
-                Clinic Location
+                {t('LABEL.CLINIC_LOCATION')}
               </Typography>
               <Controller
                 name="ClinicLocation.location"
@@ -430,7 +460,7 @@ export default function AppointmentDialog({
                   color: '#666D80',
                 }}
               >
-                Status
+                {t('LABEL.STATUS')}
               </Typography>
               <RHFSelect
                 placeholder={t('LABEL.STATUS')}
@@ -457,7 +487,7 @@ export default function AppointmentDialog({
                   color: '#666D80',
                 }}
               >
-                Latitude
+                {t('LABEL.LATITUDE')}
               </Typography>
               <Controller
                 name="ClinicLocation.lat"
@@ -491,7 +521,7 @@ export default function AppointmentDialog({
                   color: '#666D80',
                 }}
               >
-                Longitude
+                {t('LABEL.LONGITUDE')}
               </Typography>
               <Controller
                 name="ClinicLocation.lng"
@@ -525,7 +555,7 @@ export default function AppointmentDialog({
                   color: '#666D80',
                 }}
               >
-                Appointment Date
+                {t('LABEL.APPOINTMENT_DATE')}
               </Typography>
               <Controller
                 name="AppointmentDate"
@@ -562,7 +592,7 @@ export default function AppointmentDialog({
                   color: '#666D80',
                 }}
               >
-                Appointment Time
+                {t('LABEL.APPOINTMENT_TIME')}
               </Typography>
               <Controller
                 name="ScheduledTime"
@@ -598,7 +628,8 @@ export default function AppointmentDialog({
                   color: '#666D80',
                 }}
               >
-                Notes <span style={{ color: '#666D90', fontSize: '9px' }}>Optional</span>
+                {t('LABEL.NOTES')}{' '}
+                <span style={{ color: '#666D90', fontSize: '9px' }}>{t('LABEL.OPTIONAL')}</span>
               </Typography>
               <RHFTextField multiline rows={4} name="Notes" placeholder={t('LABEL.NOTES')} />
             </Box>
@@ -606,14 +637,7 @@ export default function AppointmentDialog({
         </DialogContent>
 
         <DialogActions>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={() => {
-              onClose();
-              reset();
-            }}
-          >
+          <Button variant="outlined" color="primary" onClick={handleClose}>
             {t('BUTTON.CANCEL')}
           </Button>
           <LoadingButton type="submit" variant="contained" loading={isSubmitting} color="primary">

@@ -87,7 +87,7 @@ export default function RescheduleAppointmentDialog({
     setIsSubmitting(true);
     try {
       await rescheduleMutation.mutateAsync({ appointmentId, NewAppointmentDate, NewScheduledTime });
-      enqueueSnackbar('Appointment rescheduled successfully', {
+      enqueueSnackbar(t('MESSAGE.APPOINTMENT_RESCHEDULED_SUCCESSFULLY'), {
         variant: 'success',
       });
       onSuccess?.();
@@ -105,12 +105,12 @@ export default function RescheduleAppointmentDialog({
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Reschedule Appointment</DialogTitle>
+      <DialogTitle>{t('LABEL.RESCHEDULE_APPOINTMENT')}</DialogTitle>
       <DialogContent>
         <Stack spacing={2} sx={{ mt: 1 }}>
           <div>
             <Typography sx={{ mb: 1, color: '#666D80', fontSize: 12 }}>
-              New Appointment Date
+              {t('LABEL.NEW_APPOINTMENT_DATE')}
             </Typography>
             <DatePicker
               value={newDate}
@@ -121,7 +121,7 @@ export default function RescheduleAppointmentDialog({
           </div>
           <div>
             <Typography sx={{ mb: 1, color: '#666D80', fontSize: 12 }}>
-              New Scheduled Time
+              {t('LABEL.NEW_SCHEDULED_TIME')}
             </Typography>
             <TimePicker
               value={newTime}
@@ -141,7 +141,7 @@ export default function RescheduleAppointmentDialog({
           variant="contained"
           color="primary"
         >
-          Reschedule
+          {t('BUTTON.RESCHEDULE')}
         </LoadingButton>
       </DialogActions>
     </Dialog>

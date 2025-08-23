@@ -1,5 +1,7 @@
 import { Box, Button, Typography } from '@mui/material';
 
+import { useTranslate } from 'src/locales';
+
 interface IProps {
   header: string;
   subheader: string;
@@ -17,6 +19,7 @@ export default function SharedHeader({
   seconButtonText,
   onSecondButtonClick,
 }: IProps) {
+  const { t } = useTranslate();
   return (
     <Box
       sx={{
@@ -33,14 +36,14 @@ export default function SharedHeader({
           variant="h4"
           sx={{ mb: 1, fontWeight: 'bold', fontSize: { xs: '20px', lg: '24px' } }}
         >
-          {header}
+          {t(header)}
         </Typography>
         <Typography
           variant="body2"
           color="text.secondary"
           sx={{ display: { xs: 'none', lg: 'block' } }}
         >
-          {subheader}
+          {t(subheader)}
         </Typography>
       </Box>
 
@@ -54,7 +57,7 @@ export default function SharedHeader({
             onClick={onSecondButtonClick}
             sx={{ fontSize: { xs: '12px', lg: '16px' } }}
           >
-            {seconButtonText}
+            {t(seconButtonText)}
           </Button>
         )}
         <Button
@@ -72,7 +75,7 @@ export default function SharedHeader({
             },
           }}
         >
-          {buttonText}{' '}
+          {t(buttonText)}{' '}
         </Button>
       </Box>
     </Box>

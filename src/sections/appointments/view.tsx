@@ -82,26 +82,31 @@ const getStatusColors = (status: string) => {
 
   switch (status) {
     case 'Completed':
+    case 'مكتمل':
       textColor = '#28806F';
       bgColor = '#EFFEFA';
       borderColor = '#DDF3EF';
       break;
     case 'Scheduled':
+    case 'تم تحديد الموعد':
       textColor = '#116B97';
       bgColor = '#F0FBFF';
       borderColor = '#D1F0FA';
       break;
     case 'Cancelled':
+    case 'ملغى':
       textColor = '#B21634';
       bgColor = '#FEF3F2';
       borderColor = '#FECDCA';
       break;
     case 'Rescheduled':
+    case 'تم إعادة الجدولة':
       textColor = '#7C3AED';
       bgColor = '#F3F4F6';
       borderColor = '#C4B5FD';
       break;
     case 'No Show':
+    case "لم يحضر":
       textColor = '#6B7280';
       bgColor = '#F9FAFB';
       borderColor = '#E5E7EB';
@@ -337,13 +342,17 @@ export default function AppointmentsPage({
       <>
         <EmptyState
           icon="/assets/images/appointments/icon.svg"
-          header={hasActiveFilters ? 'No appointments found' : 'No appointments yet'}
+          header={
+            hasActiveFilters ? t('TITLE.NO_APPOINTMENTS_FOUND') : t('TITLE.NO_APPOINTMENTS_YET')
+          }
           subheader={
             hasActiveFilters
-              ? 'No appointments match your current filters. Try adjusting your search criteria or clearing some filters.'
-              : "You haven't scheduled any appointments yet. Start by adding a new one."
+              ? t('TITLE.NO_APPOINTMENTS_MATCH_FILTERS')
+              : t('TITLE.NO_APPOINTMENTS_YET_START_BY_ADDING_NEW_ONE')
           }
-          buttonText={hasActiveFilters ? 'Clear Filters' : 'Add New Payment'}
+          buttonText={
+            hasActiveFilters ? t('BUTTON.CLEAR_FILTERS') : t('BUTTON.ADD_NEW_APPOINTMENT')
+          }
           onButtonClick={hasActiveFilters ? handleResetFilters : handleOpenAddDialog}
           iconSize={150}
         />
@@ -366,9 +375,9 @@ export default function AppointmentsPage({
     <>
       {/* Header Section */}
       <SharedHeader
-        header="Appointments"
-        subheader="Here are all appointments updated in the last 7 days."
-        buttonText="New Appointment"
+        header="TITLE.APPOINTMENTS"
+        subheader="TITLE.APPOINTMENTS_SUBHEADER"
+        buttonText="BUTTON.NEW_APPOINTMENT"
         onButtonClick={handleOpenAddDialog}
       />
 
@@ -394,13 +403,13 @@ export default function AppointmentsPage({
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
             <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
-              Appointments
+              {t('TITLE.APPOINTMENTS')}
             </Typography>
             {filters.doctorName && (
               <Chip
                 size="small"
                 color="default"
-                label={`Doctor: ${filters.doctorName}`}
+                label={`${t('LABEL.DOCTOR_NAME')}: ${filters.doctorName}`}
                 onDelete={() => handleFilterChange('doctorName', '')}
                 sx={{ height: 24 }}
               />
@@ -409,7 +418,7 @@ export default function AppointmentsPage({
               <Chip
                 size="small"
                 color="default"
-                label={`Date: ${filters.appointmentDate}`}
+                label={`${t('LABEL.DATE')}: ${filters.appointmentDate}`}
                 onDelete={() => handleFilterChange('appointmentDate', '')}
                 sx={{ height: 24 }}
               />
@@ -418,7 +427,7 @@ export default function AppointmentsPage({
               <Chip
                 size="small"
                 color="default"
-                label={`Status: ${getStatusLabel(filters.status)}`}
+                label={`${t('LABEL.STATUS')}: ${getStatusLabel(filters.status)}`}
                 onDelete={() => handleFilterChange('status', '')}
                 sx={{ height: 24 }}
               />
@@ -522,15 +531,16 @@ export default function AppointmentsPage({
               }}
             >
               <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                Filters
+                {t('LABEL.FILTERS')}
               </Typography>
               <Button
                 variant="outlined"
                 size="small"
+                color="primary"
                 onClick={handleResetFilters}
-                startIcon={<Iconify icon="eva:refresh-fill" />}
+                // startIcon={<Iconify icon="eva:refresh-fill" />}
               >
-                Reset
+                {t('BUTTON.RESET')}
               </Button>
             </Box>
 
@@ -538,7 +548,7 @@ export default function AppointmentsPage({
               {/* Doctor Name */}
               <Grid item xs={12}>
                 <FormControl fullWidth size="small">
-                  <InputLabel>Doctor Name</InputLabel>
+                  <InputLabel>{t('LABEL.DOCTOR_NAME')}</InputLabel>
                   <Select
                     value={filters.doctorName}
                     onChange={(e) => handleFilterChange('doctorName', e.target.value)}
@@ -550,7 +560,6 @@ export default function AppointmentsPage({
                       </InputAdornment>
                     }
                   >
-                    <MenuItem value="">All Doctors</MenuItem>
                     {doctors?.map((doctor) => (
                       <MenuItem key={doctor.Id} value={doctor.FullName}>
                         <Box
@@ -578,7 +587,7 @@ export default function AppointmentsPage({
               <Grid item xs={12}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
-                    label="Appointment Date"
+                    label={t('LABEL.APPOINTMENT_DATE')}
                     value={filters.appointmentDate ? new Date(filters.appointmentDate) : null}
                     onChange={(date) => {
                       if (date) {
@@ -591,7 +600,6 @@ export default function AppointmentsPage({
                       textField: {
                         fullWidth: true,
                         size: 'small',
-                        placeholder: 'Select appointment date',
                         InputLabelProps: {
                           shrink: true,
                         },
@@ -617,10 +625,10 @@ export default function AppointmentsPage({
               {/* Status */}
               <Grid item xs={12}>
                 <FormControl fullWidth size="small">
-                  <InputLabel>Status</InputLabel>
+                  <InputLabel>{t('LABEL.STATUS')}</InputLabel>
                   <Select
                     value={filters.status}
-                    label="Status"
+                    label={t('LABEL.STATUS')}
                     onChange={(e) => handleFilterChange('status', e.target.value)}
                     startAdornment={
                       <InputAdornment position="start">
@@ -772,11 +780,11 @@ export default function AppointmentsPage({
             {(filters.doctorName || filters.appointmentDate || filters.status) && (
               <Box sx={{ mt: 1.5, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Typography variant="body2" sx={{ alignSelf: 'center', mr: 1 }}>
-                  Active filters:
+                  {t('LABEL.ACTIVE_FILTERS')}
                 </Typography>
                 {filters.doctorName && (
                   <Chip
-                    label={`Doctor: ${filters.doctorName}`}
+                    label={`${t('LABEL.DOCTOR_NAME')}: ${filters.doctorName}`}
                     onDelete={() => handleFilterChange('doctorName', '')}
                     color="primary"
                     variant="outlined"
@@ -785,7 +793,7 @@ export default function AppointmentsPage({
                 )}
                 {filters.appointmentDate && (
                   <Chip
-                    label={`Date: ${filters.appointmentDate}`}
+                    label={`${t('LABEL.DATE')}: ${filters.appointmentDate}`}
                     onDelete={() => handleFilterChange('appointmentDate', '')}
                     color="primary"
                     variant="outlined"
@@ -794,7 +802,7 @@ export default function AppointmentsPage({
                 )}
                 {filters.status && (
                   <Chip
-                    label={`Status: ${getStatusLabel(filters.status)}`}
+                    label={`${t('LABEL.STATUS')}: ${getStatusLabel(filters.status)}`}
                     onDelete={() => handleFilterChange('status', '')}
                     color="primary"
                     variant="outlined"
@@ -847,7 +855,7 @@ export default function AppointmentsPage({
             },
             {
               sx: { color: 'info.dark' },
-              label: 'Reschedule',
+              label: t('LABEL.RESCHEDULE'),
               icon: 'mdi:calendar-clock',
               onClick: (item: any) => {
                 const appointment = appointments.find((a) => a.Id === item.id);

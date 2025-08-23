@@ -43,7 +43,13 @@
     "CANCEL_APPOINTMENT": "إلغاء الموعد",
     "PATIENT_STATISTICS": "إحصائيات المرضى",
     "UPCOMING_APPOINTMENTS": "المواعيد القادمة",
-    "RECENT_PATIENTS": "المرضى الأحدث"
+    "RECENT_PATIENTS": "المرضى الأحدث",
+    "NO_APPOINTMENTS_FOUND": "لا يوجد مواعيد",
+    "NO_APPOINTMENTS_YET": "لا يوجد مواعيد",
+    "NO_APPOINTMENTS_MATCH_FILTERS": "لا يوجد مواعيد تطابق المعايير الحالية. يرجى تعديل المعايير أو تصفير بعض المعايير.",
+    "NO_APPOINTMENTS_YET_START_BY_ADDING_NEW_ONE": "لم تقم بإضافة مواعيد بعد. ابدأ بإضافة موعد جديد.",
+    "APPOINTMENTS": "المواعيد",
+    "APPOINTMENTS_SUBHEADER": "هذه هي جميع المواعيد المحدثة في الأسبوع الماضي."
   },
   "LABEL": {
     "HELP_CENTER": "مركز المساعدة",
@@ -89,7 +95,22 @@
     "NO_PATIENTS": "لا يوجد مرضى",
     "PAGE": "الصفحة",
     "OF": "من",
-    "NO": "رقم"
+    "NO": "رقم",
+    "English": "الانجليزية",
+    "Arabic": "العربية",
+    "NO_DATA": "لا يوجد بيانات",
+    "RESCHEDULE": "اعادة تعيين",
+    "FILTERS": "الفلترة",
+    "ACTIVE_FILTERS": "الفلترة النشطة",
+    "DATE": "التاريخ",
+    "SERVICE_TYPE": "نوع الخدمة",
+    "LATITUDE": "العرض",
+    "LONGITUDE": "الطول",
+    "APPOINTMENT_TIME": "وقت الموعد",
+    "OPTIONAL": "اختياري",
+    "NEW_APPOINTMENT_DATE": "تاريخ الموعد الجديد",
+    "NEW_SCHEDULED_TIME": "وقت الموعد الجديد",
+    "RESCHEDULE_APPOINTMENT": "اعادة تعيين الموعد"
   },
   "BUTTON": {
     "LOGIN": "تسجيل الدخول",
@@ -121,7 +142,17 @@
     "ADD_PACKAGES": "اضافه باقة",
     "UPDATE": "تعديل",
     "CREATE_APPOINTMENT": "انشاء موعد",
-    "CONFIRM_CANCELLATION": "تأكيد الإلغاء"
+    "CONFIRM_CANCELLATION": "تأكيد الإلغاء",
+    "CLEAR_FILTERS": "تصفير الفلترة",
+    "ADD_NEW_APPOINTMENT": "اضافة موعد جديد",
+    "NEW_APPOINTMENT": "موعد جديد",
+    "RESET": "اعادة تعيين",
+    "ALL_DOCTORS": "جميع الأطباء",
+    "DOCTOR_NAME": "اسم الطبيب",
+    "APPOINTMENT_DATE": "تاريخ الموعد",
+    "STATUS": "الحالة",
+    "ACTIVE_FILTERS": "الفلترة النشطة",
+    "RESCHEDULE": "اعادة تعيين"
   },
   "SIDEBAR": {
     "MAIN": "الرئيسية",
@@ -211,7 +242,8 @@
     "CONFIRMATION_CHECKBOX_LABEL": "أؤكد أنني أريد إلغاء هذا الموعد",
     "ROOM_CREATED_SUCCESSFULLY": "تم إنشاء الغرفة بنجاح",
     "ROOM_UPDATED_SUCCESSFULLY": "تم تحديث الغرفة بنجاح",
-    "ARE_YOU_SURE_LOGOUT": "هل أنت متأكد أنك تريد تسجيل الخروج؟"
+    "ARE_YOU_SURE_LOGOUT": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+    "APPOINTMENT_RESCHEDULED_SUCCESSFULLY": "تم إعادة تعيين الموعد بنجاح"
   },
   "PLACEHOLDER": {
     "CANCELLATION_REASON": "أدخل سبب إلغاء هذا الموعد..."

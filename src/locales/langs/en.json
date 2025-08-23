@@ -39,7 +39,13 @@
     "CANCEL_APPOINTMENT": "Cancel Appointment",
     "PATIENT_STATISTICS": "Patient Statistics",
     "UPCOMING_APPOINTMENTS": "Upcoming Appointments",
-    "RECENT_PATIENTS": "Recent Patients"
+    "RECENT_PATIENTS": "Recent Patients",
+    "NO_APPOINTMENTS_FOUND": "No appointments found",
+    "NO_APPOINTMENTS_YET": "No appointments yet",
+    "NO_APPOINTMENTS_MATCH_FILTERS": "No appointments match your current filters. Try adjusting your search criteria or clearing some filters.",
+    "NO_APPOINTMENTS_YET_START_BY_ADDING_NEW_ONE": "You haven't scheduled any appointments yet. Start by adding a new one.",
+    "APPOINTMENTS": "Appointments",
+    "APPOINTMENTS_SUBHEADER": "Here are all appointments updated in the last 7 days."
   },
   "LABEL": {
     "HELP_CENTER": "Help Center",
@@ -85,7 +91,24 @@
     "NO_PATIENTS": "No patients",
     "PAGE": "Page",
     "OF": "of",
-    "NO": "No"
+    "NO": "No",
+    "English": "English",
+    "Arabic": "Arabic",
+    "NO_DATA": "No data",
+    "RESCHEDULE": "Reschedule",
+    "FILTERS": "Filters",
+    "RESET": "Reset",
+    "ALL_DOCTORS": "All Doctors",
+    "ACTIVE_FILTERS": "Active Filters",
+    "DATE": "Date",
+    "SERVICE_TYPE": "Service Type",
+    "LATITUDE": "Latitude",
+    "LONGITUDE": "Longitude",
+    "APPOINTMENT_TIME": "Appointment Time",
+    "OPTIONAL": "Optional",
+    "NEW_APPOINTMENT_DATE": "New Appointment Date",
+    "NEW_SCHEDULED_TIME": "New Scheduled Time",
+    "RESCHEDULE_APPOINTMENT": "Reschedule Appointment"
   },
   "BUTTON": {
     "LOGIN": "Login",
@@ -117,7 +140,11 @@
     "ADD_PACKAGES": "Add packages",
     "UPDATE": "Update",
     "CREATE_APPOINTMENT": "Create Appointment",
-    "CONFIRM_CANCELLATION": "Confirm Cancellation"
+    "CONFIRM_CANCELLATION": "Confirm Cancellation",
+    "CLEAR_FILTERS": "Clear Filters",
+    "ADD_NEW_APPOINTMENT": "Add New Appointment",
+    "NEW_APPOINTMENT": "New Appointment",
+    "RESCHEDULE": "Reschedule"
   },
   "SIDEBAR": {
     "MAIN": "Main",
@@ -210,7 +237,8 @@
     "DOCTOR_UPDATED_SUCCESSFULLY": "Doctor updated successfully",
     "INPATIENT_CREATED_SUCCESSFULLY": "Inpatient created successfully",
     "INPATIENT_UPDATED_SUCCESSFULLY": "Inpatient updated successfully",
-    "ARE_YOU_SURE_LOGOUT": "Are you sure want to Logout ?"
+    "ARE_YOU_SURE_LOGOUT": "Are you sure want to Logout ?",
+    "APPOINTMENT_RESCHEDULED_SUCCESSFULLY": "Appointment rescheduled successfully"
   },
   "PLACEHOLDER": {
     "CANCELLATION_REASON": "Enter the reason for cancelling this appointment..."
