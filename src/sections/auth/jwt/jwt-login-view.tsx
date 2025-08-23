@@ -93,7 +93,7 @@ export default function JwtLoginView() {
       <Typography
         sx={{
           color: '#000000',
-          fontFamily: 'Inter Tight',
+          fontFamily: '    ',
           fontWeight: 600,
           fontStyle: 'normal',
           fontSize: '24px',
@@ -107,7 +107,7 @@ export default function JwtLoginView() {
       <Typography
         sx={{
           color: '#6B7280', // gray color
-          fontFamily: 'Inter Tight',
+          fontFamily: '    ',
           fontWeight: 400,
           fontStyle: 'normal',
           fontSize: '16px',

@@ -227,7 +227,7 @@ export default function RoomDialog({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
+                  fontFamily: '    ',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -263,7 +263,7 @@ export default function RoomDialog({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
+                  fontFamily: '    ',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -298,7 +298,7 @@ export default function RoomDialog({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
+                  fontFamily: '    ',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -336,7 +336,7 @@ export default function RoomDialog({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
+                  fontFamily: '    ',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',

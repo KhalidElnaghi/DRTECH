@@ -73,7 +73,6 @@ export default function EmptyState({
       {/* Header */}
       <Typography
         sx={{
-          fontFamily: '"Inter Tight", sans-serif',
           fontWeight: 600,
           fontStyle: 'normal',
           fontSize: '32px',
@@ -87,7 +86,6 @@ export default function EmptyState({
       {/* Subheader */}
       <Typography
         sx={{
-          fontFamily: '"Inter Tight", sans-serif',
           fontWeight: 400,
           fontStyle: 'normal',
           fontSize: '15px',

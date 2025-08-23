@@ -22,7 +22,6 @@ export type UpdatePaymentData = {
   PaymentAmount: number;
   status: number;
   description: string;
-  ServiceType: number;
 };
 
 export const fetchPaymentsClient = async (params: PaymentParams) => {

@@ -36,7 +36,10 @@
     "DELETE_CLIENT": "Delete Client",
     "DELETE_CENTER": "Delete Center",
     "DELETE": "Confirm Delete",
-    "CANCEL_APPOINTMENT": "Cancel Appointment"
+    "CANCEL_APPOINTMENT": "Cancel Appointment",
+    "PATIENT_STATISTICS": "Patient Statistics",
+    "UPCOMING_APPOINTMENTS": "Upcoming Appointments",
+    "RECENT_PATIENTS": "Recent Patients"
   },
   "LABEL": {
     "HELP_CENTER": "Help Center",
@@ -62,7 +65,27 @@
     "PHONE_NUMBER": "Phone Number",
     "EMERGENCY_CONTACT": "Emergency Contact",
     "ADDRESS": "Address",
-    "DATE_OF_BIRTH": "Date of Birth"
+    "DATE_OF_BIRTH": "Date of Birth",
+    "WELCOME_BACK": "Welcome back",
+    "PERFORMANCE_SUMMARY": "Here's a quick summary of hospital's performance this week.",
+    "LAST_UPDATED": "Last updated",
+    "EXPORT_CSV": "Export CSV",
+    "EXPORT_EXCEL": "Export Excel",
+    "TOTAL_PATIENT": "Total Patient",
+    "TOTAL_DOCTORS": "Total Doctors",
+    "NEW_APPOINTMENTS": "New Appointments",
+    "ROOMS_AVAILABLE": "Rooms Available",
+    "PERIOD": "Period",
+    "MONTHLY": "Monthly",
+    "YEARLY": "Yearly",
+    "SINCE_LAST_WEEK": "since last week",
+    "PATIENTS": "Patients",
+    "INPATIENTS": "Inpatients",
+    "LOADING": "Loading...",
+    "NO_PATIENTS": "No patients",
+    "PAGE": "Page",
+    "OF": "of",
+    "NO": "No"
   },
   "BUTTON": {
     "LOGIN": "Login",

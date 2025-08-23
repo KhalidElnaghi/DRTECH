@@ -29,6 +29,7 @@ import { useAuthContext } from 'src/auth/hooks/use-auth-context';
 
 import Iconify from 'src/components/iconify';
 import { varHover } from 'src/components/animate';
+import { useSettingsContext } from 'src/components/settings';
 import SharedHeader from 'src/components/shared-header/empty-state';
 import ConfirmDialog from 'src/components/custom-dialog/confirm-dialog';
 
@@ -58,6 +59,7 @@ export default function SettingsView() {
   const theme = useTheme();
   const { t } = useTranslate();
   const router = useRouter();
+  const settings = useSettingsContext();
   const { logout } = useAuthContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentTab, setCurrentTab] = useState('account');
@@ -423,30 +425,30 @@ export default function SettingsView() {
     </Card>
   );
 
-  // const renderLanguageTab = (
-  //   <Card sx={{ p: 3 }}>
-  //     <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
-  //       {t('SETTINGS.LANGUAGE')}
-  //     </Typography>
-  //     <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-  //       {t('SETTINGS.LANGUAGE_DESCRIPTION')}
-  //     </Typography>
+  const renderLanguageTab = (
+    <Card sx={{ p: 3 }}>
+      <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
+        {t('SETTINGS.LANGUAGE')}
+      </Typography>
+      <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
+        {t('SETTINGS.LANGUAGE_DESCRIPTION')}
+      </Typography>
 
-  //     <Stack spacing={2}>
-  //       <Box>
-  //         <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
-  //           {t('SETTINGS.LANGUAGE_DIRECTION')}:{' '}
-  //           {settings.themeDirection === 'rtl'
-  //             ? t('SETTINGS.LANGUAGE_DIRECTION_RTL')
-  //             : t('SETTINGS.LANGUAGE_DIRECTION_LTR')}
-  //         </Typography>
-  //         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-  //           {t('SETTINGS.LANGUAGE_DIRECTION_DESCRIPTION')}
-  //         </Typography>
-  //       </Box>
-  //     </Stack>
-  //   </Card>
-  // );
+      <Stack spacing={2}>
+        <Box>
+          <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
+            {t('SETTINGS.LANGUAGE_DIRECTION')}:{' '}
+            {settings.themeDirection === 'rtl'
+              ? t('SETTINGS.LANGUAGE_DIRECTION_RTL')
+              : t('SETTINGS.LANGUAGE_DIRECTION_LTR')}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {t('SETTINGS.LANGUAGE_DIRECTION_DESCRIPTION')}
+          </Typography>
+        </Box>
+      </Stack>
+    </Card>
+  );
 
   const renderNotificationsTab = (
     <Card sx={{ p: 3 }}>

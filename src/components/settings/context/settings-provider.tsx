@@ -24,23 +24,14 @@ export function SettingsProvider({ children, defaultSettings }: SettingsProvider
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const currentLang = localStorageGetItem('i18nextLng') || 'en';
-  const isArabic = currentLang === 'ar';
+  const isArabic = localStorageGetItem('i18nextLng') === 'ar';
 
   useEffect(() => {
-    // Initialize theme direction based on current language
-    const shouldBeRTL = currentLang === 'ar';
-    const currentDirection = state.themeDirection;
-
-
-    // Only update if the direction doesn't match the language
-    if (
-      (shouldBeRTL && currentDirection !== 'rtl') ||
-      (!shouldBeRTL && currentDirection !== 'ltr')
-    ) {
-      onChangeDirectionByLang(currentLang);
+    if (isArabic) {
+      onChangeDirectionByLang('ar');
     }
-  }, [currentLang, state.themeDirection]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isArabic]);
 
   // Direction by lang
   const onChangeDirectionByLang = useCallback(

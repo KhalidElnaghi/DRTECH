@@ -3,16 +3,16 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 import { Box, Grid, Paper, Button, Typography, IconButton } from '@mui/material';
-
-import { paths } from 'src/app/auth/paths';
 
 import { useDashboardSummary } from 'src/hooks/use-dashboard-query';
 
 import axiosInstance from 'src/utils/axios';
 import { fDateTime } from 'src/utils/format-time';
 
+import { paths } from 'src/app/auth/paths';
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
@@ -21,6 +21,7 @@ import DashboardSummarySkeleton from './skeletons/dashboard-summary-skeleton';
 
 export default function DashboardSummary() {
   const { user } = useAuthContext();
+  const { t } = useTranslation();
   const { data, isLoading, refetch } = useDashboardSummary();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const router = useRouter();
@@ -109,7 +110,7 @@ export default function DashboardSummary() {
             variant="body1"
             color="initial"
             sx={{
-              fontFamily: 'Inter Tight',
+              fontFamily: '    ',
               fontWeight: 600,
               fontStyle: 'SemiBold',
               fontSize: 24,
@@ -118,13 +119,13 @@ export default function DashboardSummary() {
             }}
           >
             {' '}
-            Welcome back, {user?.FirstName}!
+            {t('LABEL.WELCOME_BACK')}, {user?.FirstName}!
           </Typography>
           <Typography
             variant="body1"
             color="#818898"
             sx={{
-              fontFamily: 'Inter Tight',
+              fontFamily: '    ',
               fontWeight: 400,
               fontStyle: 'Regular',
               fontSize: '14px',
@@ -133,7 +134,7 @@ export default function DashboardSummary() {
               mt: 1,
             }}
           >
-            Here&apos;s a quick summary of hospital&apos;s performance this week.
+            {t(`LABEL.PERFORMANCE_SUMMARY`)}
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'end', gap: 1 }}>
@@ -154,7 +155,7 @@ export default function DashboardSummary() {
               variant="body1"
               color="initial"
               sx={{
-                fontFamily: 'Inter Tight',
+                fontFamily: '    ',
                 fontWeight: 600,
                 fontStyle: 'SemiBold',
                 fontSize: { xs: '12px', md: '12px', lg: '16px' },
@@ -164,7 +165,7 @@ export default function DashboardSummary() {
                 color: '#666D80',
               }}
             >
-              Last updated: {fDateTime(data?.Data?.LastUpdated, 'dd MMM yyyy')}
+              {t('LABEL.LAST_UPDATED')}: {fDateTime(data?.Data?.LastUpdated, 'dd MMM yyyy')}
             </Typography>
             <IconButton
               aria-label="Refresh dashboard data"
@@ -216,7 +217,7 @@ export default function DashboardSummary() {
               sx={{
                 mx: 1,
                 py: { xs: '5px', md: '4px', lg: '1px' },
-                fontFamily: 'Inter Tight',
+                fontFamily: '    ',
                 fontWeight: 600,
                 fontStyle: 'SemiBold',
                 fontSize: { xs: '10px', md: '12px', lg: '16px' },
@@ -225,7 +226,7 @@ export default function DashboardSummary() {
                 textAlign: 'center',
               }}
             >
-              Export CSV
+              {t('LABEL.EXPORT_CSV')}
             </Typography>
           </Button>
           <Button
@@ -240,7 +241,7 @@ export default function DashboardSummary() {
               sx={{
                 mx: 1,
                 py: { xs: '5px', md: '4px', lg: '1px' },
-                fontFamily: 'Inter Tight',
+                fontFamily: '    ',
                 fontWeight: 600,
                 fontStyle: 'SemiBold',
                 fontSize: { xs: '10px', md: '12px', lg: '16px' },
@@ -249,7 +250,7 @@ export default function DashboardSummary() {
                 textAlign: 'center',
               }}
             >
-              Export Excel
+              {t('LABEL.EXPORT_EXCEL')}
             </Typography>
           </Button>
         </Box>
@@ -297,7 +298,7 @@ export default function DashboardSummary() {
                   <Typography
                     variant="body1"
                     sx={{
-                      fontFamily: 'Inter Tight',
+                      fontFamily: '    ',
                       fontWeight: 400,
                       fontStyle: 'Regular',
                       fontSize: 14,
@@ -308,12 +309,12 @@ export default function DashboardSummary() {
                     }}
                   >
                     {' '}
-                    Total Patient
+                    {t('LABEL.TOTAL_PATIENT')}
                   </Typography>
                   <Typography
                     variant="caption"
                     sx={{
-                      fontFamily: 'Inter Tight',
+                      fontFamily: '    ',
                       fontWeight: 600,
                       fontStyle: 'SemiBold',
                       fontSize: 18,
@@ -377,7 +378,7 @@ export default function DashboardSummary() {
                   />
                   <Typography
                     sx={{
-                      fontFamily: 'Inter Tight',
+                      fontFamily: '    ',
                       fontWeight: 400,
                       fontStyle: 'Regular',
                       fontSize: 14,
@@ -387,13 +388,12 @@ export default function DashboardSummary() {
                       pt: 1.5,
                     }}
                   >
-                    {' '}
-                    Total Doctors
+                    {t('LABEL.TOTAL_DOCTORS')}
                   </Typography>
                   <Typography
                     variant="caption"
                     sx={{
-                      fontFamily: 'Inter Tight',
+                      fontFamily: '    ',
                       fontWeight: 600,
                       fontStyle: 'SemiBold',
                       fontSize: 18,
@@ -457,7 +457,7 @@ export default function DashboardSummary() {
                   />
                   <Typography
                     sx={{
-                      fontFamily: 'Inter Tight',
+                      fontFamily: '    ',
                       fontWeight: 400,
                       fontStyle: 'Regular',
                       fontSize: 14,
@@ -467,13 +467,12 @@ export default function DashboardSummary() {
                       pt: 1.5,
                     }}
                   >
-                    {' '}
-                    New Appointments
+                    {t('LABEL.NEW_APPOINTMENTS')}
                   </Typography>
                   <Typography
                     variant="caption"
                     sx={{
-                      fontFamily: 'Inter Tight',
+                      fontFamily: '    ',
                       fontWeight: 600,
                       fontStyle: 'SemiBold',
                       fontSize: 18,
@@ -532,7 +531,7 @@ export default function DashboardSummary() {
                   <Image src="/assets/images/home/room.svg" alt="rooms" width={45} height={45} />
                   <Typography
                     sx={{
-                      fontFamily: 'Inter Tight',
+                      fontFamily: '    ',
                       fontWeight: 400,
                       fontStyle: 'Regular',
                       fontSize: 14,
@@ -542,12 +541,12 @@ export default function DashboardSummary() {
                       pt: 1.5,
                     }}
                   >
-                    Rooms Available
+                    {t('LABEL.ROOMS_AVAILABLE')}
                   </Typography>
                   <Typography
                     variant="caption"
                     sx={{
-                      fontFamily: 'Inter Tight',
+                      fontFamily: '    ',
                       fontWeight: 600,
                       fontStyle: 'SemiBold',
                       fontSize: 18,

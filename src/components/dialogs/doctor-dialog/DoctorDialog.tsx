@@ -249,7 +249,7 @@ const DoctorDialog = ({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
+                  fontFamily: '    ',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -279,7 +279,7 @@ const DoctorDialog = ({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
+                  fontFamily: '    ',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -320,7 +320,7 @@ const DoctorDialog = ({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
+                  fontFamily: '    ',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -350,7 +350,7 @@ const DoctorDialog = ({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
+                  fontFamily: '    ',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -392,7 +392,7 @@ const DoctorDialog = ({
               <Box>
                 <Typography
                   sx={{
-                    fontFamily: 'Inter Tight',
+                    fontFamily: '    ',
                     fontWeight: 400,
                     fontStyle: 'normal',
                     fontSize: '12px',
@@ -425,7 +425,7 @@ const DoctorDialog = ({
               <Box>
                 <Typography
                   sx={{
-                    fontFamily: 'Inter Tight',
+                    fontFamily: '    ',
                     fontWeight: 400,
                     fontStyle: 'normal',
                     fontSize: '12px',

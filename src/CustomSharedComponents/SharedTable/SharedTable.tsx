@@ -7,6 +7,8 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
+import { useTranslate } from 'src/locales';
+
 import Scrollbar from 'src/components/scrollbar';
 
 import useTable from './use-table';
@@ -28,7 +30,7 @@ export default function SharedTable<T extends { id: string | number }>({
 }: SharedTableProps<T>) {
   const table = useTable();
   const searchParams = useSearchParams();
-
+  const { t } = useTranslate();
   const hasPage = searchParams.get('page');
 
   const page = hasPage ? Number(searchParams.get('page')) - 1 : 0;
@@ -55,7 +57,7 @@ export default function SharedTable<T extends { id: string | number }>({
 
               '& .MuiTableBody-root .MuiTableCell-root': {
                 color: 'black',
-                fontFamily: 'Inter Tight',
+                fontFamily: '    ',
                 fontWeight: '500',
                 fontStyle: 'normal',
                 fontSize: '14px',
@@ -71,7 +73,7 @@ export default function SharedTable<T extends { id: string | number }>({
           >
             {/* Inject auto "No" column at the beginning */}
             <TableHeadCustom
-              headLabel={[{ id: 'auto_index', label: 'No', width: 25 }, ...tableHead]}
+              headLabel={[{ id: 'auto_index', label: t('LABEL.NO'), width: 25 }, ...tableHead]}
               headColor={headColor}
             />
 

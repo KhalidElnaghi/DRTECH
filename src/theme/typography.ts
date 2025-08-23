@@ -1,4 +1,4 @@
-import { Cairo, Barlow, Inter_Tight } from 'next/font/google';
+import { IBM_Plex_Sans, IBM_Plex_Sans_Arabic } from 'next/font/google';
 
 // ----------------------------------------------------------------------
 
@@ -31,18 +31,20 @@ declare module '@mui/material/styles' {
   }
 }
 
-export const primaryFont = Inter_Tight({
-  weight: ['400', '500', '600', '700', '800', '900'],
-  subsets: ['latin'],
-  display: 'swap',
-  fallback: ['Helvetica', 'Arial', 'sans-serif'],
-});
+// IBM Plex Sans for English text
+// export const primaryFont = IBM_Plex_Sans({
+//   weight: ['300', '400', '500', '600', '700'],
+//   subsets: ['latin'],
+//   display: 'swap',
+//   fallback: ['Helvetica', 'Arial', 'sans-serif'],
+// });
 
-export const secondaryFont = Cairo({
-  weight: ['400', '500', '600', '700', '800', '900'],
-  subsets: ['latin'],
+// IBM Plex Sans Arabic for Arabic text
+export const secondaryFont = IBM_Plex_Sans_Arabic({
+  weight: ['300', '400', '500', '600', '700'],
+  subsets: ['arabic'],
   display: 'swap',
-  fallback: ['Helvetica', 'Arial', 'sans-serif'],
+  fallback: ['Arial', 'sans-serif'],
 });
 
 // ----------------------------------------------------------------------
@@ -51,7 +53,7 @@ export const secondaryFont = Cairo({
 // https://nextjs.org/docs/basic-features/font-optimization#google-fonts
 
 export const typography = {
-  fontFamily: primaryFont.style.fontFamily,
+  fontFamily: secondaryFont.style.fontFamily,
   fontSecondaryFamily: secondaryFont.style.fontFamily,
   fontWeightRegular: 400,
   fontWeightMedium: 500,

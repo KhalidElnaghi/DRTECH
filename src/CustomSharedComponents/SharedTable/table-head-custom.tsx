@@ -26,7 +26,6 @@ export default function TableHeadCustom({ headLabel, headColor }: Props) {
               textWrap: 'nowrap',
               backgroundColor: 'grey.100',
               color: 'grey.700',
-              fontFamily: 'Inter Tight',
               fontWeight: 500,
               fontStyle: 'normal',
               fontSize: '12px',

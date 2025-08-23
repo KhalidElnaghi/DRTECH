@@ -405,7 +405,7 @@ export default function PaymentsPage({
                     display: 'flex',
                     alignItems: 'center',
                     gap: 0.5,
-                    fontFamily: 'Inter Tight',
+                    fontFamily: '    ',
                     fontSize: '14px',
                   }}
                 >

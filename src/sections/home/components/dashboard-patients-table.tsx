@@ -1,21 +1,27 @@
 'use client';
 
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'next/navigation';
+
 import { Box, Paper, Typography } from '@mui/material';
-import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
+
 import { useDashboardPatients } from 'src/hooks/use-dashboard-query';
+
+import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
+
 import DashboardPatientsTableSkeleton from './skeletons/dashboard-patients-table-skeleton';
 
 const TABLE_HEAD = [
-  { id: 'FullName', label: 'Full Name' },
-  { id: 'GenderName', label: 'Gender' },
-  { id: 'DateOfBirth', label: 'Date of Birth' },
-  { id: 'Address', label: 'Address' },
-  { id: 'PhoneNumber', label: 'Phone Number' },
-  { id: 'BloodTypeName', label: 'Blood Type' },
+  { id: 'FullName', label: 'LABEL.FULL_NAME' },
+  { id: 'GenderName', label: 'LABEL.GENDER' },
+  { id: 'DateOfBirth', label: 'LABEL.DATE_OF_BIRTH' },
+  { id: 'Address', label: 'LABEL.ADDRESS' },
+  { id: 'PhoneNumber', label: 'LABEL.PHONE_NUMBER' },
+  { id: 'BloodTypeName', label: 'LABEL.BLOOD_TYPE' },
 ];
 
 export default function DashboardPatientsTable() {
+  const { t } = useTranslation();
   const searchParams = useSearchParams();
   const page = Number(searchParams.get('page')) || 1;
   const limit = Number(searchParams.get('limit')) || 10;
@@ -45,7 +51,7 @@ export default function DashboardPatientsTable() {
     >
       <Box sx={{ px: 2, py: 2 }}>
         <Typography variant="h6" sx={{ mb: 0.5 }} color="#666D80">
-          Recent Patients{' '}
+          {t('TITLE.RECENT_PATIENTS')}
         </Typography>
       </Box>
       <Box sx={{ overflow: 'auto', width: '100%' }}>

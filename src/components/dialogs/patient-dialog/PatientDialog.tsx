@@ -222,7 +222,6 @@ export default function PatientDialog({
               <Box sx={{ flex: 1 }}>
                 <Typography
                   sx={{
-                    fontFamily: 'Inter Tight',
                     fontWeight: 400,
                     fontStyle: 'normal',
                     fontSize: '12px',
@@ -244,7 +243,6 @@ export default function PatientDialog({
               <Box sx={{ flex: 1 }}>
                 <Typography
                   sx={{
-                    fontFamily: 'Inter Tight',
                     fontWeight: 400,
                     fontStyle: 'normal',
                     fontSize: '12px',
@@ -282,7 +280,6 @@ export default function PatientDialog({
               <Box sx={{ flex: 1 }}>
                 <Typography
                   sx={{
-                    fontFamily: 'Inter Tight',
                     fontWeight: 400,
                     fontStyle: 'normal',
                     fontSize: '12px',
@@ -310,7 +307,6 @@ export default function PatientDialog({
               <Box sx={{ flex: 1 }}>
                 <Typography
                   sx={{
-                    fontFamily: 'Inter Tight',
                     fontWeight: 400,
                     fontStyle: 'normal',
                     fontSize: '12px',
@@ -358,7 +354,6 @@ export default function PatientDialog({
               <Box sx={{ flex: 1 }}>
                 <Typography
                   sx={{
-                    fontFamily: 'Inter Tight',
                     fontWeight: 400,
                     fontStyle: 'normal',
                     fontSize: '12px',
@@ -384,7 +379,6 @@ export default function PatientDialog({
               <Box sx={{ flex: 1 }}>
                 <Typography
                   sx={{
-                    fontFamily: 'Inter Tight',
                     fontWeight: 400,
                     fontStyle: 'normal',
                     fontSize: '12px',
@@ -411,7 +405,6 @@ export default function PatientDialog({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',

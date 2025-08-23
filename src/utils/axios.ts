@@ -28,9 +28,10 @@ const axiosInstance: AxiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = Cookies.get('access_token');
+    const lang = Cookies.get('Language');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      config.headers['Accept-Language'] = 'en';
+      config.headers['Accept-Language'] = lang;
     }
     return config;
   },

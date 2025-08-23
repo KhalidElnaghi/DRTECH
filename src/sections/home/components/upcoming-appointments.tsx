@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Box, Paper, Avatar, Typography, IconButton } from '@mui/material';
 
@@ -16,6 +17,7 @@ import UpcomingAppointmentsSkeleton from './skeletons/upcoming-appointments-skel
 type Props = { limit?: number };
 
 export default function UpcomingAppointments({ limit = 5 }: Props) {
+  const { t } = useTranslation();
   const { data, isLoading, refetch } = useDashboardUpcomingAppointments({ limit });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedAppointmentId, setSelectedAppointmentId] = useState<number | null>(null);
@@ -77,7 +79,7 @@ export default function UpcomingAppointments({ limit = 5 }: Props) {
             zIndex: 1,
           }}
         >
-          <Typography variant="h6">Upcoming Appointments</Typography>
+          <Typography variant="h6">{t('TITLE.UPCOMING_APPOINTMENTS')}</Typography>
           <IconButton
             onClick={handleRefresh}
             disabled={isRefreshing}

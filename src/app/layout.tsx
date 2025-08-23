@@ -6,15 +6,15 @@ import I18nProvider from 'src/locales/i18n-provider';
 // ----------------------------------------------------------------------
 
 import ThemeProvider from 'src/theme';
-import { primaryFont } from 'src/theme/typography';
 import { LocalizationProvider } from 'src/locales';
 import { AuthProvider } from 'src/auth/context/jwt';
+import { secondaryFont } from 'src/theme/typography';
+import QueryProvider from 'src/providers/query-provider';
 
 import ProgressBar from 'src/components/progress-bar';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
 import SnackbarProvider from 'src/components/snackbar/snackbar-provider';
 import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
-import QueryProvider from 'src/providers/query-provider';
 // ----------------------------------------------------------------------
 
 export const viewport = {
@@ -43,13 +43,7 @@ type Props = {
 
 export default function RootLayout({ children }: Props) {
   return (
-    <html lang="en" className={primaryFont.className}>
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={secondaryFont.className}>
       <body>
         <QueryProvider>
           <I18nProvider>

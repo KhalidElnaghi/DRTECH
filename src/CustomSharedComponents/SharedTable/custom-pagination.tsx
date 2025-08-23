@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import { useTranslate } from 'src/locales';
+import { useTheme } from '@emotion/react';
 // Custom chevron icons using SVG
 const ChevronLeftIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -31,6 +33,8 @@ export default function CustomPagination({
   onPageChange,
   onRowsPerPageChange,
 }: CustomPaginationProps) {
+  const { t } = useTranslate();
+  const theme = useTheme();
   const totalPages = Math.ceil(count / rowsPerPage);
   const currentPage = page + 1;
 
@@ -100,7 +104,7 @@ export default function CustomPagination({
           mr: 2,
         }}
       >
-        Page {currentPage} of {totalPages}
+        {t('LABEL.PAGE')} {currentPage} {t('LABEL.OF')} {totalPages}
       </Typography>
 
       {/* Pagination controls */}
@@ -114,11 +118,7 @@ export default function CustomPagination({
             border: '1px solid black',
             borderColor: currentPage <= 1 ? 'divider' : 'primary.main',
             borderRadius: 1,
-            '&:hover': {
-              // bgcolor: currentPage <= 1 ? 'transparent' : 'primary.light',
-              // color: currentPage <= 1 ? 'text.disabled' : 'primary.dark',
-              // borderColor: currentPage <= 1 ? 'divider' : 'primary.dark',
-            },
+            transform: (theme as any)?.direction === 'rtl' ? 'rotate(180deg)' : 'none',
           }}
         >
           <ChevronLeftIcon />
@@ -186,11 +186,7 @@ export default function CustomPagination({
             border: '1px solid black',
             borderColor: currentPage >= totalPages ? 'divider' : 'primary.main',
             borderRadius: 1,
-            // '&:hover': {
-            //   bgcolor: currentPage >= totalPages ? 'transparent' : 'primary.light',
-            //   color: currentPage >= totalPages ? 'text.disabled' : 'primary.dark',
-            //   borderColor: currentPage >= totalPages ? 'primary.dark' : 'primary.dark',
-            // },
+            transform: (theme as any)?.direction === 'rtl' ? 'rotate(180deg)' : 'none',
           }}
         >
           <ChevronRightIcon />

@@ -273,12 +273,11 @@ export default function AppointmentDialog({
         <DialogContent sx={{ borderBottom: '1px solid #DFE1E7', py: 3 }}>
           <Stack
             spacing={1}
-            sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, }}
+            sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2 }}
           >
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -307,7 +306,6 @@ export default function AppointmentDialog({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -336,7 +334,6 @@ export default function AppointmentDialog({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -365,7 +362,7 @@ export default function AppointmentDialog({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
+                  fontFamily: '    ',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -395,7 +392,6 @@ export default function AppointmentDialog({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -424,7 +420,7 @@ export default function AppointmentDialog({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
+                  fontFamily: '    ',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -452,7 +448,6 @@ export default function AppointmentDialog({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -487,7 +482,6 @@ export default function AppointmentDialog({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -519,12 +513,9 @@ export default function AppointmentDialog({
               />
             </Box>
 
-
-
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -562,7 +553,6 @@ export default function AppointmentDialog({
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -599,7 +589,6 @@ export default function AppointmentDialog({
             <Box sx={{ gridColumn: 'span 2' }}>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',

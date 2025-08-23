@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   Box,
@@ -34,6 +35,7 @@ type ChartDataPoint = {
 };
 
 export default function PatientsStatistics() {
+  const { t } = useTranslation();
   const [period, setPeriod] = useState('monthly');
   const { data, isLoading } = useDashboardPatientsStatistics({ period });
 
@@ -192,7 +194,7 @@ export default function PatientsStatistics() {
       labels: {
         style: {
           fontSize: '10px',
-          fontFamily: 'Inter Tight',
+          fontFamily: '    ',
           colors: '#637381',
         },
       },
@@ -210,7 +212,7 @@ export default function PatientsStatistics() {
       labels: {
         style: {
           fontSize: '12px',
-          fontFamily: 'Inter Tight',
+          fontFamily: '    ',
           colors: '#637381',
         },
         formatter: (value: number) => Math.round(value).toString(),
@@ -242,7 +244,6 @@ export default function PatientsStatistics() {
       },
       style: {
         fontSize: '12px',
-        fontFamily: 'Inter Tight',
       },
       custom({ series, seriesIndex, dataPointIndex, w }) {
         const chartDataPoint = currentData[dataPointIndex];
@@ -254,10 +255,9 @@ export default function PatientsStatistics() {
             border-radius: 8px;
             padding: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            font-family: 'Inter Tight', sans-serif;
             width: 200px;
           ">
-            <div style="font-weight: 600; color: #212B36; margin-bottom: 8px;">Total Patient</div>
+            <div style="font-weight: 600; color: #212B36; margin-bottom: 8px;">${t('LABEL.TOTAL_PATIENT')}</div>
             <div style="font-weight: 600; border-bottom: 1.5px solid #E0E3E7; margin-bottom: 8px;"></div>
             <div style="display: flex; justify-content: space-between;">
               <div style="color: #637381; font-size: 12px; margin-bottom: 4px;">${timeLabel}</div>
@@ -276,7 +276,7 @@ export default function PatientsStatistics() {
       position: 'top',
       horizontalAlign: 'right',
       fontSize: '12px',
-      fontFamily: 'Inter Tight',
+      fontFamily: '    ',
       fontWeight: 500,
       labels: {
         colors: '#637381',
@@ -298,11 +298,11 @@ export default function PatientsStatistics() {
 
   const chartSeries = [
     {
-      name: 'Patients',
+      name: t('LABEL.PATIENTS'),
       data: currentData.map((item: ChartDataPoint) => item.patients),
     },
     {
-      name: 'Inpatient',
+      name: t('LABEL.INPATIENTS'),
       data: currentData.map((item: ChartDataPoint) => item.inpatients),
     },
   ];
@@ -332,17 +332,17 @@ export default function PatientsStatistics() {
         <Typography
           variant="h6"
           sx={{
-            fontFamily: 'Inter Tight',
+            fontFamily: '    ',
             fontWeight: 600,
             color: '#212B36',
             fontSize: '18px',
           }}
         >
-          Patient Statistics
+          {t('TITLE.PATIENT_STATISTICS')}
         </Typography>
 
         <FormControl size="small" sx={{ minWidth: 120 }}>
-          <InputLabel id="period-select-label">Period</InputLabel>
+          <InputLabel id="period-select-label">{t('LABEL.PERIOD')}</InputLabel>
           <Select
             labelId="period-select-label"
             value={period}
@@ -357,8 +357,8 @@ export default function PatientsStatistics() {
               },
             }}
           >
-            <MenuItem value="monthly">Monthly</MenuItem>
-            <MenuItem value="yearly">Yearly</MenuItem>
+            <MenuItem value="monthly">{t('LABEL.MONTHLY')}</MenuItem>
+            <MenuItem value="yearly">{t('LABEL.YEARLY')}</MenuItem>
           </Select>
         </FormControl>
       </Box>
@@ -368,7 +368,7 @@ export default function PatientsStatistics() {
         <Typography
           variant="h3"
           sx={{
-            fontFamily: 'Inter Tight',
+            fontFamily: '    ',
             fontWeight: 700,
             color: '#212B36',
             fontSize: '32px',
@@ -387,13 +387,13 @@ export default function PatientsStatistics() {
           <Typography
             variant="body2"
             sx={{
-              fontFamily: 'Inter Tight',
+              fontFamily: '    ',
               fontWeight: 500,
               color: '#637381',
               fontSize: '14px',
             }}
           >
-            {Math.abs(changePercentage)}% since last week
+            {Math.abs(changePercentage)}% {t('LABEL.SINCE_LAST_WEEK')}
           </Typography>
         </Box>
       </Box>

@@ -218,7 +218,6 @@ export default function InpatientDialog({ open, onClose, rooms, inpatient }: Inp
               <Box sx={{ flex: 1 }}>
                 <Typography
                   sx={{
-                    fontFamily: 'Inter Tight',
                     fontWeight: 400,
                     fontStyle: 'normal',
                     fontSize: '12px',
@@ -253,7 +252,7 @@ export default function InpatientDialog({ open, onClose, rooms, inpatient }: Inp
               <Box sx={{ flex: 1 }}>
                 <Typography
                   sx={{
-                    fontFamily: 'Inter Tight',
+                    fontFamily: '    ',
                     fontWeight: 400,
                     fontStyle: 'normal',
                     fontSize: '12px',
@@ -291,7 +290,7 @@ export default function InpatientDialog({ open, onClose, rooms, inpatient }: Inp
               <Box sx={{ flex: 1 }}>
                 <Typography
                   sx={{
-                    fontFamily: 'Inter Tight',
+                    fontFamily: '    ',
                     fontWeight: 400,
                     fontStyle: 'normal',
                     fontSize: '12px',
@@ -326,7 +325,7 @@ export default function InpatientDialog({ open, onClose, rooms, inpatient }: Inp
               <Box sx={{ flex: 1 }}>
                 <Typography
                   sx={{
-                    fontFamily: 'Inter Tight',
+                    fontFamily: '    ',
                     fontWeight: 400,
                     fontStyle: 'normal',
                     fontSize: '12px',
@@ -363,7 +362,7 @@ export default function InpatientDialog({ open, onClose, rooms, inpatient }: Inp
             <Box>
               <Typography
                 sx={{
-                  fontFamily: 'Inter Tight',
+                  fontFamily: '    ',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
