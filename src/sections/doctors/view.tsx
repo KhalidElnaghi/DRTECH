@@ -26,7 +26,7 @@ import {
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useDeleteDoctor } from 'src/hooks/use-doctors-query';
 
-import { useTranslate } from 'src/locales';
+import { useLocales, useTranslate } from 'src/locales';
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 import { cellAlignment } from 'src/CustomSharedComponents/SharedTable/types';
 
@@ -70,14 +70,14 @@ export default function DoctorsPage({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const prevSearchTermRef = useRef<string>('');
-
+  const { currentLang } = useLocales();
   const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
   const [selectedDoctor, setSelectedDoctor] = useState<IDoctor | undefined>();
   const [selectedId, setSelectedId] = useState<string>('');
   const confirmDelete = useBoolean();
   const [isDeleting, setIsDeleting] = useState(false);
-
+  console.log(currentLang);
   const TABLE_HEAD = [
     { id: 'FullName', label: t('LABEL.FULL_NAME') || 'Full Name', align: cellAlignment.left },
     {
@@ -544,33 +544,6 @@ export default function DoctorsPage({
                 </FormControl>
               </Grid>
             </Grid>
-
-            {/* Active Filters Display */}
-            {hasActiveFilters && (
-              <Box sx={{ mt: 1.5, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                <Typography variant="body2" sx={{ alignSelf: 'center', mr: 1 }}>
-                  Active filters:
-                </Typography>
-                {filters.specializationId > 0 && (
-                  <Chip
-                    label={`Specialization: ${specializations?.find((s) => s.Id === filters.specializationId)?.Name || ''}`}
-                    onDelete={() => handleFilterChange('specializationId', 0)}
-                    color="primary"
-                    variant="outlined"
-                    size="small"
-                  />
-                )}
-                {filters.status > 0 && (
-                  <Chip
-                    label={`Status: ${statusOptions?.find((s) => s.Id === filters.status)?.Name || ''}`}
-                    onDelete={() => handleFilterChange('status', 0)}
-                    color="primary"
-                    variant="outlined"
-                    size="small"
-                  />
-                )}
-              </Box>
-            )}
           </Popover>
 
           {/* Auto-close popover when URL params change or anchor unmounts */}
@@ -617,6 +590,11 @@ export default function DoctorsPage({
                   }}
                 >
                   {StatusName}
+                </Box>
+              ),
+              PhoneNumber: ({ PhoneNumber }: IDoctor) => (
+                <Box sx={{ direction: currentLang.value === 'ar' ? 'rtl' : 'ltr' }}>
+                  {PhoneNumber}
                 </Box>
               ),
             }}

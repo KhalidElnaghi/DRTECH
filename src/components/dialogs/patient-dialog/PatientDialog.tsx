@@ -191,7 +191,7 @@ export default function PatientDialog({
           alignItems: 'center',
         }}
       >
-        <Typography variant="h6">{patient ? 'Edit Patient' : 'Add New Patient'}</Typography>
+        <Typography variant="h6">{patient ? t('BUTTON.UPDATE_PATIENT') || 'Edit Patient' : t('BUTTON.ADD_PATIENT') || 'Add New Patient'}</Typography>
         <IconButton
           onClick={onClose}
           sx={{
@@ -231,7 +231,7 @@ export default function PatientDialog({
                     color: '#666D80',
                   }}
                 >
-                  Full Name
+                  {t('LABEL.FULL_NAME') || 'Full Name'}
                 </Typography>
                 <RHFTextField
                   placeholder={t('LABEL.FULL_NAME') || 'Enter patient full name'}
@@ -252,7 +252,7 @@ export default function PatientDialog({
                     color: '#666D80',
                   }}
                 >
-                  Gender
+                  {t('LABEL.GENDER') || 'Gender'}
                 </Typography>
                 <RHFSelect
                   placeholder={t('LABEL.GENDER') || 'Select gender'}
@@ -289,7 +289,7 @@ export default function PatientDialog({
                     color: '#666D80',
                   }}
                 >
-                  Blood Type
+                  {t('LABEL.BLOOD_TYPE') || 'Blood Type'}
                 </Typography>
                 <RHFSelect
                   placeholder={t('LABEL.BLOOD_TYPE') || 'Select blood type'}
@@ -316,7 +316,7 @@ export default function PatientDialog({
                     color: '#666D80',
                   }}
                 >
-                  Date of Birth
+                  {t('LABEL.DATE_OF_BIRTH') || 'Date of Birth'}
                 </Typography>
                 <Controller
                   name="DateOfBirth"
@@ -363,7 +363,7 @@ export default function PatientDialog({
                     color: '#666D80',
                   }}
                 >
-                  Phone Number
+                  {t('LABEL.PHONE_NUMBER') || 'Phone Number'}
                 </Typography>
                 <RHFTextField
                   placeholder="+966XXXXXXXXX"
@@ -388,7 +388,7 @@ export default function PatientDialog({
                     color: '#666D80',
                   }}
                 >
-                  Emergency Contact
+                  {t('LABEL.EMERGENCY_CONTACT') || 'Emergency Contact'}
                 </Typography>
                 <RHFTextField
                   placeholder="+966XXXXXXXXX"
@@ -414,7 +414,7 @@ export default function PatientDialog({
                   color: '#666D80',
                 }}
               >
-                Address
+                {t('LABEL.ADDRESS') || 'Address'}
               </Typography>
               <RHFTextField
                 placeholder={t('LABEL.ADDRESS') || 'Enter patient address'}
@@ -439,7 +439,7 @@ export default function PatientDialog({
             color="primary"
             disabled={isSubmitting}
           >
-            {patient ? 'Update Patient' : 'Add Patient'}
+            {patient ? t('BUTTON.UPDATE_PATIENT') || 'Update Patient' : t('BUTTON.ADD_PATIENT') || 'Add Patient'}
           </LoadingButton>
         </DialogActions>
       </FormProvider>

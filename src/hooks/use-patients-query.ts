@@ -1,6 +1,7 @@
+import { t } from 'i18next';
 import { useSnackbar } from 'notistack';
 import { useRouter } from 'next/navigation';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
   fetchPatients,
@@ -35,7 +36,9 @@ export const useCreatePatient = () => {
     mutationFn: createPatient,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patients'] });
-      enqueueSnackbar('Patient created successfully', { variant: 'success' });
+      enqueueSnackbar(t('MESSAGE.PATIENT_CREATED_SUCCESSFULLY') || 'Patient created successfully', {
+        variant: 'success',
+      });
       router.push('/dashboard/patients');
     },
     onError: (error: any) => {
@@ -52,7 +55,7 @@ export const useUpdatePatient = () => {
     mutationFn: ({ id, data }: { id: string; data: PatientData }) => updatePatient(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patients'] });
-      enqueueSnackbar('Patient updated successfully', { variant: 'success' });
+      enqueueSnackbar(t('MESSAGE.PATIENT_UPDATED_SUCCESSFULLY') || 'Patient updated successfully', { variant: 'success' });
     },
     onError: (error: any) => {
       enqueueSnackbar(error?.message || 'Failed to update patient', { variant: 'error' });
@@ -68,7 +71,9 @@ export const useDeletePatient = () => {
     mutationFn: deletePatient,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patients'] });
-      enqueueSnackbar('Patient deleted successfully', { variant: 'success' });
+      enqueueSnackbar(t('MESSAGE.PATIENT_DELETED_SUCCESSFULLY') || 'Patient deleted successfully', {
+        variant: 'success',
+      });
     },
     onError: (error: any) => {
       enqueueSnackbar(error?.message || 'Failed to delete patient', { variant: 'error' });

@@ -69,7 +69,15 @@
     "DOCTORS": "الأطباء",
     "MANAGE_ALL_DOCTORS": "إدارة جميع الأطباء، وتخصصاتهم، وحالات إتاحتهم.",
     "DELETE_DOCTOR": "حذف الطبيب",
-    "DELETE_DOCTOR_CONFIRMATION": "هل أنت متأكد من حذف هذا الطبيب؟"
+    "DELETE_DOCTOR_CONFIRMATION": "هل أنت متأكد من حذف هذا الطبيب؟",
+    "NO_PATIENTS_FOUND": "لا يوجد مرضى",
+    "NO_PATIENTS_YET": "لا يوجد مرضى",
+    "NO_PATIENTS_MATCH_FILTERS": "لا يوجد مرضى تطابق المعايير الحالية. يرجى تعديل المعايير أو تصفير بعض المعايير.",
+    "NO_PATIENTS_YET_START_BY_ADDING_NEW_ONE": "لم تقم بإضافة مرضى بعد. ابدأ بإضافة مريض جديد.",
+    "PATIENTS": "المرضى",
+    "LATEST_UPDATES_FROM_THE_PAST_7_DAYS": "آخر تحديثات من الأسبوع الماضي.",
+    "DELETE_PATIENT": "حذف المريض",
+    "DELETE_PATIENT_CONFIRMATION": "هل أنت متأكد من حذف هذا المريض؟"
   },
   "LABEL": {
     "HELP_CENTER": "مركز المساعدة",
@@ -143,7 +151,8 @@
     "PASSWORD": "كلمة المرور",
     "EMAIL": "البريد الإلكتروني",
     "SEARCH": "البحث",
-    "SEARCH_DOCTORS_NAME": "ابحث عن طبيب بالاسم ..."
+    "SEARCH_DOCTORS_NAME": "ابحث عن طبيب بالاسم ...",
+    "SEARCH_PATIENT_NAME": "ابحث عن مريض بالاسم ..."
   },
   "BUTTON": {
     "LOGIN": "تسجيل الدخول",
@@ -192,7 +201,11 @@
     "CREATE_PAYMENT": "انشاء المدفوعات",
     "ADD_NEW_DOCTOR": "اضافة طبيب جديد",
     "UPDATE_DOCTOR": "تحديث الطبيب",
-    "ADD_DOCTOR": "اضافة الطبيب"
+    "ADD_DOCTOR": "اضافة الطبيب",
+    "ADD_NEW_PATIENT": "اضافة مريض جديد",
+    "UPDATE_PATIENT": "تحديث المريض",
+    "ADD_PATIENT": "اضافة المريض",
+    "DELETING": "جاري الحذف..."
   },
   "SIDEBAR": {
     "MAIN": "الرئيسية",
@@ -284,7 +297,10 @@
     "ROOM_CREATED_SUCCESSFULLY": "تم إنشاء الغرفة بنجاح",
     "ROOM_UPDATED_SUCCESSFULLY": "تم تحديث الغرفة بنجاح",
     "ARE_YOU_SURE_LOGOUT": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
-    "APPOINTMENT_RESCHEDULED_SUCCESSFULLY": "تم إعادة تعيين الموعد بنجاح"
+    "APPOINTMENT_RESCHEDULED_SUCCESSFULLY": "تم إعادة تعيين الموعد بنجاح",
+    "PATIENT_DELETED_SUCCESSFULLY": "تم حذف المريض بنجاح",
+    "PATIENT_CREATED_SUCCESSFULLY": "تم إنشاء المريض بنجاح",
+    "PATIENT_UPDATED_SUCCESSFULLY": "تم تحديث المريض بنجاح"
   },
   "PLACEHOLDER": {
     "CANCELLATION_REASON": "أدخل سبب إلغاء هذا الموعد..."

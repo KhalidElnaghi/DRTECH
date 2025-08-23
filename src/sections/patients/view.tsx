@@ -25,6 +25,7 @@ import {
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useDeletePatient } from 'src/hooks/use-patients-query';
 
+import { useLocales, useTranslate } from 'src/locales';
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 
 import Iconify from 'src/components/iconify';
@@ -77,7 +78,8 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
+  const { t } = useTranslate();
+  const { currentLang } = useLocales();
   const [selectedPatient, setSelectedPatient] = useState<IPatient | undefined>();
   const [selectedId, setSelectedId] = useState<string>('');
   const confirmDelete = useBoolean();
@@ -265,12 +267,12 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
 
   // Table configuration for SharedTable
   const TABLE_HEAD = [
-    { id: 'FullName', label: 'Full Name' },
-    { id: 'GenderName', label: 'Gender' },
-    { id: 'DateOfBirth', label: 'Date of Birth' },
-    { id: 'Address', label: 'Address' },
-    { id: 'PhoneNumber', label: 'Phone Number' },
-    { id: 'BloodTypeName', label: 'Blood Type' },
+    { id: 'FullName', label: t('LABEL.FULL_NAME') || 'Full Name' },
+    { id: 'GenderName', label: t('LABEL.GENDER') || 'Gender' },
+    { id: 'DateOfBirth', label: t('LABEL.DATE_OF_BIRTH') || 'Date of Birth' },
+    { id: 'Address', label: t('LABEL.ADDRESS') || 'Address' },
+    { id: 'PhoneNumber', label: t('LABEL.PHONE_NUMBER') || 'Phone Number' },
+    { id: 'BloodTypeName', label: t('LABEL.BLOOD_TYPE') || 'Blood Type' },
     { id: '', label: '', width: 80 },
   ];
 
@@ -302,13 +304,13 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
         {/* No Data Found Message */}
         <EmptyState
           icon="/assets/images/patients/icon.svg"
-          header={hasActiveFilters ? 'No patients found' : 'No patients yet'}
+          header={hasActiveFilters ? t('TITLE.NO_PATIENTS_FOUND') : t('TITLE.NO_PATIENTS_YET')}
           subheader={
             hasActiveFilters
-              ? 'No patients match your current filters. Try adjusting your search criteria or clearing some filters.'
-              : "You haven't added any patients yet. Start by adding a new one."
+              ? t('TITLE.NO_PATIENTS_MATCH_FILTERS')
+              : t('TITLE.NO_PATIENTS_YET_START_BY_ADDING_NEW_ONE')
           }
-          buttonText={hasActiveFilters ? 'Clear Filters' : 'Add New Patient'}
+          buttonText={hasActiveFilters ? t('BUTTON.CLEAR_FILTERS') : t('BUTTON.ADD_NEW_PATIENT')}
           onButtonClick={hasActiveFilters ? handleFilterReset : handleOpenAddDialog}
           iconSize={150}
         />
@@ -332,9 +334,9 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
         {/* Header Section */}
 
         <SharedHeader
-          header="Patients"
-          subheader="Latest updates from the past 7 days."
-          buttonText="Add New Patient"
+          header={t('TITLE.PATIENTS')}
+          subheader={t('TITLE.LATEST_UPDATES_FROM_THE_PAST_7_DAYS')}
+          buttonText={t('BUTTON.ADD_NEW_PATIENT')}
           onButtonClick={handleOpenAddDialog}
         />
         {/* Search and Filter Bar */}
@@ -359,13 +361,13 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
           >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
               <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
-                Patients
+                {t('TITLE.PATIENTS')}
               </Typography>
               {filters.gender > 0 && (
                 <Chip
                   size="small"
                   color="default"
-                  label={`Gender: ${genders?.find((gender) => gender.Id === filters.gender)?.Name || ''}`}
+                  label={`${t('LABEL.GENDER')}: ${genders?.find((gender) => gender.Id === filters.gender)?.Name || ''}`}
                   onDelete={() => handleClearFilter('gender')}
                   sx={{ height: 24 }}
                 />
@@ -374,7 +376,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
                 <Chip
                   size="small"
                   color="default"
-                  label={`Blood Type: ${bloodTypes?.find((bloodType) => bloodType.Id === filters.bloodType)?.Name || ''}`}
+                  label={`${t('LABEL.BLOOD_TYPE')}: ${bloodTypes?.find((bloodType) => bloodType.Id === filters.bloodType)?.Name || ''}`}
                   onDelete={() => handleClearFilter('bloodType')}
                   sx={{ height: 24 }}
                 />
@@ -383,7 +385,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
                 <Chip
                   size="small"
                   color="default"
-                  label={`Search: ${filters.searchTerm}`}
+                  label={`${t('LABEL.SEARCH')}: ${filters.searchTerm}`}
                   onDelete={() => handleClearFilter('searchTerm')}
                   sx={{ height: 24 }}
                 />
@@ -400,7 +402,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
             >
               {/* Search Bar */}
               <TextField
-                placeholder="Search patient name"
+                placeholder={t('LABEL.SEARCH_PATIENT_NAME') || 'Search patient name'}
                 value={filters.searchTerm}
                 onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
                 sx={{ flexGrow: 1, maxWidth: 600, width: '100%' }}
@@ -476,19 +478,22 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
               },
             }}
           >
-            <Box sx={{ mb: 2 }}>
+            <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-                Filter Patients
+                {t('LABEL.FILTERS')}
               </Typography>
+              <Button variant="outlined" onClick={handleFilterReset} size="small" color="primary">
+                {t('BUTTON.RESET')}
+              </Button>
             </Box>
 
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <FormControl fullWidth size="small">
-                  <InputLabel>Gender</InputLabel>
+                  <InputLabel>{t('LABEL.GENDER')}</InputLabel>
                   <Select
                     value={filters.gender}
-                    label="Gender"
+                    label={t('LABEL.GENDER')}
                     onChange={(e) => handleFilterChange('gender', Number(e.target.value))}
                     startAdornment={
                       <InputAdornment position="start">
@@ -496,7 +501,6 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
                       </InputAdornment>
                     }
                   >
-                    <MenuItem value={0}>All Genders</MenuItem>
                     {genders?.map((gender) => (
                       <MenuItem key={gender.Id} value={gender.Id}>
                         {gender.Name}
@@ -508,10 +512,10 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
 
               <Grid item xs={12}>
                 <FormControl fullWidth size="small">
-                  <InputLabel>Blood Type</InputLabel>
+                  <InputLabel>{t('LABEL.BLOOD_TYPE')}</InputLabel>
                   <Select
                     value={filters.bloodType}
-                    label="Blood Type"
+                    label={t('LABEL.BLOOD_TYPE')}
                     onChange={(e) => handleFilterChange('bloodType', Number(e.target.value))}
                     startAdornment={
                       <InputAdornment position="start">
@@ -519,7 +523,6 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
                       </InputAdornment>
                     }
                   >
-                    <MenuItem value={0}>All Blood Types</MenuItem>
                     {bloodTypes?.map((bloodType) => (
                       <MenuItem key={bloodType.Id} value={bloodType.Id}>
                         {bloodType.Name}
@@ -529,43 +532,6 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
                 </FormControl>
               </Grid>
             </Grid>
-
-            {/* Active Filters Display */}
-            {(filters.gender > 0 || filters.bloodType > 0) && (
-              <Box sx={{ mt: 1.5, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                <Typography variant="body2" sx={{ alignSelf: 'center', mr: 1 }}>
-                  Active filters:
-                </Typography>
-                {filters.gender > 0 && (
-                  <Chip
-                    label={`Gender: ${genders?.find((gender) => gender.Id === filters.gender)?.Name || ''}`}
-                    onDelete={() => handleClearFilter('gender')}
-                    color="primary"
-                    variant="outlined"
-                    size="small"
-                  />
-                )}
-                {filters.bloodType > 0 && (
-                  <Chip
-                    label={`Blood Type: ${bloodTypes?.find((bloodType) => bloodType.Id === filters.bloodType)?.Name || ''}`}
-                    onDelete={() => handleClearFilter('bloodType')}
-                    color="primary"
-                    variant="outlined"
-                    size="small"
-                  />
-                )}
-              </Box>
-            )}
-
-            {/* Action Buttons */}
-            <Box sx={{ mt: 2, display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
-              <Button variant="outlined" onClick={handleFilterReset} size="small">
-                Reset
-              </Button>
-              <Button variant="contained" onClick={handleFilterApply} size="small">
-                Apply
-              </Button>
-            </Box>
           </Popover>
 
           {/* Active filters inline with header; removed bottom bar to match Rooms */}
@@ -581,13 +547,13 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
             actions={[
               {
                 sx: { color: 'primary.main' },
-                label: 'Edit',
+                label: t('BUTTON.EDIT') || 'Edit',
                 icon: 'solar:pen-bold',
                 onClick: (patient: IPatient) => handleEditPatient(patient),
               },
               {
                 sx: { color: 'error.dark' },
-                label: 'Delete',
+                label: t('BUTTON.DELETE') || 'Delete',
                 icon: 'material-symbols:delete-outline-rounded',
                 onClick: (patient: IPatient) => {
                   setSelectedId(patient.Id);
@@ -597,7 +563,9 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
             ]}
             customRender={{
               PhoneNumber: ({ PhoneNumber }: IPatient) => (
-                <Box>{formatPhoneNumber(PhoneNumber)}</Box>
+                <Box sx={{ direction: currentLang.value === 'ar' ? 'rtl' : 'ltr' }}>
+                  {formatPhoneNumber(PhoneNumber)}
+                </Box>
               ),
               EmergencyContact: ({ EmergencyContact }: IPatient) => (
                 <Box>{formatPhoneNumber(EmergencyContact)}</Box>
@@ -624,8 +592,8 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
       <ConfirmDialog
         open={confirmDelete.value}
         onClose={confirmDelete.onFalse}
-        title="Delete Patient"
-        content="Are you sure you want to delete this patient?"
+        title={t('TITLE.DELETE_PATIENT') || 'Delete Patient'}
+        content={t('TITLE.DELETE_PATIENT_CONFIRMATION') || 'Are you sure you want to delete this patient?'}
         icon={<Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />}
         action={
           <Button
@@ -644,7 +612,7 @@ export default function PatientsPage({ patients, totalCount, genders, bloodTypes
               },
             }}
           >
-            {isDeleting ? 'Deleting...' : 'Delete'}
+            {isDeleting ? t('BUTTON.DELETING') || 'Deleting...' : t('BUTTON.DELETE') || 'Delete'}
           </Button>
         }
       />
