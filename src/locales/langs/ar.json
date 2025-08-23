@@ -61,7 +61,15 @@
     "MANAGE_AND_TRACK_ALL_BILLING_TRANSACTIONS_FROM_PATIENTS": "إدارة وتتبع جميع المعاملات المالية من المرضى",
     "PAYMENTS": "المدفوعات",
     "DELETE_PAYMENT": "حذف المدفوعات",
-    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PAYMENT": "هل أنت متأكد من حذف هذه المدفوعات؟"
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PAYMENT": "هل أنت متأكد من حذف هذه المدفوعات؟",
+    "NO_DOCTORS_FOUND": "لا يوجد أطباء",
+    "NO_DOCTORS_YET": "لا يوجد أطباء",
+    "NO_DOCTORS_MATCH_FILTERS": "لا يوجد أطباء تطابق المعايير الحالية. يرجى تعديل المعايير أو تصفير بعض المعايير.",
+    "NO_DOCTORS_YET_START_BY_ADDING_NEW_ONE": "لم تقم بإضافة أطباء بعد. ابدأ بإضافة طبيب جديد.",
+    "DOCTORS": "الأطباء",
+    "MANAGE_ALL_DOCTORS": "إدارة جميع الأطباء، وتخصصاتهم، وحالات إتاحتهم.",
+    "DELETE_DOCTOR": "حذف الطبيب",
+    "DELETE_DOCTOR_CONFIRMATION": "هل أنت متأكد من حذف هذا الطبيب؟"
   },
   "LABEL": {
     "HELP_CENTER": "مركز المساعدة",
@@ -130,7 +138,12 @@
     "AMOUNT": "المبلغ",
     "PAYMENT_METHOD": "طريقة الدفع",
     "APPOINTMENT": "الموعد",
-    "DESCRIPTION": "الوصف"
+    "DESCRIPTION": "الوصف",
+    "SPECIALIZATION": "التخصص",
+    "PASSWORD": "كلمة المرور",
+    "EMAIL": "البريد الإلكتروني",
+    "SEARCH": "البحث",
+    "SEARCH_DOCTORS_NAME": "ابحث عن طبيب بالاسم ..."
   },
   "BUTTON": {
     "LOGIN": "تسجيل الدخول",
@@ -176,13 +189,16 @@
     "ADD_NEW_ROOM": "اضافة غرفة جديدة",
     "ADD_NEW_PAYMENT": "اضافة مدفوعة جديدة",
     "UPDATE_PAYMENT": "تحديث المدفوعات",
-    "CREATE_PAYMENT": "انشاء المدفوعات"
+    "CREATE_PAYMENT": "انشاء المدفوعات",
+    "ADD_NEW_DOCTOR": "اضافة طبيب جديد",
+    "UPDATE_DOCTOR": "تحديث الطبيب",
+    "ADD_DOCTOR": "اضافة الطبيب"
   },
   "SIDEBAR": {
     "MAIN": "الرئيسية",
     "APPOINTMENTS": "المواعيد",
     "ROOMS": "الغرف",
-    "DOCTORS": "الطبيب",
+    "DOCTORS": "الأطباء",
     "PATIENTS": "المرضى",
     "INPATIENTS": "المرضى الداخليين",
     "USERS": "المستخدمين",

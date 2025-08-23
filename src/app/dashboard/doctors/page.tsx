@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 
 import { useLookups } from 'src/hooks/use-lookups-query';
-import { useDoctors ,useSpecializations} from 'src/hooks/use-doctors-query';
+import { useDoctors, useSpecializations } from 'src/hooks/use-doctors-query';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -31,7 +31,6 @@ export default function Page() {
   if (isLoading) {
     return <LoadingScreen />;
   }
-
 
   return (
     <DoctorsPage

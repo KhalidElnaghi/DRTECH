@@ -207,10 +207,10 @@ const DoctorDialog = ({
   const getSubmitButtonText = () => {
     if (isSubmitting || createDoctorMutation.isPending || updateDoctorMutation.isPending) {
       return isEditing
-        ? t('COMMON.UPDATING') || 'Updating...'
-        : t('COMMON.CREATING') || 'Creating...';
+        ? t('BUTTON.UPDATING') || 'Updating...'
+        : t('BUTTON.CREATING') || 'Creating...';
     }
-    return isEditing ? 'Update Doctor' : 'Add Doctor';
+    return isEditing ? t('BUTTON.UPDATE_DOCTOR') || 'Update Doctor' : t('BUTTON.ADD_DOCTOR') || 'Add Doctor';
   };
 
   return (
@@ -259,7 +259,7 @@ const DoctorDialog = ({
                   color: '#666D80',
                 }}
               >
-                {t('DOCTOR.FULL_NAME') || 'Full Name'}
+                {t('LABEL.FULL_NAME') || 'Full Name'}
               </Typography>
               <Controller
                 name="FullName"
@@ -268,7 +268,6 @@ const DoctorDialog = ({
                   <TextField
                     {...field}
                     fullWidth
-                    placeholder="Enter full name"
                     error={!!errors.FullName}
                     helperText={errors.FullName?.message}
                   />
@@ -289,7 +288,7 @@ const DoctorDialog = ({
                   color: '#666D80',
                 }}
               >
-                {t('DOCTOR.SPECIALIZATION') || 'Specialization'}
+                {t('LABEL.SPECIALIZATION') || 'Specialization'}
               </Typography>
               <Controller
                 name="SpecializationId"
@@ -297,7 +296,7 @@ const DoctorDialog = ({
                 render={({ field }) => (
                   <FormControl fullWidth error={!!errors.SpecializationId}>
                     <Select {...field}>
-                      {specializations?.map((spec) => (
+                      {specializations?.map((spec: ISpecialization) => (
                         <MenuItem key={spec.Id} value={spec.Id}>
                           {spec.Name}
                         </MenuItem>
@@ -330,7 +329,7 @@ const DoctorDialog = ({
                   color: '#666D80',
                 }}
               >
-                {t('DOCTOR.PHONE_NUMBER') || 'Phone Number'}
+                {t('LABEL.PHONE_NUMBER') || 'Phone Number'}
               </Typography>
               <Controller
                 name="PhoneNumber"
@@ -402,7 +401,7 @@ const DoctorDialog = ({
                     color: '#666D80',
                   }}
                 >
-                  {t('DOCTOR.EMAIL') || 'Email'}
+                  {t('LABEL.EMAIL') || 'Email'}
                 </Typography>
                 <Controller
                   name="email"
@@ -435,7 +434,7 @@ const DoctorDialog = ({
                     color: '#666D80',
                   }}
                 >
-                  {t('DOCTOR.PASSWORD') || 'Password'}
+                  {t('LABEL.PASSWORD') || 'Password'}
                 </Typography>
                 <Controller
                   name="password"
@@ -458,7 +457,7 @@ const DoctorDialog = ({
 
         <DialogActions>
           <Button onClick={handleClose} color="primary" variant="outlined">
-            {t('COMMON.CANCEL') || 'Cancel'}
+            {t('BUTTON.CANCEL') || 'Cancel'}
           </Button>
           <Button
             type="submit"

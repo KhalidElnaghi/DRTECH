@@ -57,7 +57,15 @@
     "MANAGE_AND_TRACK_ALL_BILLING_TRANSACTIONS_FROM_PATIENTS": "Manage and track all billing transactions from patients",
     "PAYMENTS": "Payments",
     "DELETE_PAYMENT": "Delete Payment",
-    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PAYMENT": "Are you sure you want to delete this payment?"
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PAYMENT": "Are you sure you want to delete this payment?",
+    "NO_DOCTORS_FOUND": "No doctors found",
+    "NO_DOCTORS_YET": "No doctors yet",
+    "NO_DOCTORS_MATCH_FILTERS": "No doctors match your current filters. Try adjusting your search criteria or clearing some filters.",
+    "NO_DOCTORS_YET_START_BY_ADDING_NEW_ONE": "You haven't added any doctors yet. Start by adding a new one.",
+    "DOCTORS": "Doctors",
+    "MANAGE_ALL_DOCTORS": "Manage all doctors, their specializations, and availability status.",
+    "DELETE_DOCTOR": "Delete Doctor",
+    "DELETE_DOCTOR_CONFIRMATION": "Are you sure you want to delete this doctor?"
   },
   "LABEL": {
     "HELP_CENTER": "Help Center",
@@ -128,7 +136,12 @@
     "AMOUNT": "Amount",
     "PAYMENT_METHOD": "Payment Method",
     "APPOINTMENT": "Appointment",
-    "DESCRIPTION": "Description"
+    "DESCRIPTION": "Description",
+    "SPECIALIZATION": "Specialization",
+    "PASSWORD": "Password",
+    "EMAIL": "Email",
+    "SEARCH": "Search",
+    "SEARCH_DOCTORS_NAME": "Search doctors by name..."
   },
   "BUTTON": {
     "LOGIN": "Login",
@@ -168,7 +181,10 @@
     "ADD_NEW_ROOM": "Add New Room",
     "ADD_NEW_PAYMENT": "Add New Payment",
     "UPDATE_PAYMENT": "Update Payment",
-    "CREATE_PAYMENT": "Create Payment"
+    "CREATE_PAYMENT": "Create Payment",
+    "ADD_NEW_DOCTOR": "Add New Doctor",
+    "UPDATE_DOCTOR": "Update Doctor",
+    "ADD_DOCTOR": "Add Doctor"
   },
   "SIDEBAR": {
     "MAIN": "Main",

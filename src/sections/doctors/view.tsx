@@ -52,14 +52,6 @@ interface FilterState {
   specializationId: number;
 }
 
-const TABLE_HEAD = [
-  { id: 'FullName', label: 'Full Name', align: cellAlignment.left },
-  { id: 'SpecializationName', label: 'Specialization', align: cellAlignment.left },
-  { id: 'PhoneNumber', label: 'Phone Number', align: cellAlignment.left },
-  { id: 'StatusName', label: 'Status', align: cellAlignment.left },
-  { id: '', label: '', width: 80 },
-];
-
 export default function DoctorsPage({
   doctors,
   totalCount,
@@ -85,6 +77,22 @@ export default function DoctorsPage({
   const [selectedId, setSelectedId] = useState<string>('');
   const confirmDelete = useBoolean();
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const TABLE_HEAD = [
+    { id: 'FullName', label: t('LABEL.FULL_NAME') || 'Full Name', align: cellAlignment.left },
+    {
+      id: 'SpecializationName',
+      label: t('LABEL.SPECIALIZATION') || 'Specialization',
+      align: cellAlignment.left,
+    },
+    {
+      id: 'PhoneNumber',
+      label: t('LABEL.PHONE_NUMBER') || 'Phone Number',
+      align: cellAlignment.left,
+    },
+    { id: 'StatusName', label: t('LABEL.STATUS') || 'Status', align: cellAlignment.left },
+    { id: '', label: '', width: 80 },
+  ];
 
   // React Query mutations
   const deleteDoctorMutation = useDeleteDoctor();
@@ -318,13 +326,13 @@ export default function DoctorsPage({
 
         <EmptyState
           icon="/assets/images/doctors/icon.svg"
-          header={hasActiveFilters ? 'No appointments found' : 'No appointments yet'}
+          header={hasActiveFilters ? t('TITLE.NO_DOCTORS_FOUND') : t('TITLE.NO_DOCTORS_YET')}
           subheader={
             hasActiveFilters
-              ? 'No appointments match your current filters. Try adjusting your search criteria or clearing some filters.'
-              : "You haven't scheduled any appointments yet. Start by adding a new one."
+              ? t('TITLE.NO_DOCTORS_MATCH_FILTERS')
+              : t('TITLE.NO_DOCTORS_YET_START_BY_ADDING_NEW_ONE')
           }
-          buttonText="Add New Doctor"
+          buttonText={t('BUTTON.ADD_NEW_DOCTOR') || 'Add New Doctor'}
           onButtonClick={hasActiveFilters ? handleResetFilters : handleOpenAddDialog}
           iconSize={150}
         />
@@ -346,9 +354,9 @@ export default function DoctorsPage({
         {/* Header Section */}
 
         <SharedHeader
-          header={t('DOCTOR.DOCTORS') || 'Doctors'}
-          subheader="Manage all doctors, their specializations, and availability status."
-          buttonText={t('DOCTOR.ADD_DOCTOR') || 'Add New Doctor'}
+          header={t('TITLE.DOCTORS')}
+          subheader={t('TITLE.MANAGE_ALL_DOCTORS')}
+          buttonText={t('BUTTON.ADD_NEW_DOCTOR')}
           onButtonClick={handleOpenAddDialog}
         />
         {/* Search and Filter Bar */}
@@ -373,13 +381,13 @@ export default function DoctorsPage({
           >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
               <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
-                {t('DOCTOR.DOCTORS') || 'Doctors'}
+                {t('TITLE.DOCTORS')}
               </Typography>
               {!!filters.searchTerm && (
                 <Chip
                   size="small"
                   color="default"
-                  label={`Search: ${filters.searchTerm}`}
+                  label={`${t('LABEL.SEARCH')}: ${filters.searchTerm}`}
                   onDelete={() => {
                     const next = { ...filters, searchTerm: '' };
                     setFilters(next);
@@ -392,7 +400,7 @@ export default function DoctorsPage({
                 <Chip
                   size="small"
                   color="default"
-                  label={`Specialization: ${activeSpecializationName}`}
+                  label={`${t('LABEL.SPECIALIZATION')}: ${activeSpecializationName}`}
                   onDelete={() => handleFilterChange('specializationId' as const, 0)}
                   sx={{ height: 24 }}
                 />
@@ -401,7 +409,7 @@ export default function DoctorsPage({
                 <Chip
                   size="small"
                   color="default"
-                  label={`Status: ${activeStatusName}`}
+                  label={`${t('LABEL.STATUS')}: ${activeStatusName}`}
                   onDelete={() => handleFilterChange('status' as const, 0)}
                   sx={{ height: 24 }}
                 />
@@ -418,7 +426,10 @@ export default function DoctorsPage({
             >
               {/* Search Bar */}
               <TextField
-                placeholder="Search doctors by name, specialization, or phone..."
+                placeholder={
+                  t('LABEL.SEARCH_DOCTORS_NAME') ||
+                  'Search doctors by name, specialization, or phone...'
+                }
                 value={filters.searchTerm}
                 onChange={handleSearchChange}
                 sx={{ flexGrow: 1, maxWidth: 600, width: '100%' }}
@@ -479,19 +490,22 @@ export default function DoctorsPage({
               },
             }}
           >
-            <Box sx={{ mb: 2 }}>
+            <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-                Filter Options
+                {t('LABEL.FILTERS')}
               </Typography>
+              <Button variant="outlined" onClick={handleResetFilters} size="small" color="primary">
+                {t('BUTTON.RESET')}
+              </Button>
             </Box>
 
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <FormControl fullWidth size="small">
-                  <InputLabel>Specialization</InputLabel>
+                  <InputLabel>{t('LABEL.SPECIALIZATION')}</InputLabel>
                   <Select
                     value={filters.specializationId}
-                    label="Specialization"
+                    label={t('LABEL.SPECIALIZATION')}
                     onChange={(e) => handleFilterChange('specializationId', Number(e.target.value))}
                     startAdornment={
                       <InputAdornment position="start">
@@ -499,7 +513,6 @@ export default function DoctorsPage({
                       </InputAdornment>
                     }
                   >
-                    <MenuItem value={0}>All Specializations</MenuItem>
                     {specializations?.map((spec: ISpecialization) => (
                       <MenuItem key={spec.Id} value={spec.Id}>
                         {spec.Name}
@@ -511,10 +524,10 @@ export default function DoctorsPage({
 
               <Grid item xs={12}>
                 <FormControl fullWidth size="small">
-                  <InputLabel>Status</InputLabel>
+                  <InputLabel>{t('LABEL.STATUS')}</InputLabel>
                   <Select
                     value={filters.status}
-                    label="Status"
+                    label={t('LABEL.STATUS')}
                     onChange={(e) => handleFilterChange('status', Number(e.target.value))}
                     startAdornment={
                       <InputAdornment position="start">
@@ -522,7 +535,6 @@ export default function DoctorsPage({
                       </InputAdornment>
                     }
                   >
-                    <MenuItem value={0}>All Statuses</MenuItem>
                     {statusOptions?.map((status) => (
                       <MenuItem key={status.Id} value={status.Id}>
                         {status.Name}
@@ -559,16 +571,6 @@ export default function DoctorsPage({
                 )}
               </Box>
             )}
-
-            {/* Action Buttons */}
-            <Box sx={{ mt: 2, display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
-              <Button variant="outlined" onClick={handleResetFilters} size="small">
-                Reset
-              </Button>
-              <Button variant="contained" onClick={handleCloseFilterPopover} size="small">
-                Apply
-              </Button>
-            </Box>
           </Popover>
 
           {/* Auto-close popover when URL params change or anchor unmounts */}
@@ -636,10 +638,10 @@ export default function DoctorsPage({
       <ConfirmDialog
         open={confirmDelete.value}
         onClose={confirmDelete.onFalse}
-        title={t('DOCTOR.DELETE_DOCTOR') || 'Delete Doctor'}
+        title={t('TITLE.DELETE_DOCTOR') || 'Delete Doctor'}
         icon={<Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />}
         content={
-          t('DOCTOR.DELETE_DOCTOR_CONFIRMATION') || 'Are you sure you want to delete this doctor?'
+          t('TITLE.DELETE_DOCTOR_CONFIRMATION') || 'Are you sure you want to delete this doctor?'
         }
         action={
           <Button
