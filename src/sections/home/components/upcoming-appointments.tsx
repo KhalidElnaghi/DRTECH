@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 
-import { Box, List, Paper, Avatar, Typography, IconButton } from '@mui/material';
+import { Box, Paper, Avatar, Typography, IconButton } from '@mui/material';
 
 import { useDashboardUpcomingAppointments } from 'src/hooks/use-dashboard-query';
 
-import { fDate, fFullDate, formatDateLocal, fTime } from 'src/utils/format-time';
+import { fTime, fFullDate } from 'src/utils/format-time';
 
 import Iconify from 'src/components/iconify';
 

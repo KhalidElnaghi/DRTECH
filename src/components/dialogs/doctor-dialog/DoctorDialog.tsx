@@ -15,20 +15,21 @@ import {
   MenuItem,
   TextField,
   Typography,
+  IconButton,
   DialogTitle,
   FormControl,
   DialogActions,
   DialogContent,
-  IconButton,
 } from '@mui/material';
 
 import { useCreateDoctor, useUpdateDoctor } from 'src/hooks/use-doctors-query';
 
 import { useTranslate } from 'src/locales';
 
+import Iconify from 'src/components/iconify';
+
 import { ILookup } from 'src/types/lookups';
 import { IDoctor, ICreateDoctor, IUpdateDoctor, ISpecialization } from 'src/types/doctors';
-import Iconify from 'src/components/iconify';
 
 interface DoctorDialogProps {
   open: boolean;
@@ -296,9 +297,6 @@ const DoctorDialog = ({
                 render={({ field }) => (
                   <FormControl fullWidth error={!!errors.SpecializationId}>
                     <Select {...field}>
-                      <MenuItem value={0}>
-                        {t('DOCTOR.SELECT_SPECIALIZATION') || 'Select Specialization'}
-                      </MenuItem>
                       {specializations?.map((spec) => (
                         <MenuItem key={spec.Id} value={spec.Id}>
                           {spec.Name}

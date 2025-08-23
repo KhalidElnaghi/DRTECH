@@ -1,8 +1,8 @@
 'use client';
 
 import * as yup from 'yup';
-import { useEffect } from 'react';
 import { useSnackbar } from 'notistack';
+import { useMemo, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -21,6 +21,8 @@ import {
   DialogActions,
 } from '@mui/material';
 
+import { useDoctorsDropdown } from 'src/hooks/use-doctors-query';
+import { usePatientsDropdown } from 'src/hooks/use-patients-query';
 import { useNewAppointment, useEditAppointment } from 'src/hooks/use-appointments-query';
 
 import { useTranslate } from 'src/locales';
@@ -47,8 +49,6 @@ interface AppointmentDialogProps {
 export default function AppointmentDialog({
   open,
   onClose,
-  doctors,
-  patients,
   services,
   appointment,
   appointmentStatus,
@@ -59,7 +59,10 @@ export default function AppointmentDialog({
   // React Query mutations
   const editAppointmentMutation = useEditAppointment();
   const newAppointmentMutation = useNewAppointment();
-
+  const { data: doctorsData } = useDoctorsDropdown();
+  const { data: patientsData } = usePatientsDropdown();
+  const doctors = useMemo(() => doctorsData?.Data || doctorsData || [], [doctorsData]);
+  const patients = useMemo(() => patientsData?.Data || patientsData || [], [patientsData]);
   // Helper function to combine date and time
   const combineDateAndTime = (date: Date, time: Date): Date => {
     const combined = new Date(date);
@@ -295,7 +298,7 @@ export default function AppointmentDialog({
               >
                 {patients.map((patient: any) => (
                   <MenuItem key={patient.Id} value={patient.Id}>
-                    {patient?.FullName}
+                    {patient?.Name}
                   </MenuItem>
                 ))}
               </RHFSelect>
@@ -324,7 +327,7 @@ export default function AppointmentDialog({
               >
                 {doctors.map((doctor: any) => (
                   <MenuItem key={doctor.Id} value={doctor.Id}>
-                    {doctor?.FullName}
+                    {doctor?.Name}
                   </MenuItem>
                 ))}
               </RHFSelect>

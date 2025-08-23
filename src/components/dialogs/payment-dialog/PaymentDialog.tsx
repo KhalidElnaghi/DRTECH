@@ -37,6 +37,7 @@ type Props = {
   onClose: () => void;
   paymentMethods: ILookup[];
   paymentStatus: ILookup[];
+  ServiceTypes: ILookup[];
   payment?: import('src/types/payments').IPayment | null;
 };
 
@@ -44,13 +45,22 @@ const getSchema = (isEditing: boolean) =>
   yup.object().shape({
     patientId: yup.number().required('Patient is required').min(1, 'Patient is required'),
     doctorId: yup.number().required('Doctor is required').min(1, 'Doctor is required'),
-    PaymentAmount: yup.number().required('Amount is required').min(0.01, 'Amount is required'),
+    PaymentAmount: isEditing
+      ? yup.number().optional()
+      : yup
+          .number()
+          .required('Payment amount is required')
+          .min(0.01, 'Payment amount must be greater than 0'),
     paymentMethod: isEditing
       ? yup.number().optional()
       : yup.number().required('Payment method is required').min(1, 'Payment method is required'),
     AppointmentId: isEditing
       ? yup.number().optional()
       : yup.number().required('Appointment is required').min(1, 'Appointment is required'),
+    ServiceType: yup
+      .number()
+      .required('Service type is required')
+      .min(1, 'Service type is required'),
     status: yup.number().required('Status is required').min(1, 'Status is required'),
     description: yup.string().default(''),
   });
@@ -60,6 +70,7 @@ export default function PaymentDialog({
   onClose,
   paymentMethods,
   paymentStatus,
+  ServiceTypes,
   payment,
 }: Props) {
   const { data: doctorsData } = useDoctorsDropdown();
@@ -83,6 +94,7 @@ export default function PaymentDialog({
       PaymentAmount: 0,
       paymentMethod: 0,
       AppointmentId: 0,
+      ServiceType: 0,
       status: 0,
       description: '',
     },
@@ -100,6 +112,7 @@ export default function PaymentDialog({
         PaymentAmount: payment.PaymentAmount || 0,
         paymentMethod: payment.PaymentMethod || 0,
         AppointmentId: payment.AppointmentId || 0,
+        ServiceType: payment.ServiceType || 0,
         status: payment.Status || 0,
         description: payment.Description || '',
       });
@@ -110,6 +123,7 @@ export default function PaymentDialog({
         PaymentAmount: 0,
         paymentMethod: 0,
         AppointmentId: 0,
+        ServiceType: 0,
         status: 0,
         description: '',
       });
@@ -123,7 +137,8 @@ export default function PaymentDialog({
         data: {
           patientId: data.patientId,
           doctorId: data.doctorId,
-          paymentAmount: Number(data.PaymentAmount),
+          PaymentAmount: Number(data.PaymentAmount),
+          ServiceType: data.ServiceType,
           status: data.status,
           description: data.description || '',
         },
@@ -219,6 +234,19 @@ export default function PaymentDialog({
                 </RHFSelect>
               </Box>
             )}
+
+            <Box>
+              <Typography sx={{ fontSize: '12px', mb: 1, color: '#666D80' }}>
+                Service Type
+              </Typography>
+              <RHFSelect name="ServiceType" placeholder="Select Service Type">
+                {ServiceTypes?.map((s) => (
+                  <MenuItem key={s.Id} value={s.Id}>
+                    {s.Name}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+            </Box>
 
             <Box>
               <Typography sx={{ fontSize: '12px', mb: 1, color: '#666D80' }}>Status</Typography>

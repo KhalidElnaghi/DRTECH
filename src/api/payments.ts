@@ -19,9 +19,10 @@ export type CreatePaymentData = {
 export type UpdatePaymentData = {
   patientId: number;
   doctorId: number;
-  paymentAmount: number;
+  PaymentAmount: number;
   status: number;
   description: string;
+  ServiceType: number;
 };
 
 export const fetchPaymentsClient = async (params: PaymentParams) => {

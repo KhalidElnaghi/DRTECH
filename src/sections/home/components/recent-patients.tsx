@@ -2,7 +2,7 @@
 
 'use client';
 
-import { Paper, Typography, List, ListItem, ListItemText } from '@mui/material';
+import { List, Paper, ListItem, Typography, ListItemText } from '@mui/material';
 
 import { useDashboardPatients } from 'src/hooks/use-dashboard-query';
 

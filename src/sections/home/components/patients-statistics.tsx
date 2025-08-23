@@ -17,6 +17,7 @@ import { useDashboardPatientsStatistics } from 'src/hooks/use-dashboard-query';
 
 import Iconify from 'src/components/iconify';
 import Chart, { useChart } from 'src/components/chart';
+
 import PatientsStatisticsSkeleton from './skeletons/patients-statistics-skeleton';
 
 type ApiChartDataPoint = {

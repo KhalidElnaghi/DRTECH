@@ -9,6 +9,8 @@ export type IPayment = {
   PaymentAmount: number;
   PaymentMethod: number;
   PaymentMethodName?: string;
+  ServiceType: number;
+  ServiceTypeName?: string;
   Status: number;
   StatusName?: string;
   Description?: string;

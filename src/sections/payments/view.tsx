@@ -41,6 +41,7 @@ interface IProps {
   doctors: ILookup[];
   paymentMethods: ILookup[];
   paymentStatus: ILookup[];
+  serviceTypes: ILookup[];
 }
 
 interface FilterState {
@@ -54,6 +55,7 @@ export default function PaymentsPage({
   doctors,
   paymentMethods,
   paymentStatus,
+  serviceTypes,
 }: IProps) {
   const filterButtonRef = useRef<HTMLButtonElement | null>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -89,6 +91,7 @@ export default function PaymentsPage({
     () => [
       { id: 'PatientName', label: 'Patient' },
       { id: 'DoctorName', label: 'Doctor' },
+      { id: 'ServiceType', label: 'Service Type' },
       { id: 'PaymentMethodName', label: 'Method' },
       { id: 'PaymentAmount', label: 'Amount' },
       { id: 'StatusName', label: 'Status' },
@@ -217,6 +220,7 @@ export default function PaymentsPage({
           onClose={createDialog.onFalse}
           paymentMethods={paymentMethods}
           paymentStatus={paymentStatus}
+          ServiceTypes={serviceTypes}
         />
       </>
     );
@@ -443,6 +447,7 @@ export default function PaymentsPage({
                   </Box>
                 );
               },
+              ServiceType: (row: any) => serviceTypes.find((s) => s.Id === row?.ServiceType)?.Name,
             }}
             emptyIcon="/assets/images/payments/icon.svg"
           />
@@ -484,6 +489,7 @@ export default function PaymentsPage({
         }}
         paymentMethods={paymentMethods}
         paymentStatus={paymentStatus}
+        ServiceTypes={serviceTypes}
         payment={selectedPayment}
       />
     </>

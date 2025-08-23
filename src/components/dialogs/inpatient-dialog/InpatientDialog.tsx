@@ -15,23 +15,25 @@ import {
   Button,
   MenuItem,
   Typography,
+  IconButton,
   DialogTitle,
   DialogContent,
   DialogActions,
-  IconButton,
 } from '@mui/material';
 
+import { usePatientsDropdown } from 'src/hooks/use-patients-query';
 import { useCreateInpatient, useUpdateInpatient } from 'src/hooks/use-inpatients-query';
 
 import { useTranslate } from 'src/locales';
 
+import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
 import RHFTextField from 'src/components/hook-form/rhf-text-field-form';
 
 import { IRoom } from 'src/types/room';
+import { ILookup } from 'src/types/lookups';
 import { IPatient } from 'src/types/patient';
 import { IInpatient } from 'src/types/inpatient';
-import Iconify from 'src/components/iconify';
 
 interface InpatientDialogProps {
   open: boolean;
@@ -41,19 +43,14 @@ interface InpatientDialogProps {
   inpatient?: IInpatient | null;
 }
 
-export default function InpatientDialog({
-  open,
-  onClose,
-  patients,
-  rooms,
-  inpatient,
-}: InpatientDialogProps) {
+export default function InpatientDialog({ open, onClose, rooms, inpatient }: InpatientDialogProps) {
   const { t } = useTranslate();
   const { enqueueSnackbar } = useSnackbar();
 
   const createInpatientMutation = useCreateInpatient();
   const updateInpatientMutation = useUpdateInpatient();
-
+  const { data: patientsData } = usePatientsDropdown();
+  const patients = useMemo(() => patientsData?.Data || patientsData || [], [patientsData]);
   const defaultValues = useMemo(
     () => ({
       PatientId: inpatient?.PatientId || 0,
@@ -243,9 +240,9 @@ export default function InpatientDialog({
                       error={!!error}
                       helperText={error?.message}
                     >
-                      {patients.map((patient) => (
+                      {patients.map((patient: ILookup) => (
                         <MenuItem key={patient.Id} value={patient.Id}>
-                          {patient.FullName}
+                          {patient.Name}
                         </MenuItem>
                       ))}
                     </RHFSelect>

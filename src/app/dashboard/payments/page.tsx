@@ -25,8 +25,10 @@ export default function Page() {
   const { data: doctorsData, isLoading: doctorsLoading } = useDoctorsDropdown();
   const { data: paymentMethods, isLoading: methodsLoading } = useLookups('payment-methods');
   const { data: paymentStatus, isLoading: statusLoading } = useLookups('payment-status');
+  const { data: serviceTypes, isLoading: serviceTypesLoading } = useLookups('service-types');
 
-  const isLoading = paymentsLoading || doctorsLoading || methodsLoading || statusLoading;
+  const isLoading =
+    paymentsLoading || doctorsLoading || methodsLoading || statusLoading || serviceTypesLoading;
 
   if (isLoading) return <LoadingScreen />;
 
@@ -37,6 +39,7 @@ export default function Page() {
       doctors={doctorsData?.Data || doctorsData?.Items || doctorsData || []}
       paymentMethods={paymentMethods || []}
       paymentStatus={paymentStatus || []}
+      serviceTypes={serviceTypes || []}
     />
   );
 }

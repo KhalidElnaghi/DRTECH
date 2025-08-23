@@ -6,17 +6,16 @@ import { useRouter } from 'next/navigation';
 
 import { Box, Grid, Paper, Button, Typography, IconButton } from '@mui/material';
 
+import { paths } from 'src/routes/paths';
+
 import { useDashboardSummary } from 'src/hooks/use-dashboard-query';
 
+import axiosInstance from 'src/utils/axios';
 import { fDateTime } from 'src/utils/format-time';
 
 import { useAuthContext } from 'src/auth/hooks';
 
 import Iconify from 'src/components/iconify';
-
-import { paths } from 'src/routes/paths';
-
-import axiosInstance from 'src/utils/axios';
 
 import DashboardSummarySkeleton from './skeletons/dashboard-summary-skeleton';
 
