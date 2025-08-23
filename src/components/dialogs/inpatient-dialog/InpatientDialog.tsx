@@ -373,7 +373,7 @@ export default function InpatientDialog({ open, onClose, rooms, inpatient }: Inp
                 }}
               >
                 {t('INPATIENT.DIAGNOSIS') || 'Diagnosis'}{' '}
-                <span style={{ color: '#666D90', fontSize: '10px' }}>Optional</span>
+                <span style={{ color: '#666D90', fontSize: '10px' }}>{t('LABEL.OPTIONAL') || 'Optional'}</span>
               </Typography>
               <Controller
                 name="Diagnosis"
@@ -397,7 +397,7 @@ export default function InpatientDialog({ open, onClose, rooms, inpatient }: Inp
 
         <DialogActions sx={{ px: 3, pb: 3 }}>
           <Button variant="outlined" color="primary" onClick={handleClose}>
-            Cancel
+            {t('BUTTON.CANCEL') || 'Cancel'}
           </Button>
           <LoadingButton
             type="submit"
@@ -406,7 +406,7 @@ export default function InpatientDialog({ open, onClose, rooms, inpatient }: Inp
             loading={isSubmitting}
             disabled={isSubmitting}
           >
-            Add Inpatient
+            {inpatient ? t('BUTTON.UPDATE_INPATIENT') || 'Update Inpatient' : t('BUTTON.ADD_NEW_INPATIENT') || 'Add Inpatient'}
           </LoadingButton>
         </DialogActions>
       </FormProvider>

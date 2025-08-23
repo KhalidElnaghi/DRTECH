@@ -77,7 +77,12 @@
     "PATIENTS": "المرضى",
     "LATEST_UPDATES_FROM_THE_PAST_7_DAYS": "آخر تحديثات من الأسبوع الماضي.",
     "DELETE_PATIENT": "حذف المريض",
-    "DELETE_PATIENT_CONFIRMATION": "هل أنت متأكد من حذف هذا المريض؟"
+    "DELETE_PATIENT_CONFIRMATION": "هل أنت متأكد من حذف هذا المريض؟",
+    "NO_INPATIENTS_YET": "لا يوجد مرضى داخليين",
+    "NO_INPATIENTS_YET_START_BY_ADDING_NEW_ONE": "لم تقم بإضافة مرضى داخليين بعد. ابدأ بإضافة مريض داخلي جديد.",
+    "INPATIENTS": "المرضى الداخليين",
+    "DELETE_INPATIENT": "حذف المريض الداخلي",
+    "DELETE_INPATIENT_CONFIRMATION": "هل أنت متأكد من حذف هذا المريض الداخلي؟"
   },
   "LABEL": {
     "HELP_CENTER": "مركز المساعدة",
@@ -152,7 +157,11 @@
     "EMAIL": "البريد الإلكتروني",
     "SEARCH": "البحث",
     "SEARCH_DOCTORS_NAME": "ابحث عن طبيب بالاسم ...",
-    "SEARCH_PATIENT_NAME": "ابحث عن مريض بالاسم ..."
+    "SEARCH_PATIENT_NAME": "ابحث عن مريض بالاسم ...",
+    "ADMISSION_DATE": "تاريخ القبول",
+    "DISCHARGE_DATE": "تاريخ الاعادة",
+    "DIAGNOSIS": "التشخيص",
+    "ROOM_NUMBER": "رقم الغرفة"
   },
   "BUTTON": {
     "LOGIN": "تسجيل الدخول",
@@ -205,7 +214,9 @@
     "ADD_NEW_PATIENT": "اضافة مريض جديد",
     "UPDATE_PATIENT": "تحديث المريض",
     "ADD_PATIENT": "اضافة المريض",
-    "DELETING": "جاري الحذف..."
+    "DELETING": "جاري الحذف...",
+    "ADD_NEW_INPATIENT": "اضافة مريض مقيم جديد",
+    "UPDATE_INPATIENT": "تحديث المريض الداخلي"
   },
   "SIDEBAR": {
     "MAIN": "الرئيسية",

@@ -17,14 +17,14 @@ import { useDeleteInpatient } from 'src/hooks/use-inpatients-query';
 import { useTranslate } from 'src/locales';
 import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 
+import EmptyState from 'src/components/empty-state';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import SharedHeader from 'src/components/shared-header/empty-state';
 import InpatientDialog from 'src/components/dialogs/inpatient-dialog';
 
 import { IRoom } from 'src/types/room';
 import { IPatient } from 'src/types/patient';
 import { IInpatient } from 'src/types/inpatient';
-import SharedHeader from 'src/components/shared-header/empty-state';
-import EmptyState from 'src/components/empty-state';
 
 interface IProps {
   inpatients: IInpatient[];
@@ -83,11 +83,11 @@ export default function InpatientsPage({ inpatients, totalCount, patients, rooms
 
   // Table configuration for SharedTable
   const TABLE_HEAD = [
-    { id: 'PatientName', label: 'Patient Name' },
-    { id: 'RoomNumber', label: 'Room Number' },
-    { id: 'AdmissionDate', label: 'Admission Date' },
-    { id: 'DischargeDate', label: 'Discharge Date' },
-    { id: 'Diagnosis', label: 'Diagnosis' },
+    { id: 'PatientName', label: t('LABEL.PATIENT_NAME') || 'Patient Name' },
+    { id: 'RoomNumber', label: t('LABEL.ROOM_NUMBER') || 'Room Number' },
+    { id: 'AdmissionDate', label: t('LABEL.ADMISSION_DATE') || 'Admission Date' },
+    { id: 'DischargeDate', label: t('LABEL.DISCHARGE_DATE') || 'Discharge Date' },
+    { id: 'Diagnosis', label: t('LABEL.DIAGNOSIS') || 'Diagnosis' },
     { id: '', label: '', width: 80 },
   ];
 
@@ -98,9 +98,9 @@ export default function InpatientsPage({ inpatients, totalCount, patients, rooms
         {/* No Data Found Message */}
         <EmptyState
           icon="/assets/images/inpatients/icon.svg"
-          header="No inpatients yet"
-          subheader="You haven&apos;t added any inpatients yet. Start by adding a new one."
-          buttonText="Add New Inpatient"
+          header={t('TITLE.NO_INPATIENTS_YET') || 'No inpatients yet'}
+          subheader={t('TITLE.NO_INPATIENTS_YET_START_BY_ADDING_NEW_ONE') || 'You haven&apos;t added any inpatients yet. Start by adding a new one.'}
+          buttonText={t('BUTTON.ADD_NEW_INPATIENT') || 'Add New Inpatient'}
           onButtonClick={ handleOpenAddDialog}
           iconSize={150}
         />
@@ -124,9 +124,9 @@ export default function InpatientsPage({ inpatients, totalCount, patients, rooms
         {/* Header Section */}
 
         <SharedHeader
-        header="Inpatients"
-        subheader="Latest updates from the past 7 days."
-        buttonText="Add New Inpatient"
+        header={t('TITLE.INPATIENTS') || 'Inpatients'}
+        subheader={t('TITLE.LATEST_UPDATES_FROM_THE_PAST_7_DAYS') || 'Latest updates from the past 7 days.'}
+        buttonText={t('BUTTON.ADD_NEW_INPATIENT') || 'Add New Inpatient'}
         onButtonClick={handleOpenAddDialog}
       />
         {/* Search and Filter Bar */}
@@ -151,7 +151,7 @@ export default function InpatientsPage({ inpatients, totalCount, patients, rooms
           >
             <Box>
               <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
-                Inpatients
+                {t('TITLE.INPATIENTS') || 'Inpatients'}
               </Typography>
             </Box>
           </Box>
@@ -173,7 +173,7 @@ export default function InpatientsPage({ inpatients, totalCount, patients, rooms
               // },
               {
                 sx: { color: 'error.dark' },
-                label: 'Delete',
+                label: t('BUTTON.DELETE') || 'Delete',
                 icon: 'material-symbols:delete-outline-rounded',
                 onClick: (inpatient: IInpatient) => {
                   setSelectedId(inpatient.Id);
@@ -221,9 +221,9 @@ export default function InpatientsPage({ inpatients, totalCount, patients, rooms
       <ConfirmDialog
         open={confirmDelete.value}
         onClose={confirmDelete.onFalse}
-        title="Delete Inpatient"
+        title={t('TITLE.DELETE_INPATIENT') || 'Delete Inpatient'}
         icon={<Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />}
-        content="Are you sure you want to delete this inpatient?"
+        content={t('TITLE.DELETE_INPATIENT_CONFIRMATION') || 'Are you sure you want to delete this inpatient?'}
         action={
           <Button
             variant="contained"
@@ -241,7 +241,7 @@ export default function InpatientsPage({ inpatients, totalCount, patients, rooms
               },
             }}
           >
-            {isDeleting ? 'Deleting...' : 'Delete'}
+            {isDeleting ? t('BUTTON.DELETING') || 'Deleting...' : t('BUTTON.DELETE') || 'Delete'}
           </Button>
         }
       />
