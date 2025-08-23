@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 
-import { paths } from 'src/routes/paths';
+import { paths } from 'src/app/auth/paths';
 
 // import { useMockedUser } from 'src/hooks/use-mocked-user';
 
@@ -26,7 +26,7 @@ export default function NavUpgrade() {
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
           {/* <Avatar src={userData?.photoURL} alt={userData?.displayName} sx={{ width: 48, height: 48 }}> */}
-            {/* {userData?.displayName?.charAt(0).toUpperCase()} */}
+          {/* {userData?.displayName?.charAt(0).toUpperCase()} */}
           {/* </Avatar> */}
 
           <Label

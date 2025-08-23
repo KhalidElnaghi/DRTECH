@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 
-import { paths } from 'src/routes/paths';
+import { paths } from 'src/app/auth/paths';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { SplashScreen } from 'src/components/loading-screen';

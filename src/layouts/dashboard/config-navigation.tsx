@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { paths } from 'src/routes/paths';
+import { paths } from 'src/app/auth/paths';
 
 import { useTranslate } from 'src/locales';
 

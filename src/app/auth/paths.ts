@@ -14,12 +14,12 @@ export const paths = {
   // AUTH
   auth: {
     jwt: {
-      login: `${ROOTS.AUTH}/jwt/login`,
-      forgot: `${ROOTS.AUTH}/jwt/forgot-password`,
-      register: `${ROOTS.AUTH}/jwt/register`,
-      verify: `${ROOTS.AUTH}/jwt/verify`,
-      resetPassword: `${ROOTS.AUTH}/jwt/reset-password`,
-      changePassword: `${ROOTS.AUTH}/jwt/new-password`,
+      login: `${ROOTS.AUTH}/login`,
+      forgot: `${ROOTS.AUTH}/forgot-password`,
+      register: `${ROOTS.AUTH}/register`,
+      verify: `${ROOTS.AUTH}/verify`,
+      resetPassword: `${ROOTS.AUTH}/reset-password`,
+      changePassword: `${ROOTS.AUTH}/new-password`,
     },
   },
   // DASHBOARD

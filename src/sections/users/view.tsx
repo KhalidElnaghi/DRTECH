@@ -5,7 +5,7 @@ import { enqueueSnackbar } from 'notistack';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
-import { Box, Chip, Paper, TextField, Button, InputAdornment, Typography } from '@mui/material';
+import { Box, Chip, Paper, Button, TextField, Typography, InputAdornment } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import {
@@ -378,7 +378,7 @@ export default function UsersPage({
             onClick={handleDeleteUser}
             disabled={isDeleting}
             sx={{
-              width: 175,
+              width: { xs: '100%', lg: 175 },
               height: 56,
               borderRadius: 2,
               padding: '8px 16px',

@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { paths } from 'src/routes/paths';
+import { paths } from 'src/app/auth/paths';
 import { RouterLink } from 'src/routes/components';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
 
@@ -153,22 +153,21 @@ export default function JwtRegisterView() {
 
   return (
     <>
-      <Box sx={{ mb: 8 }}> {/* Add margin bottom to prevent overlap with footer */}
+      <Box sx={{ mb: 8 }}>
+        {' '}
+        {/* Add margin bottom to prevent overlap with footer */}
         {renderHead}
-
         {!!error && (
           <Alert severity="error" sx={{ m: 3 }}>
             {error}
           </Alert>
         )}
-
         <FormProvider methods={methods} onSubmit={onSubmit}>
           {renderForm}
         </FormProvider>
-
         {renderTerms}
       </Box>
-      
+
       <AuthFooter />
     </>
   );

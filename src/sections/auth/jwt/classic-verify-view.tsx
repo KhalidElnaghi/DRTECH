@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useRouter } from 'src/routes/hooks';
 
-import { paths } from 'src/routes/paths';
+import { paths } from 'src/app/auth/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { EmailInboxIcon } from 'src/assets/icons';

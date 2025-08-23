@@ -5,37 +5,38 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 import {
   Box,
-  Button,
   Chip,
-  FormControl,
   Grid,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
   Paper,
-  Popover,
-  Select,
   Stack,
+  Button,
+  Select,
+  Popover,
+  MenuItem,
   TextField,
+  IconButton,
+  InputLabel,
   Typography,
+  FormControl,
+  InputAdornment,
 } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useDeleteRoom, useDisableRoom, useArchiveRoom } from 'src/hooks/use-rooms-query';
 
+import { formatDateLocal } from 'src/utils/format-time';
+
 import { useTranslate } from 'src/locales';
+import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
 
 import Iconify from 'src/components/iconify';
-import RoomDialog from 'src/components/dialogs/room-dialog';
-import SharedTable from 'src/CustomSharedComponents/SharedTable/SharedTable';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import EmptyState from 'src/components/empty-state';
+import RoomDialog from 'src/components/dialogs/room-dialog';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import SharedHeader from 'src/components/shared-header/empty-state';
 
 import { IRoom } from 'src/types/room';
 import { ILookup } from 'src/types/lookups';
-import { formatDateLocal } from 'src/utils/format-time';
 
 interface IProps {
   rooms: IRoom[];
@@ -48,8 +49,6 @@ interface FilterState {
   searchTerm: string;
   status: number;
 }
-
-
 
 export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: IProps) {
   const [openAddDialog, setOpenAddDialog] = useState(false);
@@ -246,6 +245,7 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
         borderColor = '#FAEDCC';
         break;
       case 3:
+      case 6:
         textColor = '#B21634';
         bgColor = '#FEF3F2';
         borderColor = '#FECDCA';
@@ -260,11 +260,11 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
         bgColor = '#FFF0F0';
         borderColor = '#FF8080';
         break;
-      case 6:
-        textColor = '#1F2937';
-        bgColor = '#F3F4F6';
-        borderColor = '#9CA3AF';
-        break;
+
+      // textColor = '#1F2937';
+      // bgColor = '#F3F4F6';
+      // borderColor = '#9CA3AF';
+      // break;
       case 7:
         textColor = '#006C9C';
         bgColor = '#CAFDF5';
@@ -641,7 +641,7 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
           <Button
             variant="contained"
             sx={{
-              width: 175,
+              width: { xs: '100%', lg: 175 },
               height: 56,
               borderRadius: 2,
               padding: '8px 16px',
@@ -668,7 +668,12 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
         action={
           <Button
             variant="contained"
-            sx={{ width: 175, height: 56, borderRadius: 2, padding: '8px 16px' }}
+            sx={{
+              width: { xs: '100%', lg: 175 },
+              height: 56,
+              borderRadius: 2,
+              padding: '8px 16px',
+            }}
             color="info"
             onClick={() => handleArchiveRoom(selectedId)}
           >

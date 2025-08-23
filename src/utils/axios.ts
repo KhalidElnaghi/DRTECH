@@ -149,4 +149,7 @@ export const endpoints = {
   notifications: {
     fetch: '/notification',
   },
+  settings: {
+    deleteAccount: '/settings/account',
+  },
 };

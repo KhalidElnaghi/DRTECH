@@ -14,7 +14,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 
-import { paths } from 'src/routes/paths';
+import { paths } from 'src/app/auth/paths';
 import { RouterLink } from 'src/routes/components';
 import { useRouter } from 'src/routes/hooks';
 

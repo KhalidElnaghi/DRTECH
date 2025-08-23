@@ -52,7 +52,7 @@ export default function ConfirmDialog({
           variant="outlined"
           color="primary"
           onClick={onClose}
-          sx={{ width: 175, height: 56, borderRadius: 2, padding: '8px 16px' }}
+          sx={{ width: { xs: '100%', lg: 175 }, height: 56, borderRadius: 2, padding: '8px 16px' }}
         >
           {t('BUTTON.CANCEL')}
         </Button>

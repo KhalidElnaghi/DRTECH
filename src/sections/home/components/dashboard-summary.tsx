@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import { Box, Grid, Paper, Button, Typography, IconButton } from '@mui/material';
 
-import { paths } from 'src/routes/paths';
+import { paths } from 'src/app/auth/paths';
 
 import { useDashboardSummary } from 'src/hooks/use-dashboard-query';
 
@@ -97,7 +97,14 @@ export default function DashboardSummary() {
           flexDirection: { xs: 'column', sm: 'row' },
         }}
       >
-        <Box>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: { xs: 'center', sm: 'start' },
+            gap: 1,
+            flexDirection: 'column',
+          }}
+        >
           <Typography
             variant="body1"
             color="initial"
@@ -200,7 +207,7 @@ export default function DashboardSummary() {
           <Button
             variant="contained"
             color="primary"
-            sx={{ display: { sm: 'none', md: 'flex' } }}
+            sx={{ display: { xs: 'none', lg: 'flex' } }}
             onClick={handleExportCSV}
           >
             <Iconify icon="tabler:file-download-filled" />
@@ -224,7 +231,7 @@ export default function DashboardSummary() {
           <Button
             variant="contained"
             color="primary"
-            sx={{ display: { sm: 'none', md: 'flex' } }}
+            sx={{ display: { xs: 'none', lg: 'flex' } }}
             onClick={handleExportExcel}
           >
             <Iconify icon="vscode-icons:file-type-excel" />

@@ -648,7 +648,7 @@ export default function DoctorsPage({
             onClick={handleDeleteDoctor}
             disabled={isDeleting}
             sx={{
-              width: 175,
+              width: { xs: '100%', lg: 175 },
               height: 56,
               borderRadius: 2,
               padding: '8px 16px',

@@ -12,7 +12,7 @@ import { InputAdornment } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { paths } from 'src/routes/paths';
+import { paths } from 'src/app/auth/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 

@@ -1,6 +1,6 @@
 import Cookie from 'js-cookie';
 
-import { paths } from 'src/routes/paths';
+import { paths } from 'src/app/auth/paths';
 
 import axios from 'src/utils/axios';
 
