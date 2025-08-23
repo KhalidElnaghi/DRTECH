@@ -34,6 +34,7 @@ import PaymentDialog from 'src/components/dialogs/payment-dialog/PaymentDialog';
 
 import { ILookup } from 'src/types/lookups';
 import { IPayment } from 'src/types/payments';
+import { useTranslate } from 'src/locales';
 
 interface IProps {
   payments: IPayment[];
@@ -65,6 +66,7 @@ export default function PaymentsPage({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const prevParamsRef = useRef<string>('');
+  const { t } = useTranslate();
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [selectedPayment, setSelectedPayment] = useState<IPayment | null>(null);
@@ -89,15 +91,15 @@ export default function PaymentsPage({
 
   const TABLE_HEAD = useMemo(
     () => [
-      { id: 'PatientName', label: 'Patient' },
-      { id: 'DoctorName', label: 'Doctor' },
-      { id: 'ServiceType', label: 'Service Type' },
-      { id: 'PaymentMethodName', label: 'Method' },
-      { id: 'PaymentAmount', label: 'Amount' },
-      { id: 'StatusName', label: 'Status' },
+      { id: 'PatientName', label: t('LABEL.PATIENT') },
+      { id: 'DoctorName', label: t('LABEL.DOCTOR') },
+      { id: 'ServiceType', label: t('LABEL.SERVICE_TYPE') },
+      { id: 'PaymentMethodName', label: t('LABEL.METHOD') },
+      { id: 'PaymentAmount', label: t('LABEL.AMOUNT') },
+      { id: 'StatusName', label: t('LABEL.STATUS') },
       { id: '', label: '', width: 80 },
     ],
-    []
+    [t]
   );
 
   const openFilter = Boolean(isFilterOpen && filterButtonRef.current);
@@ -204,13 +206,11 @@ export default function PaymentsPage({
       <>
         <EmptyState
           icon="/assets/images/payments/icon.svg"
-          header={hasActiveFilters ? 'No payments found' : 'No payments found'}
+          header={hasActiveFilters ? t('TITLE.NO_PAYMENTS_FOUND') : t('TITLE.NO_PAYMENTS_YET')}
           subheader={
-            hasActiveFilters
-              ? 'Try changing the filters to find matching payments.'
-              : 'Start tracking payments by creating one or linking it to an existing appointment'
+            hasActiveFilters ? t('TITLE.TRY_CHANGING_FILTERS') : t('TITLE.START_TRACKING_PAYMENTS')
           }
-          buttonText={hasActiveFilters ? 'Clear Filters' : 'Add New Payment'}
+          buttonText={hasActiveFilters ? t('BUTTON.CLEAR_FILTERS') : t('BUTTON.ADD_NEW_PAYMENT')}
           onButtonClick={hasActiveFilters ? handleFilterReset : createDialog.onTrue}
           iconSize={150}
         />
@@ -230,9 +230,9 @@ export default function PaymentsPage({
     <>
       <Stack spacing={3}>
         <SharedHeader
-          header="Payments"
-          subheader="Manage and track all billing transactions from patients"
-          buttonText="Add New Payment"
+          header={t('TITLE.PAYMENTS')}
+          subheader={t('TITLE.MANAGE_AND_TRACK_ALL_BILLING_TRANSACTIONS_FROM_PATIENTS')}
+          buttonText={t('BUTTON.ADD_NEW_PAYMENT')}
           onButtonClick={createDialog.onTrue}
         />
         <Paper
@@ -251,13 +251,13 @@ export default function PaymentsPage({
             {' '}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
               <Typography variant="h6" sx={{ mb: 0.5, color: 'text.secondary' }}>
-                Payments
+                {t('TITLE.PAYMENTS')}
               </Typography>
               {activeDoctorName && (
                 <Chip
                   size="small"
                   color="default"
-                  label={`Doctor: ${activeDoctorName}`}
+                  label={`${t('LABEL.DOCTOR')}: ${activeDoctorName}`}
                   onDelete={() => handleFilterChange('DoctorId', 0)}
                   sx={{ height: 24 }}
                 />
@@ -266,7 +266,7 @@ export default function PaymentsPage({
                 <Chip
                   size="small"
                   color="default"
-                  label={`Status: ${activeStatusName}`}
+                  label={`${t('LABEL.STATUS')}: ${activeStatusName}`}
                   onDelete={() => handleFilterChange('Status', 0)}
                   sx={{ height: 24 }}
                 />
@@ -310,13 +310,13 @@ export default function PaymentsPage({
                   },
                 }}
               >
-                <Box sx={{ mb: 2 }}>
+                <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
                   <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-                    Filter Payments
+                    {t('LABEL.FILTER_PAYMENTS')}
                   </Typography>
                   <Box sx={{ display: 'flex', gap: 1 }}>
-                    <Button variant="contained" size="small" onClick={handleFilterReset}>
-                      Reset
+                    <Button variant="contained" size="small" color="primary" onClick={handleFilterReset}>
+                      {t('BUTTON.RESET')}
                     </Button>
                   </Box>
                 </Box>
@@ -324,7 +324,7 @@ export default function PaymentsPage({
                 <Grid container spacing={1.5}>
                   <Grid item xs={12}>
                     <FormControl fullWidth size="small">
-                      <InputLabel>Doctor</InputLabel>
+                      <InputLabel>{t('LABEL.DOCTOR')}</InputLabel>
                       <Select
                         value={filters.DoctorId}
                         onChange={(e) => handleFilterChange('DoctorId', Number(e.target.value))}
@@ -336,7 +336,6 @@ export default function PaymentsPage({
                           </InputAdornment>
                         }
                       >
-                        <MenuItem value={0}>All Doctors</MenuItem>
                         {doctors?.map((doctor) => (
                           <MenuItem key={doctor.Id} value={doctor.Id}>
                             {doctor.Name}
@@ -348,7 +347,7 @@ export default function PaymentsPage({
 
                   <Grid item xs={12}>
                     <FormControl fullWidth size="small">
-                      <InputLabel>Status</InputLabel>
+                      <InputLabel>{t('LABEL.STATUS')}</InputLabel>
                       <Select
                         value={filters.Status}
                         onChange={(e) => handleFilterChange('Status', Number(e.target.value))}
@@ -360,7 +359,6 @@ export default function PaymentsPage({
                           </InputAdornment>
                         }
                       >
-                        <MenuItem value={0}>All Status</MenuItem>
                         {paymentStatus?.map((s) => (
                           <MenuItem key={s.Id} value={s.Id}>
                             {s.Name}
@@ -381,7 +379,7 @@ export default function PaymentsPage({
             actions={[
               {
                 sx: { color: 'primary.main' },
-                label: 'Edit',
+                label: t('BUTTON.EDIT'),
                 icon: 'solar:pen-bold',
                 onClick: (row: IPayment) => {
                   setSelectedPayment(row);
@@ -390,7 +388,7 @@ export default function PaymentsPage({
               },
               {
                 sx: { color: 'error.dark' },
-                label: 'Delete',
+                label: t('BUTTON.DELETE'),
                 icon: 'material-symbols:delete-outline-rounded',
                 onClick: (row: IPayment) => {
                   setSelectedId(row.Id);
@@ -457,8 +455,8 @@ export default function PaymentsPage({
       <ConfirmDialog
         open={confirmDelete.value}
         onClose={confirmDelete.onFalse}
-        title="Delete Payment"
-        content="Are you sure you want to delete this payment?"
+        title={t('TITLE.DELETE_PAYMENT')}
+        content={t('TITLE.ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PAYMENT')}
         icon={<Image src="/assets/images/global/delete.svg" alt="delete" width={84} height={84} />}
         action={
           <Button
@@ -476,7 +474,7 @@ export default function PaymentsPage({
               },
             }}
           >
-            Delete
+            {t('BUTTON.DELETE')}
           </Button>
         }
       />

@@ -2,8 +2,8 @@
 
 import { useSearchParams } from 'next/navigation';
 
-import { usePayments } from 'src/hooks/use-payments-query';
 import { useLookups } from 'src/hooks/use-lookups-query';
+import { usePayments } from 'src/hooks/use-payments-query';
 import { useDoctorsDropdown } from 'src/hooks/use-doctors-query';
 
 import { LoadingScreen } from 'src/components/loading-screen';

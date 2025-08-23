@@ -49,7 +49,15 @@
     "NO_ROOMS_FOUND": "No rooms found",
     "NO_ROOMS_YET": "No rooms yet",
     "NO_ROOMS_MATCH_FILTERS": "No rooms match your current filters. Try adjusting your search criteria or clearing some filters.",
-    "NO_ROOMS_YET_START_BY_ADDING_NEW_ONE": "You haven't added any rooms yet. Start by adding a new one."
+    "NO_ROOMS_YET_START_BY_ADDING_NEW_ONE": "You haven't added any rooms yet. Start by adding a new one.",
+    "NO_PAYMENTS_FOUND": "No payments found",
+    "NO_PAYMENTS_YET": "No payments yet",
+    "TRY_CHANGING_FILTERS": "Try changing the filters to find matching payments.",
+    "START_TRACKING_PAYMENTS": "Start tracking payments by creating one or linking it to an existing appointment",
+    "MANAGE_AND_TRACK_ALL_BILLING_TRANSACTIONS_FROM_PATIENTS": "Manage and track all billing transactions from patients",
+    "PAYMENTS": "Payments",
+    "DELETE_PAYMENT": "Delete Payment",
+    "ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_PAYMENT": "Are you sure you want to delete this payment?"
   },
   "LABEL": {
     "HELP_CENTER": "Help Center",
@@ -112,7 +120,15 @@
     "OPTIONAL": "Optional",
     "NEW_APPOINTMENT_DATE": "New Appointment Date",
     "NEW_SCHEDULED_TIME": "New Scheduled Time",
-    "RESCHEDULE_APPOINTMENT": "Reschedule Appointment"
+    "RESCHEDULE_APPOINTMENT": "Reschedule Appointment",
+    "DOCTOR": "Doctor",
+    "FILTER_PAYMENTS": "Filter Payments",
+    "PATIENT": "Patient",
+    "METHOD": "Method",
+    "AMOUNT": "Amount",
+    "PAYMENT_METHOD": "Payment Method",
+    "APPOINTMENT": "Appointment",
+    "DESCRIPTION": "Description"
   },
   "BUTTON": {
     "LOGIN": "Login",
@@ -149,7 +165,10 @@
     "ADD_NEW_APPOINTMENT": "Add New Appointment",
     "NEW_APPOINTMENT": "New Appointment",
     "RESCHEDULE": "Reschedule",
-    "ADD_NEW_ROOM": "Add New Room"
+    "ADD_NEW_ROOM": "Add New Room",
+    "ADD_NEW_PAYMENT": "Add New Payment",
+    "UPDATE_PAYMENT": "Update Payment",
+    "CREATE_PAYMENT": "Create Payment"
   },
   "SIDEBAR": {
     "MAIN": "Main",
@@ -159,7 +178,8 @@
     "PATIENTS": "Patients",
     "INPATIENTS": "Inpatients",
     "USERS": "Users",
-    "SETTINGS": "Settings"
+    "SETTINGS": "Settings",
+    "PAYMENTS": "Payments"
   },
   "SETTINGS": {
     "TITLE": "Settings",

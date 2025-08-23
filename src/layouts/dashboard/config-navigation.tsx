@@ -87,7 +87,7 @@ export function useNavData() {
             icon: ICONS.appointments,
           },
           { title: t('SIDEBAR.ROOMS'), path: paths.dashboard.rooms, icon: ICONS.rooms },
-          { title: 'Payments', path: paths.dashboard.payments, icon: ICONS.payments },
+          { title: t('SIDEBAR.PAYMENTS'), path: paths.dashboard.payments, icon: ICONS.payments },
         ],
       },
       {

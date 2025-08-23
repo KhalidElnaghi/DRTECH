@@ -73,7 +73,7 @@ export default function PaymentDialog({
   const { data: doctorsData } = useDoctorsDropdown();
   const { data: patientsData } = usePatientsDropdown();
   const { data: appointmentsData } = useAppointments({ page: 1 });
-
+  const { t } = useTranslate();
   const doctors = useMemo(() => doctorsData?.Data || doctorsData || [], [doctorsData]);
   const patients = useMemo(() => patientsData?.Data || patientsData || [], [patientsData]);
   const appointments = useMemo(
@@ -171,7 +171,9 @@ export default function PaymentDialog({
         <DialogContent sx={{ borderBottom: '1px solid #DFE1E7', py: 3 }}>
           <Stack sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2 }}>
             <Box>
-              <Typography sx={{ fontSize: '12px', mb: 1, color: '#666D80' }}>Patient</Typography>
+              <Typography sx={{ fontSize: '12px', mb: 1, color: '#666D80' }}>
+                {t('LABEL.PATIENT')}
+              </Typography>
               <RHFSelect name="patientId" placeholder="Select Patient">
                 {patients.map((p: any) => (
                   <MenuItem key={p.Id} value={p.Id}>
@@ -182,7 +184,9 @@ export default function PaymentDialog({
             </Box>
 
             <Box>
-              <Typography sx={{ fontSize: '12px', mb: 1, color: '#666D80' }}>Doctor</Typography>
+              <Typography sx={{ fontSize: '12px', mb: 1, color: '#666D80' }}>
+                {t('LABEL.DOCTOR')}
+              </Typography>
               <RHFSelect name="doctorId" placeholder="Select Doctor">
                 {doctors.map((d: any) => (
                   <MenuItem key={d.Id} value={d.Id}>
@@ -193,14 +197,16 @@ export default function PaymentDialog({
             </Box>
 
             <Box>
-              <Typography sx={{ fontSize: '12px', mb: 1, color: '#666D80' }}>Amount</Typography>
+              <Typography sx={{ fontSize: '12px', mb: 1, color: '#666D80' }}>
+                {t('LABEL.AMOUNT')}
+              </Typography>
               <RHFTextField name="PaymentAmount" placeholder="0.00" />
             </Box>
 
             {!isEditing && (
               <Box>
                 <Typography sx={{ fontSize: '12px', mb: 1, color: '#666D80' }}>
-                  Payment Method
+                  {t('LABEL.PAYMENT_METHOD')}
                 </Typography>
                 <RHFSelect name="paymentMethod" placeholder="Select Method">
                   {paymentMethods.map((m) => (
@@ -215,7 +221,7 @@ export default function PaymentDialog({
             {!isEditing && (
               <Box>
                 <Typography sx={{ fontSize: '12px', mb: 1, color: '#666D80' }}>
-                  Appointment
+                  {t('LABEL.APPOINTMENT')}
                 </Typography>
                 <RHFSelect name="AppointmentId" placeholder="Select Appointment">
                   {appointments.map((a: any) => (
@@ -228,7 +234,9 @@ export default function PaymentDialog({
             )}
 
             <Box>
-              <Typography sx={{ fontSize: '12px', mb: 1, color: '#666D80' }}>Status</Typography>
+              <Typography sx={{ fontSize: '12px', mb: 1, color: '#666D80' }}>
+                {t('LABEL.STATUS')}
+              </Typography>
               <RHFSelect name="status" placeholder="Select Status">
                 {paymentStatus.map((s) => (
                   <MenuItem key={s.Id} value={s.Id}>
@@ -240,16 +248,19 @@ export default function PaymentDialog({
 
             <Box sx={{ gridColumn: 'span 2' }}>
               <Typography sx={{ fontSize: '12px', mb: 1, color: '#666D80' }}>
-                Description
-                <span style={{ color: '#666D90', fontSize: '9px', marginLeft: 2 }}>Optional</span>
+                {t('LABEL.DESCRIPTION')}
+                <span style={{ color: '#666D90', fontSize: '9px', marginLeft: 2 }}>
+                  {' '}
+                  {t('LABEL.OPTIONAL')}
+                </span>
               </Typography>
-              <RHFTextField name="description" placeholder="Optional" multiline rows={3} />
+              <RHFTextField name="description" multiline rows={3} />
             </Box>
           </Stack>
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
           <Button variant="outlined" onClick={onClose} color="primary">
-            Cancel
+            {t('BUTTON.CANCEL') || 'Cancel'}
           </Button>
           <LoadingButton
             loading={createMutation.isPending || updateMutation.isPending}
@@ -257,7 +268,9 @@ export default function PaymentDialog({
             variant="contained"
             color="primary"
           >
-            {isEditing ? 'Update Payment' : 'Create Payment'}
+            {isEditing
+              ? t('BUTTON.UPDATE_PAYMENT') || 'Update Payment'
+              : t('BUTTON.CREATE_PAYMENT') || 'Create Payment'}
           </LoadingButton>
         </DialogActions>
       </FormProvider>
