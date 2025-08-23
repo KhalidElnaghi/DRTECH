@@ -87,6 +87,9 @@ export const endpoints = {
     register: '/auth/register',
     forgot: `/auth/send-password-reset-otp`,
     verify: `/auth/verify-otp-and-reset-password`,
+    requestResetPassword: '/auth/request-reset-password',
+    verifyResetOtp: '/auth/verify-reset-otp',
+    resetPassword: '/auth/reset-password',
   },
   appointments: {
     fetch: '/appointments',

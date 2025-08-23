@@ -73,7 +73,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
       <Stack sx={{ p: 2 }}>
         <ListItemButton onClick={() => {}} sx={{ borderRadius: 1 }}>
           <Iconify icon="streamline:customer-support-1" width={20} color="#818898" />
-          <Typography sx={{ ml: 2, fontWeight: 600 }} color="#818898">
+          <Typography sx={{ ml: 1, fontWeight: 600, fontSize: '14px' }} color="#818898">
             {t('LABEL.HELP_CENTER')}
           </Typography>
         </ListItemButton>
@@ -82,8 +82,8 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
           onClick={() => setOpenLogout(true)}
           sx={{ borderRadius: 1, color: 'error.main' }}
         >
-          <Iconify icon="solar:logout-outline" width={24} color="#D92C20" />
-          <Typography sx={{ ml: 2, fontWeight: 600, color: '#D92C20' }}>
+          <Iconify icon="solar:logout-outline" width={22} color="#D92C20" />
+          <Typography sx={{ ml: 1, fontWeight: 600, color: '#D92C20', fontSize: '14px' }}>
             {t('LABEL.LOGOUT')}
           </Typography>
         </ListItemButton>
