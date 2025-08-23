@@ -1,11 +1,11 @@
 import { m } from 'framer-motion';
 import { useCallback } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 
 import { useLocales, useTranslate } from 'src/locales';
-import { invalidateCaching } from 'src/actions/cache-invalidation';
 
 import Iconify from 'src/components/iconify';
 import { varHover } from 'src/components/animate';
@@ -42,6 +42,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 export default function LanguagePopover() {
   const popover = usePopover();
+  const queryClient = useQueryClient();
 
   const { t } = useTranslate();
   const { onChangeLang } = useTranslate();
@@ -51,10 +52,13 @@ export default function LanguagePopover() {
   const handleChangeLang = useCallback(
     (newLang: string) => {
       onChangeLang(newLang);
-      invalidateCaching();
+
+      // Invalidate all React Query caches to refetch data with new language
+      queryClient.invalidateQueries();
+
       popover.onClose();
     },
-    [onChangeLang, popover]
+    [onChangeLang, popover, queryClient]
   );
 
   return (

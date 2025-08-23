@@ -1,8 +1,9 @@
 import axiosInstance, { endpoints } from 'src/utils/axios';
-import type { RoomParams, RoomData } from 'src/types/room';
+
+import type { RoomData, RoomParams } from 'src/types/room';
 
 // Re-export types for use in hooks
-export type { RoomParams, RoomData };
+export type { RoomData, RoomParams };
 
 export const fetchRoomsClient = async (params: RoomParams) => {
   const response = await axiosInstance.get(endpoints.rooms.fetch, {

@@ -49,7 +49,11 @@
     "NO_APPOINTMENTS_MATCH_FILTERS": "لا يوجد مواعيد تطابق المعايير الحالية. يرجى تعديل المعايير أو تصفير بعض المعايير.",
     "NO_APPOINTMENTS_YET_START_BY_ADDING_NEW_ONE": "لم تقم بإضافة مواعيد بعد. ابدأ بإضافة موعد جديد.",
     "APPOINTMENTS": "المواعيد",
-    "APPOINTMENTS_SUBHEADER": "هذه هي جميع المواعيد المحدثة في الأسبوع الماضي."
+    "APPOINTMENTS_SUBHEADER": "هذه هي جميع المواعيد المحدثة في الأسبوع الماضي.",
+    "NO_ROOMS_FOUND": "لا يوجد غرف",
+    "NO_ROOMS_YET": "لا يوجد غرف",
+    "NO_ROOMS_MATCH_FILTERS": "لا يوجد غرف تطابق المعايير الحالية. يرجى تعديل المعايير أو تصفير بعض المعايير.",
+    "NO_ROOMS_YET_START_BY_ADDING_NEW_ONE": "لم تقم بإضافة غرف بعد. ابدأ بإضافة غرفة جديدة."
   },
   "LABEL": {
     "HELP_CENTER": "مركز المساعدة",
@@ -152,7 +156,8 @@
     "APPOINTMENT_DATE": "تاريخ الموعد",
     "STATUS": "الحالة",
     "ACTIVE_FILTERS": "الفلترة النشطة",
-    "RESCHEDULE": "اعادة تعيين"
+    "RESCHEDULE": "اعادة تعيين",
+    "ADD_NEW_ROOM": "اضافة غرفة جديدة"
   },
   "SIDEBAR": {
     "MAIN": "الرئيسية",
@@ -267,7 +272,14 @@
     "ARCHIVE_ROOM": "أرشفة الغرفة",
     "ARCHIVE_ROOM_CONFIRMATION": "هل أنت متأكد من أرشفة هذه الغرفة؟",
     "SEARCH_ROOM_NUMBER": "البحث عن رقم الغرفة...",
-    "SEARCH_FLOOR": "البحث عن الطابق..."
+    "SEARCH_FLOOR": "البحث عن الطابق...",
+    "ROOMS_SUBHEADER": "آخر التحديثات من الأسبوع الماضي.",
+    "FILTER_BY_STATUS": "تصفية حسب الحالة",
+    "ACTIVE_FILTERS": "الفلترة النشطة",
+    "STATUS": "الحالة",
+    "SEARCH": "البحث",
+    "EDIT_ROOM_STATUS": "تحديث الحالة",
+    "UPDATE_STATUS": "تحديث الحالة"
   },
   "COMMON": {
     "ALL": "الكل",

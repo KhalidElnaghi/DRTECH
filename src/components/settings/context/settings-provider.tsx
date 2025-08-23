@@ -24,22 +24,28 @@ export function SettingsProvider({ children, defaultSettings }: SettingsProvider
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const isArabic = localStorageGetItem('i18nextLng') === 'ar';
-
-  useEffect(() => {
-    if (isArabic) {
-      onChangeDirectionByLang('ar');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isArabic]);
-
   // Direction by lang
   const onChangeDirectionByLang = useCallback(
     (lang: string) => {
+      console.log(`Changing direction to: ${lang === 'ar' ? 'rtl' : 'ltr'} for language: ${lang}`);
       update('themeDirection', lang === 'ar' ? 'rtl' : 'ltr');
     },
     [update]
   );
+
+  // Initialize direction based on stored language
+  useEffect(() => {
+    const currentStoredLang = localStorageGetItem('i18nextLng');
+    const isArabic = currentStoredLang === 'ar';
+
+    if (isArabic && state.themeDirection !== 'rtl') {
+      console.log('Initializing direction to RTL for Arabic');
+      onChangeDirectionByLang('ar');
+    } else if (!isArabic && state.themeDirection !== 'ltr') {
+      console.log('Initializing direction to LTR for English');
+      onChangeDirectionByLang('en');
+    }
+  }, [onChangeDirectionByLang, state.themeDirection]);
 
   // Drawer
   const onToggleDrawer = useCallback(() => {

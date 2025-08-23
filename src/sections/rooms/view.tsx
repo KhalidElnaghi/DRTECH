@@ -320,13 +320,13 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
 
         <EmptyState
           icon="/assets/images/rooms/icon.svg"
-          header={hasActiveFilters ? 'No rooms found' : 'No rooms yet'}
+          header={hasActiveFilters ? t('TITLE.NO_ROOMS_FOUND') : t('TITLE.NO_ROOMS_YET')}
           subheader={
             hasActiveFilters
-              ? 'No rooms match your current filters. Try adjusting your search criteria or clearing some filters.'
-              : "You haven't added any rooms yet. Start by adding a new one."
+              ? t('TITLE.NO_ROOMS_MATCH_FILTERS')
+              : t('TITLE.NO_ROOMS_YET_START_BY_ADDING_NEW_ONE')
           }
-          buttonText={hasActiveFilters ? 'Clear Filters' : 'Add New Room'}
+          buttonText={hasActiveFilters ? t('BUTTON.CLEAR_FILTERS') : t('BUTTON.ADD_NEW_ROOM')}
           onButtonClick={hasActiveFilters ? handleFilterReset : handleOpenAddDialog}
           iconSize={150}
         />
@@ -350,8 +350,8 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
 
         <SharedHeader
           header={t('ROOM.ROOMS') || 'Rooms'}
-          subheader="Latest updates from the past 7 days."
-          buttonText={t('ROOM.ADD_ROOM') || 'Add New Room'}
+          subheader={t('ROOM.ROOMS_SUBHEADER') || 'Latest updates from the past 7 days.'}
+          buttonText={t('BUTTON.ADD_NEW_ROOM') || 'Add New Room'}
           onButtonClick={handleOpenAddDialog}
         />
         {/* Search and Filter Bar */}
@@ -382,7 +382,7 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
                 <Chip
                   size="small"
                   color="default"
-                  label={`Status: ${activeStatusName}`}
+                  label={`${t('ROOM.STATUS')}: ${activeStatusName}`}
                   onDelete={() => handleFilterChange('status', 0)}
                   sx={{ height: 24 }}
                 />
@@ -391,7 +391,7 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
                 <Chip
                   size="small"
                   color="default"
-                  label={`Search: ${filters.searchTerm}`}
+                  label={`${t('ROOM.SEARCH')}: ${filters.searchTerm}`}
                   onDelete={() => {
                     const next = { ...filters, searchTerm: '' };
                     setFilters(next);
@@ -412,7 +412,7 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
             >
               {/* Search Bar */}
               <TextField
-                placeholder="Search by room number"
+                placeholder={t('ROOM.SEARCH_ROOM_NUMBER') || 'Search by room number'}
                 value={filters.searchTerm}
                 onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
                 sx={{ flexGrow: 1, maxWidth: 600, width: '100%' }}
@@ -473,19 +473,22 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
               },
             }}
           >
-            <Box sx={{ mb: 2 }}>
+            <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-                Filter by Status
+                {t('ROOM.FILTER_BY_STATUS') || 'Filter by Status'}
               </Typography>
+              <Button variant="outlined" color="primary" onClick={handleFilterReset} size="small">
+                {t('COMMON.RESET') || 'Reset'}
+              </Button>
             </Box>
 
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <FormControl fullWidth size="small">
-                  <InputLabel>Room Status</InputLabel>
+                  <InputLabel>{t('ROOM.ROOM_STATUS') || 'Room Status'}</InputLabel>
                   <Select
                     value={filters.status}
-                    label="Room Status"
+                    label={t('ROOM.ROOM_STATUS') || 'Room Status'}
                     onChange={(e) => handleFilterChange('status', Number(e.target.value))}
                     startAdornment={
                       <InputAdornment position="start">
@@ -493,7 +496,6 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
                       </InputAdornment>
                     }
                   >
-                    <MenuItem value={0}>All Statuses</MenuItem>
                     {roomStatus?.map((status) => (
                       <MenuItem key={status.Id} value={status.Id}>
                         {status.Name}
@@ -508,11 +510,12 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
             {filters.status > 0 && (
               <Box sx={{ mt: 1.5, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Typography variant="body2" sx={{ alignSelf: 'center', mr: 1 }}>
-                  Active filters:
+                  {t('ROOM.ACTIVE_FILTERS') || 'Active filters:'}
                 </Typography>
+
                 {filters.status > 0 && (
                   <Chip
-                    label={`Status: ${roomStatus?.find((status) => status.Id === filters.status)?.Name || ''}`}
+                    label={`${t('ROOM.STATUS')}: ${roomStatus?.find((status) => status.Id === filters.status)?.Name || ''}`}
                     onDelete={() => handleFilterChange('status', 0)}
                     color="primary"
                     variant="outlined"
@@ -524,12 +527,9 @@ export default function RoomsPage({ rooms, totalCount, roomTypes, roomStatus }: 
 
             {/* Action Buttons */}
             <Box sx={{ mt: 2, display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
-              <Button variant="outlined" onClick={handleFilterReset} size="small">
-                Reset
-              </Button>
-              <Button variant="contained" onClick={handleFilterApply} size="small">
-                Apply
-              </Button>
+              {/* <Button variant="contained" onClick={handleFilterApply} size="small">
+                {t('COMMON.APPLY') || 'Apply'}
+              </Button> */}
             </Box>
           </Popover>
 

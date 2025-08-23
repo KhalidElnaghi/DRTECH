@@ -45,7 +45,11 @@
     "NO_APPOINTMENTS_MATCH_FILTERS": "No appointments match your current filters. Try adjusting your search criteria or clearing some filters.",
     "NO_APPOINTMENTS_YET_START_BY_ADDING_NEW_ONE": "You haven't scheduled any appointments yet. Start by adding a new one.",
     "APPOINTMENTS": "Appointments",
-    "APPOINTMENTS_SUBHEADER": "Here are all appointments updated in the last 7 days."
+    "APPOINTMENTS_SUBHEADER": "Here are all appointments updated in the last 7 days.",
+    "NO_ROOMS_FOUND": "No rooms found",
+    "NO_ROOMS_YET": "No rooms yet",
+    "NO_ROOMS_MATCH_FILTERS": "No rooms match your current filters. Try adjusting your search criteria or clearing some filters.",
+    "NO_ROOMS_YET_START_BY_ADDING_NEW_ONE": "You haven't added any rooms yet. Start by adding a new one."
   },
   "LABEL": {
     "HELP_CENTER": "Help Center",
@@ -144,7 +148,8 @@
     "CLEAR_FILTERS": "Clear Filters",
     "ADD_NEW_APPOINTMENT": "Add New Appointment",
     "NEW_APPOINTMENT": "New Appointment",
-    "RESCHEDULE": "Reschedule"
+    "RESCHEDULE": "Reschedule",
+    "ADD_NEW_ROOM": "Add New Room"
   },
   "SIDEBAR": {
     "MAIN": "Main",
@@ -262,7 +267,12 @@
     "ARCHIVE_ROOM": "Archive Room",
     "ARCHIVE_ROOM_CONFIRMATION": "Are you sure you want to archive this room?",
     "SEARCH_ROOM_NUMBER": "Search room number...",
-    "SEARCH_FLOOR": "Search floor..."
+    "SEARCH_FLOOR": "Search floor...",
+    "ROOMS_SUBHEADER": "Latest updates from the past 7 days.",
+    "FILTER_BY_STATUS": "Filter by Status",
+    "ACTIVE_FILTERS": "Active Filters",
+    "STATUS": "Status",
+    "SEARCH": "Search"
   },
   "DOCTOR": {
     "DOCTORS": "Doctors",
