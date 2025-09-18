@@ -4,6 +4,12 @@ import Cookie from 'js-cookie';
 import { useMemo, useEffect, useReducer, useCallback } from 'react';
 
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import {
+  setSessionStorage,
+  getSessionStorage,
+  removeSessionStorage,
+  clearFromAllStorage,
+} from 'src/hooks/use-local-storage';
 
 import { AuthContext } from './auth-context';
 import { setSession, isValidToken } from './utils';
@@ -145,10 +151,16 @@ export function AuthProvider({ children }: Readonly<Props>) {
       const lang: string = Cookie.get('Language') || 'en';
       Cookie.set('Language', lang);
 
-      const accessToken = Cookie.get(ACCESS_TOKEN);
-      const userStr = Cookie.get(USER_KEY);
+      // Try to get from cookies first (remember me was checked)
+      let accessToken = Cookie.get(ACCESS_TOKEN);
+      let userStr = Cookie.get(USER_KEY);
+      let user = userStr ? (JSON.parse(userStr) as User) : null;
 
-      const user = userStr ? (JSON.parse(userStr) as User) : null;
+      // If not found in cookies, try sessionStorage (remember me was not checked)
+      if (!accessToken || !user) {
+        accessToken = getSessionStorage(ACCESS_TOKEN);
+        user = getSessionStorage(USER_KEY);
+      }
 
       if (accessToken && isValidToken(accessToken) && user) {
         setSession(accessToken);
@@ -183,7 +195,7 @@ export function AuthProvider({ children }: Readonly<Props>) {
   }, [initialize]);
 
   // LOGIN
-  const login = useCallback(async (email: string, password: string) => {
+  const login = useCallback(async (email: string, password: string, rememberMe = false) => {
     try {
       const credentials = {
         email,
@@ -198,21 +210,27 @@ export function AuthProvider({ children }: Readonly<Props>) {
       setSession(accessToken);
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
-      // Set cookie with proper domain and path
-      Cookie.set(ACCESS_TOKEN, accessToken, {
-        expires: 7, // 7 days
-        secure: true, // for HTTPS
-        sameSite: 'strict',
-        path: '/',
-        // domain: '.drtech.runasp.net' // Uncomment if you need cross-subdomain access
-      });
+      if (rememberMe) {
+        // Store in cookies (persistent)
+        Cookie.set(ACCESS_TOKEN, accessToken, {
+          expires: 7, // 7 days
+          secure: true, // for HTTPS
+          sameSite: 'strict',
+          path: '/',
+          // domain: '.drtech.runasp.net' // Uncomment if you need cross-subdomain access
+        });
 
-      Cookie.set(USER_KEY, JSON.stringify(user), {
-        expires: 7,
-        secure: true,
-        sameSite: 'strict',
-        path: '/',
-      });
+        Cookie.set(USER_KEY, JSON.stringify(user), {
+          expires: 7,
+          secure: true,
+          sameSite: 'strict',
+          path: '/',
+        });
+      } else {
+        // Store in sessionStorage (session only)
+        setSessionStorage(ACCESS_TOKEN, accessToken);
+        setSessionStorage(USER_KEY, user);
+      }
 
       dispatch({
         type: Types.LOGIN,
@@ -398,8 +416,12 @@ export function AuthProvider({ children }: Readonly<Props>) {
   // LOGOUT
   const logout = useCallback(async () => {
     setSession(null);
+    // Clear from cookies
     Cookie.remove(ACCESS_TOKEN);
     Cookie.remove(USER_KEY);
+    // Clear from sessionStorage
+    removeSessionStorage(ACCESS_TOKEN);
+    removeSessionStorage(USER_KEY);
     dispatch({
       type: Types.LOGOUT,
     });

@@ -73,7 +73,7 @@ export default function JwtLoginView() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       clearError();
-      await login?.(data.email, data.password);
+      await login?.(data.email, data.password, data.keepMeLoggedIn);
       router.push(returnTo || PATH_AFTER_LOGIN);
     } catch (loginError) {
       reset();
@@ -102,7 +102,7 @@ export default function JwtLoginView() {
           textAlign: 'center',
         }}
       >
-        {t('TITLE.WELCOME_BACK') }
+        {t('TITLE.WELCOME_BACK')}
       </Typography>
       <Typography
         sx={{

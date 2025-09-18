@@ -87,3 +87,46 @@ export const removeStorage = (key: string) => {
     console.error(error);
   }
 };
+
+// SessionStorage functions
+export const getSessionStorage = (key: string) => {
+  let value = null;
+
+  try {
+    const result = window.sessionStorage.getItem(key);
+
+    if (result) {
+      value = JSON.parse(result);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  return value;
+};
+
+export const setSessionStorage = (key: string, value: any) => {
+  try {
+    window.sessionStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const removeSessionStorage = (key: string) => {
+  try {
+    window.sessionStorage.removeItem(key);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// Helper functions to clear from both storages
+export const clearFromAllStorage = (key: string) => {
+  try {
+    window.localStorage.removeItem(key);
+    window.sessionStorage.removeItem(key);
+  } catch (error) {
+    console.error(error);
+  }
+};

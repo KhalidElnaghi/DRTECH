@@ -109,7 +109,7 @@ export default function MainPage() {
                 <PatientsStatistics />
               </Box>
               <Box sx={{ gridRow: { lg: 'span 2' } }}>
-                {/* <UpcomingAppointments limit={5} /> */}
+                <UpcomingAppointments limit={5} />
               </Box>
               <Box sx={{ gridColumn: { xs: '1 / -1', sm: '1 / -1', lg: '1 / -1' } }}>
                 <DashboardPatientsTable />
