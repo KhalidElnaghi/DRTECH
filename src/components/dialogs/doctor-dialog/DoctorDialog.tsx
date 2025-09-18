@@ -20,6 +20,7 @@ import {
   FormControl,
   DialogActions,
   DialogContent,
+  InputAdornment,
 } from '@mui/material';
 
 import { useCreateDoctor, useUpdateDoctor } from 'src/hooks/use-doctors-query';
@@ -40,6 +41,7 @@ interface DoctorDialogProps {
 }
 
 export const phoneRegex = /^\+966[0-9]{9}$/;
+export const phoneNumberRegex = /^[0-9]{9}$/;
 
 const DoctorDialog = ({
   open,
@@ -81,6 +83,10 @@ const DoctorDialog = ({
       : Yup.string()
           .min(6, t('DOCTOR.PASSWORD_MIN') || 'Password must be at least 6 characters')
           .required(t('DOCTOR.PASSWORD_REQUIRED') || 'Password is required'),
+    ExaminationFees: Yup.number()
+      .min(0, t('DOCTOR.EXAMINATION_FEES_INVALID') || 'Examination fees must be a positive number')
+      .nullable()
+      .required(t('DOCTOR.EXAMINATION_FEES_REQUIRED') || 'Examination fees is required'),
   });
 
   const methods = useForm<ICreateDoctor>({
@@ -90,8 +96,9 @@ const DoctorDialog = ({
       SpecializationId: 0,
       PhoneNumber: '',
       Status: 0,
-      email: '', // Ensure email starts empty
-      password: '', // Ensure password starts empty
+      email: '',
+      password: '',
+      ExaminationFees: undefined,
     },
   });
 
@@ -114,6 +121,7 @@ const DoctorDialog = ({
           Status: doctor.Status || 0,
           email: doctor.email || '',
           password: '', // Always empty for security when editing
+          ExaminationFees: doctor.ExaminationFees || undefined,
         });
       } else {
         // Creating new doctor - ensure email and password are completely empty
@@ -125,6 +133,7 @@ const DoctorDialog = ({
           Status: 0,
           email: '',
           password: '',
+          ExaminationFees: undefined,
         });
 
         // Force clear email and password fields specifically
@@ -147,6 +156,7 @@ const DoctorDialog = ({
       Status: 0,
       email: '',
       password: '',
+      ExaminationFees: undefined,
     });
     onClose();
   };
@@ -159,10 +169,12 @@ const DoctorDialog = ({
         if (!updateData.password) {
           delete updateData.password;
         }
+        // Don't send email in edit mode
+        delete updateData.email;
 
         await updateDoctorMutation.mutateAsync({ id: doctor.Id.toString(), data: updateData });
 
-        enqueueSnackbar(t('MESSAGE.DOCTOR_UPDATED_SUCCESSFULLY') || 'Doctor updated successfully', {
+        enqueueSnackbar(t('MESSAGE.DOCTOR_UPDATED_SUCCESSFULLY') , {
           variant: 'success',
         });
       } else {
@@ -210,7 +222,9 @@ const DoctorDialog = ({
         ? t('BUTTON.UPDATING') || 'Updating...'
         : t('BUTTON.CREATING') || 'Creating...';
     }
-    return isEditing ? t('BUTTON.UPDATE_DOCTOR') || 'Update Doctor' : t('BUTTON.ADD_DOCTOR') || 'Add Doctor';
+    return isEditing
+      ? t('BUTTON.UPDATE_DOCTOR') || 'Update Doctor'
+      : t('BUTTON.ADD_DOCTOR') || 'Add Doctor';
   };
 
   return (
@@ -226,9 +240,7 @@ const DoctorDialog = ({
         }}
       >
         <Typography variant="h6">
-          {isEditing
-            ? t('DOCTOR.EDIT_DOCTOR') || 'Edit Doctor'
-            : t('DOCTOR.ADD_DOCTOR') || 'Add New Doctor'}
+          {isEditing ? t('DOCTOR.EDIT_DOCTOR') || 'Edit Doctor' : t('DOCTOR.ADD_DOCTOR')}
         </Typography>
         <IconButton
           onClick={onClose}
@@ -338,9 +350,50 @@ const DoctorDialog = ({
                   <TextField
                     {...field}
                     fullWidth
-                    placeholder="+966XXXXXXXXX"
+                    placeholder="XXXXXXXXX"
                     error={!!errors.PhoneNumber}
                     helperText={errors.PhoneNumber?.message}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 0.5,
+                              flexDirection: 'row',
+                            }}
+                          >
+                            <Box
+                              component="img"
+                              src="/assets/images/flag.png"
+                              alt="Saudi Arabia Flag"
+                              sx={{
+                                width: 20,
+                                height: 15,
+                                objectFit: 'cover',
+                                borderRadius: '2px',
+                              }}
+                            />
+                            <Typography
+                              sx={{
+                                fontSize: '14px',
+                                fontWeight: 500,
+                                color: '#333',
+                                fontFamily: 'monospace',
+                              }}
+                            >
+                              966+
+                            </Typography>
+                          </Box>
+                        </InputAdornment>
+                      ),
+                    }}
+                    value={field.value?.replace('+966', '') || ''}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                      field.onChange(`+966${value}`);
+                    }}
                   />
                 )}
               />
@@ -452,6 +505,44 @@ const DoctorDialog = ({
                 />
               </Box>
             )}
+            <Box>
+              <Typography
+                sx={{
+                  fontFamily: '    ',
+                  fontWeight: 400,
+                  fontStyle: 'normal',
+                  fontSize: '12px',
+                  lineHeight: '150%',
+                  letterSpacing: '2%',
+                  mb: 1,
+                  color: '#666D80',
+                }}
+              >
+                {t('LABEL.EXAMINATION_FEES') || 'Examination Fees'}
+              </Typography>
+              <Controller
+                name="ExaminationFees"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    type="number"
+                    placeholder={t('LABEL.ENTER_EXAMINATION_FEES')}
+                    inputProps={{
+                      min: 0,
+                      step: 0.01,
+                    }}
+                    error={!!errors.ExaminationFees}
+                    helperText={errors.ExaminationFees?.message}
+                    value={field.value || ''}
+                    onChange={({ target: { value } }) => {
+                      field.onChange(value === '' ? undefined : parseFloat(value));
+                    }}
+                  />
+                )}
+              />
+            </Box>
           </Stack>
         </DialogContent>
 

@@ -19,6 +19,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  TextField,
+  InputAdornment,
 } from '@mui/material';
 
 import { useCreatePatient, useUpdatePatient } from 'src/hooks/use-patients-query';
@@ -87,11 +89,17 @@ export default function PatientDialog({
         PhoneNumber: yup
           .string()
           .required(t('LABEL.THIS_FIELD_IS_REQUIRED') || 'Phone number is required')
-          .matches(/^\+966[0-9]{9}$/, 'Phone number must be in format +966XXXXXXXXX'),
+          .matches(
+            /^\+966[0-9]{9}$/,
+            t('LABEL.PHONE_INVALID') || 'Phone number must be in format +966XXXXXXXXX'
+          ),
         EmergencyContact: yup
           .string()
           .required(t('LABEL.THIS_FIELD_IS_REQUIRED') || 'Emergency contact is required')
-          .matches(/^\+966[0-9]{9}$/, 'Phone number must be in format +966XXXXXXXXX'),
+          .matches(
+            /^\+966[0-9]{9}$/,
+            t('LABEL.PHONE_INVALID') || 'Phone number must be in format +966XXXXXXXXX'
+          ),
         Address: yup.string().required(t('LABEL.THIS_FIELD_IS_REQUIRED') || 'Address is required'),
         DateOfBirth: yup
           .date()
@@ -100,7 +108,6 @@ export default function PatientDialog({
       })
     ),
     defaultValues,
-    mode: 'onBlur', // Changed from 'onChange' to 'onBlur' to prevent premature validation
   });
 
   const {
@@ -168,9 +175,10 @@ export default function PatientDialog({
           Gender: data.Gender ?? 0,
           DateOfBirth: data.DateOfBirth ? data.DateOfBirth.toISOString().split('T')[0] : '',
         };
+        console.log(patientData);
 
-        await newPatientMutation.mutateAsync(patientData);
-
+        const res = await newPatientMutation.mutateAsync(patientData);
+        console.log(res);
         onClose();
       }
     } catch (error) {
@@ -191,7 +199,11 @@ export default function PatientDialog({
           alignItems: 'center',
         }}
       >
-        <Typography variant="h6">{patient ? t('BUTTON.UPDATE_PATIENT') || 'Edit Patient' : t('BUTTON.ADD_PATIENT') || 'Add New Patient'}</Typography>
+        <Typography variant="h6">
+          {patient
+            ? t('BUTTON.UPDATE_PATIENT') || 'Edit Patient'
+            : t('BUTTON.ADD_PATIENT') || 'Add New Patient'}
+        </Typography>
         <IconButton
           onClick={onClose}
           sx={{
@@ -209,7 +221,7 @@ export default function PatientDialog({
         <DialogContent sx={{ borderBottom: '1px solid #DFE1E7', py: 3 }}>
           <Stack
             spacing={1}
-            sx={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: 2, }}
+            sx={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: 2 }}
           >
             <Box
               sx={{
@@ -365,14 +377,58 @@ export default function PatientDialog({
                 >
                   {t('LABEL.PHONE_NUMBER') || 'Phone Number'}
                 </Typography>
-                <RHFTextField
-                  placeholder="+966XXXXXXXXX"
+                <Controller
                   name="PhoneNumber"
-                  InputLabelProps={{ shrink: true }}
-                  sx={{ flexGrow: 1 }}
-                  inputProps={{
-                    maxLength: 13,
-                  }}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      error={!!error}
+                      helperText={error?.message}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 0.5,
+                                flexDirection: 'row',
+                              }}
+                            >
+                              <Box
+                                component="img"
+                                src="/assets/images/flag.png"
+                                alt="Saudi Arabia Flag"
+                                sx={{
+                                  width: 20,
+                                  height: 15,
+                                  objectFit: 'cover',
+                                  borderRadius: '2px',
+                                }}
+                              />
+                              <Typography
+                                sx={{
+                                  fontSize: '14px',
+                                  fontWeight: 500,
+                                  color: '#333',
+                                  fontFamily: 'monospace',
+                                }}
+                              >
+                                966+
+                              </Typography>
+                            </Box>
+                          </InputAdornment>
+                        ),
+                      }}
+                      value={field.value?.replace('+966', '') || ''}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                        field.onChange(`+966${value}`);
+                      }}
+                    />
+                  )}
                 />
               </Box>
 
@@ -390,14 +446,58 @@ export default function PatientDialog({
                 >
                   {t('LABEL.EMERGENCY_CONTACT') || 'Emergency Contact'}
                 </Typography>
-                <RHFTextField
-                  placeholder="+966XXXXXXXXX"
+                <Controller
                   name="EmergencyContact"
-                  InputLabelProps={{ shrink: true }}
-                  sx={{ flexGrow: 1 }}
-                  inputProps={{
-                    maxLength: 13,
-                  }}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      error={!!error}
+                      helperText={error?.message}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 0.5,
+                                flexDirection: 'row',
+                              }}
+                            >
+                              <Box
+                                component="img"
+                                src="/assets/images/flag.png"
+                                alt="Saudi Arabia Flag"
+                                sx={{
+                                  width: 20,
+                                  height: 15,
+                                  objectFit: 'cover',
+                                  borderRadius: '2px',
+                                }}
+                              />
+                              <Typography
+                                sx={{
+                                  fontSize: '14px',
+                                  fontWeight: 500,
+                                  color: '#333',
+                                  fontFamily: 'monospace',
+                                }}
+                              >
+                                966+
+                              </Typography>
+                            </Box>
+                          </InputAdornment>
+                        ),
+                      }}
+                      value={field.value?.replace('+966', '') || ''}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                        field.onChange(`+966${value}`);
+                      }}
+                    />
+                  )}
                 />
               </Box>
             </Box>
@@ -439,7 +539,9 @@ export default function PatientDialog({
             color="primary"
             disabled={isSubmitting}
           >
-            {patient ? t('BUTTON.UPDATE_PATIENT') || 'Update Patient' : t('BUTTON.ADD_PATIENT') || 'Add Patient'}
+            {patient
+              ? t('BUTTON.UPDATE_PATIENT') || 'Update Patient'
+              : t('BUTTON.ADD_PATIENT') || 'Add Patient'}
           </LoadingButton>
         </DialogActions>
       </FormProvider>

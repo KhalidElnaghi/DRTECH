@@ -184,7 +184,10 @@
     "CONFIRM_PASSWORD": "Confirm Password",
     "CONFIRM_NEW_PASSWORD": "Confirm new password",
     "ENTER_NEW_PASSWORD": "Enter new password",
-    "LOAD_MORE": "Load more"
+    "LOAD_MORE": "Load more",
+    "EXAMINATION_FEES": "Examination Fees",
+    "ENTER_EXAMINATION_FEES": "Enter examination fees",
+    "PHONE_INVALID": "invalid phone number"
   },
   "BUTTON": {
     "LOGIN": "Login",
@@ -399,7 +402,9 @@
     "EMAIL_REQUIRED": "Email is required",
     "EMAIL_INVALID": "Invalid email format",
     "PASSWORD_REQUIRED": "Password is required",
-    "PASSWORD_MIN": "Password must be at least 6 characters"
+    "PASSWORD_MIN": "Password must be at least 6 characters",
+    "EXAMINATION_FEES_INVALID": "Examination fees must be a positive number",
+    "EXAMINATION_FEES_REQUIRED": "Examination fees is required"
   },
   "COMMON": {
     "ALL": "All",

@@ -60,6 +60,7 @@ export default function DashboardPatientsTable() {
           data={items.map((p: any) => ({ id: p.Id || p.id, ...p }))}
           tableHead={TABLE_HEAD}
           disablePagination={false}
+
         />
       </Box>
     </Paper>

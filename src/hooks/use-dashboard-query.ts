@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
+
 import {
   fetchDashboardSummaryClient,
-  fetchDashboardUpcomingAppointmentsClient,
-  fetchDashboardPatientsStatisticsClient,
   fetchDashboardPatientsClient,
+  fetchDashboardPatientsStatisticsClient,
+  fetchDashboardUpcomingAppointmentsClient,
 } from 'src/api/dashboard';
 
 export const dashboardKeys = {

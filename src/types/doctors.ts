@@ -8,6 +8,7 @@ export type IDoctor = {
   Status: number;
   email: string;
   password?: string;
+  ExaminationFees?: number;
 };
 
 export type ICreateDoctor = {
@@ -17,6 +18,7 @@ export type ICreateDoctor = {
   Status: number;
   email: string;
   password: string;
+  ExaminationFees?: number;
 };
 
 export type IUpdateDoctor = {
@@ -26,6 +28,7 @@ export type IUpdateDoctor = {
   Status?: number;
   email?: string;
   password?: string;
+  ExaminationFees?: number;
 };
 
 export type ISpecialization = {
