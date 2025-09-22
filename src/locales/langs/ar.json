@@ -188,7 +188,9 @@
     "ENTER_NEW_PASSWORD": "أدخل كلمة المرور الجديدة",
     "EXAMINATION_FEES": "رسوم الكشف",
     "ENTER_EXAMINATION_FEES": "أدخل رسوم الكشف",
-    "PHONE_INVALID": "رقم هاتف غير صالح"
+    "PHONE_INVALID": "رقم هاتف غير صالح",
+    "NATIONAL_ID_INVALID": "رقم الهوية غير صالح",
+    "NATIONAL_ID": "رقم الهوية"
   },
   "BUTTON": {
     "LOGIN": "تسجيل الدخول",

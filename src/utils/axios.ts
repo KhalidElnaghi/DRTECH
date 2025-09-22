@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-import { HOST_API } from 'src/config-global';
+import { HOST_API, LANGUAGE } from 'src/config-global';
 
 export interface Params {
   page: number;
@@ -16,7 +16,6 @@ const axiosInstance: AxiosInstance = axios.create({
   baseURL: HOST_API,
   headers: {
     'Content-Type': 'application/json',
-    'Accept-Language': 'en',
     'Access-Control-Allow-Origin': '*',
     Accept: 'application/json',
     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
@@ -27,8 +26,23 @@ const axiosInstance: AxiosInstance = axios.create({
 // Add request interceptor to dynamically set Authorization header
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = Cookies.get('access_token');
+    // Try to get token from cookies first, then from sessionStorage
+    let token = Cookies.get('access_token');
+
+    // If not in cookies, try sessionStorage (for remember me = false)
+    if (!token && typeof window !== 'undefined') {
+      try {
+        const sessionToken = window.sessionStorage.getItem('access_token');
+        if (sessionToken) {
+          token = JSON.parse(sessionToken);
+        }
+      } catch (error) {
+        console.error('Error getting token from sessionStorage:', error);
+      }
+    }
+
     const lang = Cookies.get('Language');
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
       config.headers['Accept-Language'] = lang;

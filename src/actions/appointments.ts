@@ -19,7 +19,7 @@ export const fetchAppoinments = async ({
   AppointmentDate = '',
   Status = '',
 }: IParams): Promise<any> => {
-  const accessToken = cookies().get('access_token')?.value;
+  const accessToken = cookies().get('access_token')?.value ;
   const lang = cookies().get('Language')?.value;
 
   try {

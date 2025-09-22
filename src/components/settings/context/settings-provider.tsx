@@ -27,7 +27,6 @@ export function SettingsProvider({ children, defaultSettings }: SettingsProvider
   // Direction by lang
   const onChangeDirectionByLang = useCallback(
     (lang: string) => {
-      console.log(`Changing direction to: ${lang === 'ar' ? 'rtl' : 'ltr'} for language: ${lang}`);
       update('themeDirection', lang === 'ar' ? 'rtl' : 'ltr');
     },
     [update]
@@ -39,10 +38,8 @@ export function SettingsProvider({ children, defaultSettings }: SettingsProvider
     const isArabic = currentStoredLang === 'ar';
 
     if (isArabic && state.themeDirection !== 'rtl') {
-      console.log('Initializing direction to RTL for Arabic');
       onChangeDirectionByLang('ar');
     } else if (!isArabic && state.themeDirection !== 'ltr') {
-      console.log('Initializing direction to LTR for English');
       onChangeDirectionByLang('en');
     }
   }, [onChangeDirectionByLang, state.themeDirection]);

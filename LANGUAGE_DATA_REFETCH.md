@@ -56,13 +56,7 @@ import { useLanguageContext } from 'src/contexts/language-context';
 function MyComponent() {
   const { currentLanguage, refetchAllData, isChangingLanguage } = useLanguageContext();
 
-  useEffect(() => {
-    // This will run whenever the language changes
-    console.log(`Language changed to: ${currentLanguage}`);
 
-    // Your component will automatically get fresh data
-    // No manual action needed!
-  }, [currentLanguage]);
 
   return (
     <div>

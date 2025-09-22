@@ -1,13 +1,14 @@
-'use server';
-
-/* eslint-disable consistent-return */
-
-import { cookies } from 'next/headers';
-import { revalidatePath } from 'next/cache';
+'use client';
 
 import axiosInstance, { endpoints, getErrorMessage } from 'src/utils/axios';
-
+import { getAuthHeaders } from 'src/utils/auth-storage';
 import { ICreateDoctor, IUpdateDoctor } from 'src/types/doctors';
+
+/**
+ * Client-side API functions that use the appropriate storage method
+ * These functions can be used in client components when you need to make API calls
+ * They will automatically get the token from cookies or sessionStorage
+ */
 
 interface IParams {
   page?: number;
@@ -16,16 +17,15 @@ interface IParams {
   SpecializationId?: number;
 }
 
-export const fetchDoctors = async ({
+// Doctors API functions
+export const fetchDoctorsClient = async ({
   page = 1,
   SearchTerm = '',
   Status = 0,
   SpecializationId = 0,
 }: IParams): Promise<any> => {
-  const accessToken = cookies().get('access_token')?.value;
-  const lang = cookies().get('Language')?.value;
-
   try {
+    const headers = getAuthHeaders();
     const res = await axiosInstance.get(endpoints.doctors.fetch, {
       params: {
         page,
@@ -34,26 +34,22 @@ export const fetchDoctors = async ({
         Status,
         SpecializationId,
       },
-      headers: { Authorization: `Bearer ${accessToken}`, 'Accept-Language': lang },
+      headers,
     });
     return res?.data;
   } catch (error) {
-    // throw new Error(error);
+    throw new Error(getErrorMessage(error));
   }
 };
 
-export const createDoctor = async (reqBody: ICreateDoctor): Promise<any> => {
-  const accessToken = cookies().get('access_token')?.value;
-  const lang = cookies().get('Language')?.value;
-
+export const createDoctorClient = async (reqBody: ICreateDoctor): Promise<any> => {
   try {
-    await axiosInstance.post(endpoints.doctors.new, reqBody, {
-      headers: { Authorization: `Bearer ${accessToken}`, 'Accept-Language': lang },
+    const headers = getAuthHeaders();
+    const res = await axiosInstance.post(endpoints.doctors.new, reqBody, {
+      headers,
     });
-    revalidatePath('/dashboard/doctors');
-    return { success: true };
+    return { success: true, data: res.data };
   } catch (error: any) {
-    // Handle the nested error structure from the API
     if (error && typeof error === 'object') {
       if (error.error && error.error.message) {
         return {
@@ -76,18 +72,14 @@ export const createDoctor = async (reqBody: ICreateDoctor): Promise<any> => {
   }
 };
 
-export const updateDoctor = async (reqBody: IUpdateDoctor, id: string): Promise<any> => {
-  const accessToken = cookies().get('access_token')?.value;
-  const lang = cookies().get('Language')?.value;
-
+export const updateDoctorClient = async (reqBody: IUpdateDoctor, id: string): Promise<any> => {
   try {
+    const headers = getAuthHeaders();
     const res = await axiosInstance.put(endpoints.doctors.edit(id), reqBody, {
-      headers: { Authorization: `Bearer ${accessToken}`, 'Accept-Language': lang },
+      headers,
     });
-    revalidatePath('/dashboard/doctors');
-    return { success: true };
+    return { success: true, data: res.data };
   } catch (error: any) {
-    // Handle the nested error structure from the API
     if (error && typeof error === 'object') {
       if (error.error && error.error.message) {
         return {
@@ -110,18 +102,14 @@ export const updateDoctor = async (reqBody: IUpdateDoctor, id: string): Promise<
   }
 };
 
-export const deleteDoctor = async (id: string): Promise<any> => {
-  const accessToken = cookies().get('access_token')?.value;
-  const lang = cookies().get('Language')?.value;
-
+export const deleteDoctorClient = async (id: string): Promise<any> => {
   try {
+    const headers = getAuthHeaders();
     const res = await axiosInstance.delete(endpoints.doctors.delete(id), {
-      headers: { Authorization: `Bearer ${accessToken}`, 'Accept-Language': lang },
+      headers,
     });
-    revalidatePath('/dashboard/doctors');
-    return { success: true };
+    return { success: true, data: res.data };
   } catch (error: any) {
-    // Handle the nested error structure from the API
     if (error && typeof error === 'object') {
       if (error.error && error.error.message) {
         return {

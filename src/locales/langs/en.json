@@ -187,7 +187,9 @@
     "LOAD_MORE": "Load more",
     "EXAMINATION_FEES": "Examination Fees",
     "ENTER_EXAMINATION_FEES": "Enter examination fees",
-    "PHONE_INVALID": "invalid phone number"
+    "PHONE_INVALID": "invalid phone number",
+    "NATIONAL_ID_INVALID": "invalid national ID",
+    "NATIONAL_ID": "National ID"
   },
   "BUTTON": {
     "LOGIN": "Login",

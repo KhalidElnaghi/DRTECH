@@ -107,21 +107,6 @@ export type JWTContextType = CanRemove & {
   logout: () => Promise<void>;
 };
 
-export type FirebaseContextType = CanRemove & {
-  user: AuthUserType;
-  method: string;
-  loading: boolean;
-  authenticated: boolean;
-  unauthenticated: boolean;
-  logout: () => Promise<void>;
-  loginWithGoogle: () => Promise<void>;
-  loginWithGithub: () => Promise<void>;
-  loginWithTwitter: () => Promise<void>;
-  forgotPassword?: (email: string) => Promise<void>;
-  login: (phone: string, password: string) => Promise<void>;
-  register: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
-};
-
 export type AmplifyContextType = CanRemove & {
   user: AuthUserType;
   method: string;

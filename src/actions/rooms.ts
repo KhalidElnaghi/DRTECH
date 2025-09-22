@@ -1,7 +1,6 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { revalidatePath } from 'next/cache';
 
 import axiosInstance, { endpoints, getErrorMessage } from 'src/utils/axios';
 
@@ -19,6 +18,7 @@ export const fetchRooms = async ({
   Floor = '',
   Type = 0,
   Status = 0,
+  // eslint-disable-next-line consistent-return
 }: IParams): Promise<any> => {
   const accessToken = cookies().get('access_token')?.value;
   const lang = cookies().get('Language')?.value;
@@ -45,7 +45,7 @@ export const newRoom = async (reqBody: any): Promise<any> => {
   const accessToken = cookies().get('access_token')?.value;
   const lang = cookies().get('Language')?.value;
   try {
-    const res = await axiosInstance.post(endpoints.rooms.new, reqBody, {
+    await axiosInstance.post(endpoints.rooms.new, reqBody, {
       headers: { Authorization: `Bearer ${accessToken}`, 'Accept-Language': lang },
     });
     return { success: true };
@@ -77,7 +77,7 @@ export const editRoom = async (reqBody: any, id: string): Promise<any> => {
   const accessToken = cookies().get('access_token')?.value;
   const lang = cookies().get('Language')?.value;
   try {
-    const res = await axiosInstance.put(endpoints.rooms.edit(id), reqBody, {
+    await axiosInstance.put(endpoints.rooms.edit(id), reqBody, {
       headers: { Authorization: `Bearer ${accessToken}`, 'Accept-Language': lang },
     });
     return { success: true };
@@ -109,7 +109,7 @@ export const deleteRoom = async (id: string): Promise<any> => {
   const accessToken = cookies().get('access_token')?.value;
   const lang = cookies().get('Language')?.value;
   try {
-    const res = await axiosInstance.delete(endpoints.rooms.delete(id), {
+    await axiosInstance.delete(endpoints.rooms.delete(id), {
       headers: { Authorization: `Bearer ${accessToken}`, 'Accept-Language': lang },
     });
     return { success: true };
@@ -125,7 +125,7 @@ export const disableRoom = async (id: string): Promise<any> => {
   const accessToken = cookies().get('access_token')?.value;
   const lang = cookies().get('Language')?.value;
   try {
-    const res = await axiosInstance.patch(
+    await axiosInstance.patch(
       endpoints.rooms.disable(id),
       {},
       {
@@ -145,7 +145,7 @@ export const archiveRoom = async (id: string): Promise<any> => {
   const accessToken = cookies().get('access_token')?.value;
   const lang = cookies().get('Language')?.value;
   try {
-    const res = await axiosInstance.patch(
+    await axiosInstance.patch(
       endpoints.rooms.archive(id),
       {},
       {

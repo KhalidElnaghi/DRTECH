@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useCallback, ReactNode, useState } from 'react';
+import { createContext, useContext, useEffect, useCallback, ReactNode, useState, useMemo } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslate } from 'src/locales';
 import { invalidateAllQueries } from 'src/utils/query-utils';
@@ -31,7 +31,6 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
           refetchType: 'all',
         });
 
-        console.log(`Language changed to ${newLang}, all queries invalidated for refetch`);
       } catch (error) {
         console.error('Error during language change:', error);
         // Still try to change the language even if cache invalidation fails
@@ -67,7 +66,6 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   useEffect(() => {
     const handleLanguageChange = () => {
       const currentLang = i18n.language;
-      console.log(`Language changed to ${currentLang}, refetching data...`);
 
       // Refetch all data when language changes
       invalidateAllQueries(queryClient, {
@@ -84,13 +82,16 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
     };
   }, [i18n, queryClient]);
 
-  const value: LanguageContextType = {
-    currentLanguage: i18n.language,
-    onLanguageChange,
-    refetchAllData,
-    invalidateQueries,
-    isChangingLanguage,
-  };
+  const value = useMemo<LanguageContextType>(
+    () => ({
+      currentLanguage: i18n.language,
+      onLanguageChange,
+      refetchAllData,
+      invalidateQueries,
+      isChangingLanguage,
+    }),
+    [i18n.language, onLanguageChange, refetchAllData, invalidateQueries, isChangingLanguage]
+  );
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

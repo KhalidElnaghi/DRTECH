@@ -153,7 +153,7 @@ export function AuthProvider({ children }: Readonly<Props>) {
 
       // Try to get from cookies first (remember me was checked)
       let accessToken = Cookie.get(ACCESS_TOKEN);
-      let userStr = Cookie.get(USER_KEY);
+      const userStr = Cookie.get(USER_KEY);
       let user = userStr ? (JSON.parse(userStr) as User) : null;
 
       // If not found in cookies, try sessionStorage (remember me was not checked)
@@ -211,7 +211,7 @@ export function AuthProvider({ children }: Readonly<Props>) {
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
       if (rememberMe) {
-        // Store in cookies (persistent)
+        // Store in cookies (persistent) - 7 days
         Cookie.set(ACCESS_TOKEN, accessToken, {
           expires: 7, // 7 days
           secure: true, // for HTTPS
@@ -227,7 +227,7 @@ export function AuthProvider({ children }: Readonly<Props>) {
           path: '/',
         });
       } else {
-        // Store in sessionStorage (session only)
+        // Store ONLY in sessionStorage (not in cookies)
         setSessionStorage(ACCESS_TOKEN, accessToken);
         setSessionStorage(USER_KEY, user);
       }
@@ -419,7 +419,7 @@ export function AuthProvider({ children }: Readonly<Props>) {
     // Clear from cookies
     Cookie.remove(ACCESS_TOKEN);
     Cookie.remove(USER_KEY);
-    // Clear from sessionStorage
+    // Clear from sessionStorage (in case it was stored there)
     removeSessionStorage(ACCESS_TOKEN);
     removeSessionStorage(USER_KEY);
     dispatch({

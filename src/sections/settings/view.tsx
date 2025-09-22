@@ -135,10 +135,7 @@ export default function SettingsView() {
   };
 
   const handleSave = () => {
-    // Here you would typically save the settings to your backend
-    console.log('Saving settings:', { notificationSettings, accountData });
     setHasChanges(false);
-    // You could also show a success message here
   };
 
   const handleCancel = () => {

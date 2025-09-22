@@ -19,7 +19,6 @@ export const useLanguageChange = () => {
           refetchType: 'all',
         });
 
-        console.log(`Language changed to ${newLang}, all queries invalidated for refetch`);
       } catch (error) {
         console.error('Error during language change:', error);
         // Still try to change the language even if cache invalidation fails

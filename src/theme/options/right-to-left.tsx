@@ -12,7 +12,6 @@ type Props = {
 
 export default function RTL({ children, themeDirection }: Props) {
   useEffect(() => {
-    console.log(`RTL component: Setting document direction to ${themeDirection}`);
     document.dir = themeDirection;
   }, [themeDirection]);
 

@@ -102,7 +102,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
               try {
                 await logout();
                 setOpenLogout(false);
-                router.replace('/');
+                router.replace('/auth/login');
               } catch (err) {
                 // eslint-disable-next-line no-console
                 console.error(err);

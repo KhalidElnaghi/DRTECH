@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+
 import { fetchLookupsClient } from 'src/api/lookups';
 
 export const lookupKeys = {
@@ -7,10 +8,8 @@ export const lookupKeys = {
   list: (type: string) => [...lookupKeys.lists(), type] as const,
 };
 
-export const useLookups = (type: string) => {
-  return useQuery({
+export const useLookups = (type: string) => useQuery({
     queryKey: lookupKeys.list(type),
     queryFn: () => fetchLookupsClient(type),
     staleTime: 10 * 60 * 1000, // 10 minutes
   });
-};

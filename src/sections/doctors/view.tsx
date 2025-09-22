@@ -77,7 +77,6 @@ export default function DoctorsPage({
   const [selectedId, setSelectedId] = useState<string>('');
   const confirmDelete = useBoolean();
   const [isDeleting, setIsDeleting] = useState(false);
-  console.log(currentLang);
   const TABLE_HEAD = [
     { id: 'FullName', label: t('LABEL.FULL_NAME') || 'Full Name', align: cellAlignment.left },
     {

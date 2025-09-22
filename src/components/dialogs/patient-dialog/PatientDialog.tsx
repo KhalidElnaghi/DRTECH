@@ -2,24 +2,24 @@
 
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
-import { useEffect, useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import LoadingButton from '@mui/lab/LoadingButton';
 import { DatePicker } from '@mui/x-date-pickers';
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
   Box,
   Stack,
   Dialog,
   Button,
   MenuItem,
+  TextField,
   Typography,
   IconButton,
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
   InputAdornment,
 } from '@mui/material';
 
@@ -66,6 +66,7 @@ export default function PatientDialog({
       EmergencyContact: patient?.EmergencyContact || '',
       Address: patient?.Address || '',
       DateOfBirth: patient?.DateOfBirth ? new Date(patient.DateOfBirth) : new Date(),
+      NationalID: patient?.NationalID || '',
     }),
     [patient]
   );
@@ -100,6 +101,14 @@ export default function PatientDialog({
             /^\+966[0-9]{9}$/,
             t('LABEL.PHONE_INVALID') || 'Phone number must be in format +966XXXXXXXXX'
           ),
+        NationalID: yup
+          .string()
+          .required(t('LABEL.THIS_FIELD_IS_REQUIRED') || 'National ID is required')
+          .matches(
+            /^[12]\d{8}$/,
+            t('LABEL.NATIONAL_ID_INVALID') ||
+              'National ID must start with 1 or 2 and contain exactly 9 digits'
+          ),
         Address: yup.string().required(t('LABEL.THIS_FIELD_IS_REQUIRED') || 'Address is required'),
         DateOfBirth: yup
           .date()
@@ -116,7 +125,7 @@ export default function PatientDialog({
     control,
     reset,
 
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = methods;
 
   // Reset form when patient changes (for edit mode) or when dialog opens
@@ -175,10 +184,8 @@ export default function PatientDialog({
           Gender: data.Gender ?? 0,
           DateOfBirth: data.DateOfBirth ? data.DateOfBirth.toISOString().split('T')[0] : '',
         };
-        console.log(patientData);
 
-        const res = await newPatientMutation.mutateAsync(patientData);
-        console.log(res);
+        await newPatientMutation.mutateAsync(patientData);
         onClose();
       }
     } catch (error) {
@@ -501,29 +508,57 @@ export default function PatientDialog({
                 />
               </Box>
             </Box>
-
-            <Box>
-              <Typography
-                sx={{
-                  fontWeight: 400,
-                  fontStyle: 'normal',
-                  fontSize: '12px',
-                  lineHeight: '150%',
-                  letterSpacing: '2%',
-                  mb: 1,
-                  color: '#666D80',
-                }}
-              >
-                {t('LABEL.ADDRESS') || 'Address'}
-              </Typography>
-              <RHFTextField
-                placeholder={t('LABEL.ADDRESS') || 'Enter patient address'}
-                name="Address"
-                InputLabelProps={{ shrink: true }}
-                sx={{ flexGrow: 1 }}
-                multiline
-                rows={1}
-              />
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: 1,
+                justifyContent: 'space-between',
+              }}
+            >
+              <Box sx={{ flex: 1 }}>
+                <Typography
+                  sx={{
+                    fontWeight: 400,
+                    fontStyle: 'normal',
+                    fontSize: '12px',
+                    lineHeight: '150%',
+                    letterSpacing: '2%',
+                    mb: 1,
+                    color: '#666D80',
+                  }}
+                >
+                  {t('LABEL.ADDRESS') || 'Address'}
+                </Typography>
+                <RHFTextField
+                  placeholder={t('LABEL.ADDRESS') || 'Enter patient address'}
+                  name="Address"
+                  InputLabelProps={{ shrink: true }}
+                  multiline
+                  rows={1}
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <Typography
+                  sx={{
+                    fontWeight: 400,
+                    fontStyle: 'normal',
+                    fontSize: '12px',
+                    lineHeight: '150%',
+                    letterSpacing: '2%',
+                    mb: 1,
+                    color: '#666D80',
+                  }}
+                >
+                  {t('LABEL.NATIONAL_ID') || 'National ID'}
+                </Typography>
+                <RHFTextField
+                  placeholder={t('LABEL.NATIONAL_ID') || 'Enter patient national ID'}
+                  name="NationalID"
+                  InputLabelProps={{ shrink: true }}
+                  sx={{ flexGrow: 1 }}
+                />
+              </Box>
             </Box>
           </Stack>
         </DialogContent>

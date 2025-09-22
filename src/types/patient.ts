@@ -11,6 +11,7 @@ export type IPatient = {
   DateOfBirth: string;
   CreatedAt: string;
   IsArchived: boolean;
+  NationalID: string;
 };
 
 export type PatientParams = {

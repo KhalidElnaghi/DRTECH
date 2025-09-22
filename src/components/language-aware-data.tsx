@@ -12,16 +12,7 @@ export function LanguageAwareData() {
   const { currentLanguage, refetchAllData } = useLanguageContext();
 
   // This effect will run whenever the language changes
-  useEffect(() => {
-    console.log(`Language changed to: ${currentLanguage}`);
 
-    // You can add custom logic here to refetch specific data
-    // For example, if you have a specific query that needs refreshing:
-    // refetchSpecificData();
-
-    // Or refetch all data:
-    // refetchAllData();
-  }, [currentLanguage, refetchAllData]);
 
   return (
     <div>
