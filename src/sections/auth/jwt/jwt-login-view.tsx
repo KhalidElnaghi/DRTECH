@@ -51,6 +51,7 @@ export default function JwtLoginView() {
   const LoginSchema = Yup.object().shape({
     email: Yup.string().required(t('phone_is_required')).email('Invalid email. Please try again.'),
     password: Yup.string().required(t('password_is_required')),
+    keepMeLoggedIn: Yup.boolean().default(false),
   });
 
   const defaultValues = {
