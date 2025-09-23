@@ -258,7 +258,9 @@
     "INPATIENTS": "Inpatients",
     "USERS": "Users",
     "SETTINGS": "Settings",
-    "PAYMENTS": "Payments"
+    "PAYMENTS": "Payments",
+    "MANAGEMENT": "Management",
+    "MENU": "Menu"
   },
   "SETTINGS": {
     "TITLE": "Settings",

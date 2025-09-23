@@ -30,9 +30,13 @@ export default function Page() {
   const { data: services, isLoading: servicesLoading } = useLookups('service-types');
   const { data: clinics, isLoading: clinicsLoading } = useLookups('clinics');
   const { data: appointmentStatus, isLoading: statusLoading } = useLookups('appointment-status');
-  console.log(clinics);
   const isLoading =
-    appointmentsLoading || doctorsLoading || patientsLoading || servicesLoading || statusLoading || clinicsLoading;
+    appointmentsLoading ||
+    doctorsLoading ||
+    patientsLoading ||
+    servicesLoading ||
+    statusLoading ||
+    clinicsLoading;
 
   if (isLoading) {
     return <LoadingScreen />;

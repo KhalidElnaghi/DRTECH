@@ -267,7 +267,9 @@
     "INPATIENTS": "المرضى الداخليين",
     "USERS": "المستخدمين",
     "SETTINGS": "الاعدادات",
-    "PAYMENTS": "المدفوعات"
+    "PAYMENTS": "المدفوعات",
+    "MANAGEMENT": "الإدارة",
+    "MENU": "القائمة"
   },
   "SETTINGS": {
     "TITLE": "الإعدادات",

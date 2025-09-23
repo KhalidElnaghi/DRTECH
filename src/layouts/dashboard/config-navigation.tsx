@@ -78,7 +78,7 @@ export function useNavData() {
   const data = useMemo(
     () => [
       {
-        subheader: 'Menu',
+        subheader: t('SIDEBAR.MENU'),
         items: [
           { title: t('SIDEBAR.MAIN'), path: paths.dashboard.root, icon: ICONS.home },
           {
@@ -91,7 +91,7 @@ export function useNavData() {
         ],
       },
       {
-        subheader: 'Management',
+        subheader: t('SIDEBAR.MANAGEMENT'),
         items: [
           { title: t('SIDEBAR.DOCTORS'), path: paths.dashboard.doctors, icon: ICONS.doctors },
           { title: t('SIDEBAR.PATIENTS'), path: paths.dashboard.patients, icon: ICONS.patients },
@@ -103,7 +103,7 @@ export function useNavData() {
         ],
       },
       {
-        subheader: 'Settings',
+        subheader: t('SIDEBAR.SETTINGS'),
         items: [
           { title: t('SIDEBAR.USERS'), path: paths.dashboard.users, icon: ICONS.users },
           { title: t('SIDEBAR.SETTINGS'), path: paths.dashboard.settings, icon: ICONS.settings },
