@@ -53,6 +53,7 @@ interface IProps {
   patients: IPatient[];
   services: ILookup[];
   appointmentStatus: ILookup[];
+  clinics: ILookup[];
 }
 
 interface FilterState {
@@ -134,6 +135,7 @@ export default function AppointmentsPage({
   doctors,
   patients,
   services,
+  clinics,
   appointmentStatus,
 }: IProps) {
   const [openAddDialog, setOpenAddDialog] = useState(false);
@@ -361,11 +363,10 @@ export default function AppointmentsPage({
         <AppointmentDialog
           open={openAddDialog}
           onClose={handleCloseAddDialog}
-          doctors={doctors}
-          patients={patients}
           services={services}
           appointmentStatus={appointmentStatus}
           appointment={null}
+          clinics={clinics}
         />
       </>
     );
@@ -934,11 +935,10 @@ export default function AppointmentsPage({
       <AppointmentDialog
         open={openAddDialog}
         onClose={handleCloseAddDialog}
-        doctors={doctors}
-        patients={patients}
         services={services}
         appointment={selectedAppointment}
         appointmentStatus={appointmentStatus}
+        clinics={clinics}
       />
 
       {/* Cancel Appointment Dialog */}

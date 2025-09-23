@@ -14,12 +14,7 @@ export interface AppointmentData {
   ScheduledTime?: string;
   ServiceType?: number;
   Status: number;
-  ClinicName: string;
-  ClinicLocation: {
-    lat: number;
-    lng: number;
-    location: string;
-  };
+  ClinicId: string;
   Notes?: string;
 }
 

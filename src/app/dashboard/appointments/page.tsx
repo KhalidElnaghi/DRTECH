@@ -28,10 +28,11 @@ export default function Page() {
   const { data: doctorsData, isLoading: doctorsLoading } = useDoctors();
   const { data: patientsData, isLoading: patientsLoading } = usePatients({ page: 1 });
   const { data: services, isLoading: servicesLoading } = useLookups('service-types');
+  const { data: clinics, isLoading: clinicsLoading } = useLookups('clinics');
   const { data: appointmentStatus, isLoading: statusLoading } = useLookups('appointment-status');
-
+  console.log(clinics);
   const isLoading =
-    appointmentsLoading || doctorsLoading || patientsLoading || servicesLoading || statusLoading;
+    appointmentsLoading || doctorsLoading || patientsLoading || servicesLoading || statusLoading || clinicsLoading;
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -44,6 +45,7 @@ export default function Page() {
       doctors={doctorsData?.Data?.Items || []}
       patients={patientsData?.Data?.Items || []}
       services={services || []}
+      clinics={clinics.Data || []}
       appointmentStatus={appointmentStatus || []}
     />
   );

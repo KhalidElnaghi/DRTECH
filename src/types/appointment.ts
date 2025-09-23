@@ -10,10 +10,5 @@ export type IAppointment = {
   Status?: number;
   AppointmenStatusName: string;
   Notes: string;
-  ClinicName: string;
-  ClinicLocation: {
-    lat: number;
-    lng: number;
-    location: string;
-  };
+  ClinicId: string;
 };

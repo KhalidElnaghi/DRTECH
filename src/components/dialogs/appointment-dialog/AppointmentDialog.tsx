@@ -31,17 +31,14 @@ import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
 import RHFTextField from 'src/components/hook-form/rhf-text-field-form';
 
-import { IDoctor } from 'src/types/doctors';
 import { ILookup } from 'src/types/lookups';
-import { IPatient } from 'src/types/patients';
 import { IAppointment } from 'src/types/appointment';
 
 interface AppointmentDialogProps {
   open: boolean;
   onClose: () => void;
-  doctors: IDoctor[];
-  patients: IPatient[];
   services: ILookup[];
+  clinics: ILookup[];
   appointment?: IAppointment | null;
   appointmentStatus: ILookup[];
 }
@@ -50,6 +47,7 @@ export default function AppointmentDialog({
   open,
   onClose,
   services,
+  clinics,
   appointment,
   appointmentStatus,
 }: AppointmentDialogProps) {
@@ -110,12 +108,7 @@ export default function AppointmentDialog({
         AppointmentDate: yup.date().required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
         // .min(yup.ref('startDate'), t('LABEL.END_DATE_MUST_BE_AFTER_START_DATE')),
         ScheduledTime: yup.date().required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
-        ClinicName: yup.string().required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
-        ClinicLocation: yup.object().shape({
-          lat: yup.number().required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
-          lng: yup.number().required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
-          location: yup.string().required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
-        }),
+        ClinicId: yup.string().required(t('LABEL.THIS_FIELD_IS_REQUIRED')),
         Notes: yup.string(),
       })
     ),
@@ -126,12 +119,7 @@ export default function AppointmentDialog({
       ScheduledTime: new Date(),
       Status: 0,
       ServiceType: 0,
-      ClinicName: '',
-      ClinicLocation: {
-        lat: 0,
-        lng: 0,
-        location: '',
-      },
+      ClinicId: '',
       Notes: '',
     },
     mode: 'onChange',
@@ -176,12 +164,7 @@ export default function AppointmentDialog({
         // Handle both status fields (there's a typo in the type)
         Status: appointment.Status || undefined,
         ServiceType: appointment.ServiceType || undefined,
-        ClinicName: appointment.ClinicName || '',
-        ClinicLocation: {
-          lat: appointment.ClinicLocation?.lat || 0,
-          lng: appointment.ClinicLocation?.lng || 0,
-          location: appointment.ClinicLocation?.location || '',
-        },
+        ClinicId: appointment.ClinicId || '',
         Notes: appointment.Notes || '',
       };
       reset(formData);
@@ -194,12 +177,7 @@ export default function AppointmentDialog({
         ScheduledTime: new Date(),
         Status: 0,
         ServiceType: 0,
-        ClinicName: '',
-        ClinicLocation: {
-          lat: 0,
-          lng: 0,
-          location: '',
-        },
+        ClinicId: '',
         Notes: '',
       };
       reset(emptyFormData);
@@ -217,12 +195,7 @@ export default function AppointmentDialog({
         ScheduledTime: new Date(),
         Status: 0,
         ServiceType: 0,
-        ClinicName: '',
-        ClinicLocation: {
-          lat: 0,
-          lng: 0,
-          location: '',
-        },
+        ClinicId: '',
         Notes: '',
       };
       reset(emptyFormData);
@@ -388,11 +361,9 @@ export default function AppointmentDialog({
                 ))}
               </RHFSelect>
             </Box>
-
             <Box>
               <Typography
                 sx={{
-                  fontFamily: '    ',
                   fontWeight: 400,
                   fontStyle: 'normal',
                   fontSize: '12px',
@@ -404,49 +375,20 @@ export default function AppointmentDialog({
               >
                 {t('LABEL.CLINIC_NAME')}
               </Typography>
-              <Controller
-                name="ClinicName"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <RHFTextField
-                    {...field}
-                    InputLabelProps={{ shrink: true }}
-                    sx={{ flexGrow: 1 }}
-                    error={!!error}
-                    helperText={error?.message}
-                  />
-                )}
-              />
+              <RHFSelect
+                placeholder={t('LABEL.CLINIC_NAME')}
+                name="ClinicId"
+                InputLabelProps={{ shrink: true }}
+                sx={{ flexGrow: 1 }}
+              >
+                {clinics?.map((service: any) => (
+                  <MenuItem key={service.Id} value={service.Id}>
+                    {service?.Name}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
             </Box>
 
-            <Box>
-              <Typography
-                sx={{
-                  fontWeight: 400,
-                  fontStyle: 'normal',
-                  fontSize: '12px',
-                  lineHeight: '150%',
-                  letterSpacing: '2%',
-                  mb: 1,
-                  color: '#666D80',
-                }}
-              >
-                {t('LABEL.CLINIC_LOCATION')}
-              </Typography>
-              <Controller
-                name="ClinicLocation.location"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <RHFTextField
-                    {...field}
-                    InputLabelProps={{ shrink: true }}
-                    sx={{ flexGrow: 1 }}
-                    error={!!error}
-                    helperText={error?.message}
-                  />
-                )}
-              />
-            </Box>
             <Box>
               <Typography
                 sx={{
@@ -474,73 +416,6 @@ export default function AppointmentDialog({
                   </MenuItem>
                 ))}
               </RHFSelect>
-            </Box>
-            <Box>
-              <Typography
-                sx={{
-                  fontWeight: 400,
-                  fontStyle: 'normal',
-                  fontSize: '12px',
-                  lineHeight: '150%',
-                  letterSpacing: '2%',
-                  mb: 1,
-                  color: '#666D80',
-                }}
-              >
-                {t('LABEL.LATITUDE')}
-              </Typography>
-              <Controller
-                name="ClinicLocation.lat"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <RHFTextField
-                    {...field}
-                    placeholder="0.0"
-                    InputLabelProps={{ shrink: true }}
-                    sx={{ flexGrow: 1 }}
-                    error={!!error}
-                    helperText={error?.message}
-                    onChange={(e) => {
-                      const value = parseFloat(e.target.value) || 0;
-                      field.onChange(value);
-                    }}
-                  />
-                )}
-              />
-            </Box>
-
-            <Box>
-              <Typography
-                sx={{
-                  fontWeight: 400,
-                  fontStyle: 'normal',
-                  fontSize: '12px',
-                  lineHeight: '150%',
-                  letterSpacing: '2%',
-                  mb: 1,
-                  color: '#666D80',
-                }}
-              >
-                {t('LABEL.LONGITUDE')}
-              </Typography>
-              <Controller
-                name="ClinicLocation.lng"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <RHFTextField
-                    {...field}
-                    placeholder="0.0"
-                    InputLabelProps={{ shrink: true }}
-                    sx={{ flexGrow: 1 }}
-                    error={!!error}
-                    helperText={error?.message}
-                    onChange={(e) => {
-                      const value = parseFloat(e.target.value) || 0;
-                      field.onChange(value);
-                    }}
-                  />
-                )}
-              />
             </Box>
 
             <Box>
