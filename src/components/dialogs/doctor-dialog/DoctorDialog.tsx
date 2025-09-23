@@ -31,6 +31,7 @@ import Iconify from 'src/components/iconify';
 
 import { ILookup } from 'src/types/lookups';
 import { IDoctor, ICreateDoctor, IUpdateDoctor, ISpecialization } from 'src/types/doctors';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 interface DoctorDialogProps {
   open: boolean;
@@ -174,7 +175,7 @@ const DoctorDialog = ({
 
         await updateDoctorMutation.mutateAsync({ id: doctor.Id.toString(), data: updateData });
 
-        enqueueSnackbar(t('MESSAGE.DOCTOR_UPDATED_SUCCESSFULLY') , {
+        enqueueSnackbar(t('MESSAGE.DOCTOR_UPDATED_SUCCESSFULLY'), {
           variant: 'success',
         });
       } else {
@@ -550,16 +551,19 @@ const DoctorDialog = ({
           <Button onClick={handleClose} color="primary" variant="outlined">
             {t('BUTTON.CANCEL') || 'Cancel'}
           </Button>
-          <Button
+          <LoadingButton
             type="submit"
             color="primary"
             variant="contained"
+            loading={
+              isSubmitting || createDoctorMutation.isPending || updateDoctorMutation.isPending
+            }
             disabled={
               isSubmitting || createDoctorMutation.isPending || updateDoctorMutation.isPending
             }
           >
             {getSubmitButtonText()}
-          </Button>
+          </LoadingButton>
         </DialogActions>
       </form>
     </Dialog>
