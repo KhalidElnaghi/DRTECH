@@ -105,7 +105,7 @@ export default function PatientDialog({
           .string()
           .required(t('LABEL.THIS_FIELD_IS_REQUIRED') || 'National ID is required')
           .matches(
-            /^[12]\d{8}$/,
+            /^[12]\d{9}$/,
             t('LABEL.NATIONAL_ID_INVALID') ||
               'National ID must start with 1 or 2 and contain exactly 9 digits'
           ),
