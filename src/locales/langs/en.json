@@ -264,7 +264,7 @@
   },
   "SETTINGS": {
     "TITLE": "Settings",
-    "SUBTITLE": "Customize until match to your workflows",
+    "SUBHEADER": "Customize until match to your workflows",
     "ACCOUNT": "Account",
     "LANGUAGE": "Language",
     "PUSH_NOTIFICATIONS": "Push Notifications",

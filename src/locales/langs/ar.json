@@ -273,7 +273,7 @@
   },
   "SETTINGS": {
     "TITLE": "الإعدادات",
-    "SUBTITLE": "خصص حتى يتطابق مع سير عملك",
+    "SUBHEADER": "خصص حتى يتطابق مع سير عملك",
     "ACCOUNT": "الحساب",
     "LANGUAGE": "اللغة",
     "PUSH_NOTIFICATIONS": "الإشعارات الفورية",

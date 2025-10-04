@@ -165,6 +165,8 @@ export const endpoints = {
     fetch: '/notification',
   },
   settings: {
+    account: '/settings/account',
+    uploadPhoto: '/settings/account/upload-photo',
     deleteAccount: '/settings/account',
     pushNotifications: '/settings/push-notifications',
   },

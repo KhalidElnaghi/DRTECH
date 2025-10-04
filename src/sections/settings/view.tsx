@@ -1,7 +1,7 @@
 'use client';
 
 import { m } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { useRouter } from 'next/navigation';
 
@@ -14,23 +14,21 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
 import { alpha, useTheme } from '@mui/material/styles';
-import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+import { useAccountData } from 'src/hooks/use-account-data';
 import { UseNotificationsManagementReturn } from 'src/hooks/use-notifications-management';
 
 import { useTranslate } from 'src/locales';
-import { deleteAccountClient } from 'src/api/settings';
 import { useAuthContext } from 'src/auth/hooks/use-auth-context';
+import { deleteAccountClient, updateAccountData, uploadPhoto } from 'src/api/settings';
 
 import Iconify from 'src/components/iconify';
 import { varHover } from 'src/components/animate';
-import { useSettingsContext } from 'src/components/settings';
 import SharedHeader from 'src/components/shared-header/empty-state';
 import ConfirmDialog from 'src/components/custom-dialog/confirm-dialog';
 
@@ -67,9 +65,13 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
   const { logout } = useAuthContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentTab, setCurrentTab] = useState('account');
-  const [showPassword, setShowPassword] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isSavingAccount, setIsSavingAccount] = useState(false);
+
+  // Fetch account data from API
+  const { accountData, isLoading: isLoadingAccount, error: accountError } = useAccountData();
 
   // Extract notification logic from props
   const {
@@ -81,52 +83,108 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
     handleSaveSettings,
     handleCancelSettings,
   } = notificationsLogic;
-  const [accountData, setAccountData] = useState({
-    firstName: 'Leen',
-    lastName: 'Al Mutairi',
-    phoneNumber: '+966 50 123 4567',
-    email: 'leen.mutairi@example.com',
-    dateOfBirth: new Date('1999-12-20'),
-    password: '••••••••••',
+  const [localAccountData, setLocalAccountData] = useState({
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    email: '',
+    dateOfBirth: new Date(),
   });
 
   // Delete account state
   const confirmDelete = useBoolean(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Update local state when account data is loaded from API
+  useEffect(() => {
+    if (accountData) {
+      setLocalAccountData({
+        firstName: accountData.FirstName || '',
+        lastName: accountData.LastName || '',
+        phoneNumber: accountData.PhoneNumber || '',
+        email: accountData.Email || '',
+        dateOfBirth: accountData.DateOfBirth ? new Date(accountData.DateOfBirth) : new Date(),
+      });
+
+      // Set profile image if available
+      if (accountData.ProfileTempImagePath) {
+        setProfileImage(accountData.ProfileTempImagePath);
+      }
+    }
+  }, [accountData]);
+
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);
   };
 
-  const handleAccountChange = (field: keyof typeof accountData, value: any) => {
-    setAccountData((prev) => ({
+  const handleAccountChange = (field: keyof typeof localAccountData, value: any) => {
+    setLocalAccountData((prev) => ({
       ...prev,
       [field]: value,
     }));
     setHasChanges(true);
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       // Check file size (1MB max)
       if (file.size > 1024 * 1024) {
-        alert('File size must be less than 1MB');
+        enqueueSnackbar('File size must be less than 1MB', { variant: 'error' });
         return;
       }
 
       // Check file type
       if (!file.type.startsWith('image/')) {
-        alert('Please select an image file');
+        enqueueSnackbar('Please select an image file', { variant: 'error' });
         return;
       }
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setProfileImage(e.target?.result as string);
-        setHasChanges(true);
-      };
-      reader.readAsDataURL(file);
+      try {
+        setIsUploadingImage(true);
+
+        // Show preview immediately
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setProfileImage(e.target?.result as string);
+        };
+        reader.readAsDataURL(file);
+
+        // Upload to server
+        const response = await uploadPhoto(file);
+
+        if (response.IsSuccess) {
+          enqueueSnackbar('Profile image uploaded successfully', { variant: 'success' });
+          setHasChanges(true);
+
+          // Update profile image with server response if available
+          if (response.Data?.ProfileTempImagePath) {
+            setProfileImage(response.Data.ProfileTempImagePath);
+          }
+        } else {
+          enqueueSnackbar(response.Error?.Message || 'Failed to upload image', {
+            variant: 'error',
+          });
+          // Revert to original image on error
+          if (accountData?.ProfileTempImagePath) {
+            setProfileImage(accountData.ProfileTempImagePath);
+          } else {
+            setProfileImage(null);
+          }
+        }
+      } catch (error: any) {
+        console.error('Image upload error:', error);
+        enqueueSnackbar('Failed to upload image. Please try again.', { variant: 'error' });
+
+        // Revert to original image on error
+        if (accountData?.ProfileTempImagePath) {
+          setProfileImage(accountData.ProfileTempImagePath);
+        } else {
+          setProfileImage(null);
+        }
+      } finally {
+        setIsUploadingImage(false);
+      }
     }
   };
 
@@ -137,8 +195,42 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
   const handleSave = async () => {
     if (currentTab === 'notifications') {
       await handleSaveSettings();
-    } else {
-      setHasChanges(false);
+    } else if (currentTab === 'account') {
+      try {
+        setIsSavingAccount(true);
+
+        // Prepare the data for the API request
+        const updateData = {
+          FirstName: localAccountData.firstName,
+          LastName: localAccountData.lastName,
+          PhoneNumber: localAccountData.phoneNumber,
+          Email: localAccountData.email,
+          DateOfBirth: localAccountData.dateOfBirth.toISOString().split('T')[0], // Format as YYYY-MM-DD
+          ProfileTempImagePath: profileImage || undefined,
+        };
+
+        const response = await updateAccountData(updateData);
+
+        if (response.IsSuccess) {
+          enqueueSnackbar('Account information updated successfully', { variant: 'success' });
+          setHasChanges(false);
+
+          // Optionally refetch account data to get the latest from server
+          // This ensures we have the most up-to-date data
+          // You could add a refetch function to the useAccountData hook if needed
+        } else {
+          enqueueSnackbar(response.Error?.Message || 'Failed to update account information', {
+            variant: 'error',
+          });
+        }
+      } catch (error: any) {
+        console.error('Account update error:', error);
+        enqueueSnackbar('Failed to update account information. Please try again.', {
+          variant: 'error',
+        });
+      } finally {
+        setIsSavingAccount(false);
+      }
     }
   };
 
@@ -146,16 +238,17 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
     if (currentTab === 'notifications') {
       handleCancelSettings();
     } else {
-      // Reset account data to original values
-      setAccountData({
-        firstName: 'Leen',
-        lastName: 'Al Mutairi',
-        phoneNumber: '+966 50 123 4567',
-        email: 'leen.mutairi@example.com',
-        dateOfBirth: new Date('1999-12-20'),
-        password: '••••••••••',
-      });
-      setProfileImage(null);
+      // Reset account data to original API values
+      if (accountData) {
+        setLocalAccountData({
+          firstName: accountData.FirstName || '',
+          lastName: accountData.LastName || '',
+          phoneNumber: accountData.PhoneNumber || '',
+          email: accountData.Email || '',
+          dateOfBirth: accountData.DateOfBirth ? new Date(accountData.DateOfBirth) : new Date(),
+        });
+        setProfileImage(accountData.ProfileTempImagePath || null);
+      }
       setHasChanges(false);
     }
   };
@@ -244,39 +337,189 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
         {t('SETTINGS.ACCOUNT')}
       </Typography>
 
-      <Stack spacing={4}>
-        {/* Your Photo Section */}
-        <Box>
-          <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 600 }}>
-            {t('SETTINGS.YOUR_PHOTO')}
+      {isLoadingAccount && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Loading account data...
           </Typography>
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar
-              src={
-                profileImage ||
-                'https://t4.ftcdn.net/jpg/03/59/58/91/360_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg'
-              }
-              onClick={handleImageClick}
+        </Box>
+      )}
+
+      {accountError && !isLoadingAccount && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+          <Typography variant="body2" sx={{ color: 'error.main' }}>
+            Failed to load account data. Please try again.
+          </Typography>
+        </Box>
+      )}
+
+      {!isLoadingAccount && !accountError && (
+        <Stack spacing={4}>
+          {/* Your Photo Section */}
+          <Box>
+            <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 600 }}>
+              {t('SETTINGS.YOUR_PHOTO')}
+            </Typography>
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <Avatar
+                src={
+                  profileImage ||
+                  'https://t4.ftcdn.net/jpg/03/59/58/91/360_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg'
+                }
+                onClick={!isUploadingImage ? handleImageClick : undefined}
+                sx={{
+                  width: 80,
+                  height: 80,
+                  border: `2px solid ${theme.palette.divider}`,
+                  bgcolor: profileImage ? 'transparent' : 'primary.main',
+                  fontSize: '2rem',
+                  cursor: isUploadingImage ? 'not-allowed' : 'pointer',
+                  opacity: isUploadingImage ? 0.7 : 1,
+                  '&:hover': {
+                    opacity: isUploadingImage ? 0.7 : 0.8,
+                    transform: isUploadingImage ? 'none' : 'scale(1.05)',
+                    transition: 'all 0.2s ease-in-out',
+                  },
+                }}
+              >
+                {isUploadingImage && (
+                  <Iconify icon="eos-icons:loading" width={40} sx={{ color: 'primary.main' }} />
+                )}
+                {!isUploadingImage && !profileImage && (
+                  <Iconify icon="solar:user-bold-duotone" width={40} />
+                )}
+              </Avatar>
+              <Stack spacing={1}>
+                <Button
+                  variant="outlined"
+                  onClick={handleImageClick}
+                  disabled={isUploadingImage}
+                  sx={{
+                    borderColor: 'primary.main',
+                    color: 'primary.main',
+                    '&:hover': {
+                      borderColor: 'primary.dark',
+                      bgcolor: alpha(theme.palette.primary.main, 0.08),
+                    },
+                    '&:disabled': {
+                      borderColor: 'text.disabled',
+                      color: 'text.disabled',
+                    },
+                  }}
+                >
+                  {isUploadingImage ? (
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <Iconify icon="eos-icons:loading" width={16} />
+                      <span>Uploading...</span>
+                    </Stack>
+                  ) : (
+                    t('SETTINGS.UPLOAD_IMAGE')
+                  )}
+                </Button>
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                  {t('SETTINGS.PHOTO_REQUIREMENTS')}
+                </Typography>
+              </Stack>
+            </Stack>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              disabled={isUploadingImage}
+              style={{ display: 'none' }}
+            />
+          </Box>
+
+          {/* Personal Information Section */}
+          <Box>
+            <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 600 }}>
+              {t('SETTINGS.PERSONAL_INFORMATION')}
+            </Typography>
+            <Box
               sx={{
-                width: 80,
-                height: 80,
-                border: `2px solid ${theme.palette.divider}`,
-                bgcolor: profileImage ? 'transparent' : 'primary.main',
-                fontSize: '2rem',
-                cursor: 'pointer',
-                '&:hover': {
-                  opacity: 0.8,
-                  transform: 'scale(1.05)',
-                  transition: 'all 0.2s ease-in-out',
-                },
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+                gap: 3,
               }}
             >
-              {!profileImage && <Iconify icon="solar:user-bold-duotone" width={40} />}
-            </Avatar>
-            <Stack spacing={1}>
+              <TextField
+                label={t('SETTINGS.FIRST_NAME')}
+                value={localAccountData.firstName}
+                onChange={(e) => handleAccountChange('firstName', e.target.value)}
+                fullWidth
+                size="small"
+                disabled={isLoadingAccount || isSavingAccount}
+              />
+              <TextField
+                label={t('SETTINGS.LAST_NAME')}
+                value={localAccountData.lastName}
+                onChange={(e) => handleAccountChange('lastName', e.target.value)}
+                fullWidth
+                size="small"
+                disabled={isLoadingAccount || isSavingAccount}
+              />
+              <TextField
+                label={t('SETTINGS.PHONE_NUMBER')}
+                value={localAccountData.phoneNumber}
+                onChange={(e) => handleAccountChange('phoneNumber', e.target.value)}
+                fullWidth
+                size="small"
+                disabled={isLoadingAccount || isSavingAccount}
+              />
+              <TextField
+                label={t('SETTINGS.EMAIL_ADDRESS')}
+                value={localAccountData.email}
+                onChange={(e) => handleAccountChange('email', e.target.value)}
+                fullWidth
+                size="small"
+                type="email"
+                disabled={isLoadingAccount || isSavingAccount}
+              />
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label={t('SETTINGS.DATE_OF_BIRTH')}
+                  value={localAccountData.dateOfBirth}
+                  onChange={(newValue) => handleAccountChange('dateOfBirth', newValue)}
+                  disabled={isLoadingAccount || isSavingAccount}
+                  slotProps={{
+                    textField: {
+                      size: 'small',
+                      fullWidth: true,
+                    },
+                  }}
+                />
+              </LocalizationProvider>
+            </Box>
+          </Box>
+
+          {/* Delete Account Section */}
+          <Card
+            sx={{
+              p: 3,
+              bgcolor: 'grey.50',
+              border: `1px solid ${theme.palette.divider}`,
+            }}
+          >
+            <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600, color: '#D92C20' }}>
+              {t('SETTINGS.DELETE_ACCOUNT')}
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
+              {t('SETTINGS.DELETE_ACCOUNT_DESCRIPTION')}
+            </Typography>
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={confirmDelete.onTrue}
+                sx={{
+                  bgcolor: '#D92C20',
+                }}
+              >
+                {t('SETTINGS.DELETE_ACCOUNT')}
+              </Button>
               <Button
                 variant="outlined"
-                onClick={handleImageClick}
                 sx={{
                   borderColor: 'primary.main',
                   color: 'primary.main',
@@ -286,140 +529,12 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
                   },
                 }}
               >
-                {t('SETTINGS.UPLOAD_IMAGE')}
+                {t('SETTINGS.LEARN_MORE')}
               </Button>
-              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                {t('SETTINGS.PHOTO_REQUIREMENTS')}
-              </Typography>
             </Stack>
-          </Stack>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            style={{ display: 'none' }}
-          />
-        </Box>
-
-        {/* Personal Information Section */}
-        <Box>
-          <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 600 }}>
-            {t('SETTINGS.PERSONAL_INFORMATION')}
-          </Typography>
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-              gap: 3,
-            }}
-          >
-            <TextField
-              label={t('SETTINGS.FIRST_NAME')}
-              value={accountData.firstName}
-              onChange={(e) => handleAccountChange('firstName', e.target.value)}
-              fullWidth
-              size="small"
-            />
-            <TextField
-              label={t('SETTINGS.LAST_NAME')}
-              value={accountData.lastName}
-              onChange={(e) => handleAccountChange('lastName', e.target.value)}
-              fullWidth
-              size="small"
-            />
-            <TextField
-              label={t('SETTINGS.PHONE_NUMBER')}
-              value={accountData.phoneNumber}
-              onChange={(e) => handleAccountChange('phoneNumber', e.target.value)}
-              fullWidth
-              size="small"
-            />
-            <TextField
-              label={t('SETTINGS.EMAIL_ADDRESS')}
-              value={accountData.email}
-              onChange={(e) => handleAccountChange('email', e.target.value)}
-              fullWidth
-              size="small"
-              type="email"
-            />
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                label={t('SETTINGS.DATE_OF_BIRTH')}
-                value={accountData.dateOfBirth}
-                onChange={(newValue) => handleAccountChange('dateOfBirth', newValue)}
-                slotProps={{
-                  textField: {
-                    size: 'small',
-                    fullWidth: true,
-                  },
-                }}
-              />
-            </LocalizationProvider>
-            <TextField
-              label={t('SETTINGS.PASSWORD')}
-              value={accountData.password}
-              onChange={(e) => handleAccountChange('password', e.target.value)}
-              fullWidth
-              size="small"
-              type={showPassword ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                      <Iconify
-                        icon={showPassword ? 'solar:eye-closed-bold' : 'solar:eye-bold'}
-                        width={20}
-                      />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Box>
-        </Box>
-
-        {/* Delete Account Section */}
-        <Card
-          sx={{
-            p: 3,
-            bgcolor: 'grey.50',
-            border: `1px solid ${theme.palette.divider}`,
-          }}
-        >
-          <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600, color: '#D92C20' }}>
-            {t('SETTINGS.DELETE_ACCOUNT')}
-          </Typography>
-          <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
-            {t('SETTINGS.DELETE_ACCOUNT_DESCRIPTION')}
-          </Typography>
-          <Stack direction="row" spacing={2}>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={confirmDelete.onTrue}
-              sx={{
-                bgcolor: '#D92C20',
-              }}
-            >
-              {t('SETTINGS.DELETE_ACCOUNT')}
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{
-                borderColor: 'primary.main',
-                color: 'primary.main',
-                '&:hover': {
-                  borderColor: 'primary.dark',
-                  bgcolor: alpha(theme.palette.primary.main, 0.08),
-                },
-              }}
-            >
-              {t('SETTINGS.LEARN_MORE')}
-            </Button>
-          </Stack>
-        </Card>
-      </Stack>
+          </Card>
+        </Stack>
+      )}
     </Card>
   );
 
@@ -520,13 +635,18 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
     <Box sx={{ p: 3 }}>
       <SharedHeader
         header={t('SETTINGS.TITLE') || 'Settings'}
-        subheader="Customize until match to your workflows"
-        buttonText={isSavingNotifications ? t('MESSAGE.SAVING') : t('SETTINGS.SAVE') || 'Save'}
+        subheader={t('SETTINGS.SUBHEADER')}
+        buttonText={
+          isSavingNotifications || isSavingAccount
+            ? t('MESSAGE.SAVING') || 'Saving...'
+            : t('SETTINGS.SAVE') || 'Save'
+        }
         seconButtonText={t('SETTINGS.CANCEL') || 'Cancel'}
         onButtonClick={handleSave}
         onSecondButtonClick={handleCancel}
         buttonDisabled={
           isSavingNotifications ||
+          isSavingAccount ||
           (currentTab === 'notifications' ? !hasSettingsChanges : !hasChanges)
         }
       />
