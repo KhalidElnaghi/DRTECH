@@ -22,6 +22,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+import { UseNotificationsManagementReturn } from 'src/hooks/use-notifications-management';
 
 import { useTranslate } from 'src/locales';
 import { deleteAccountClient } from 'src/api/settings';
@@ -55,24 +56,31 @@ const TABS = [
 
 // ----------------------------------------------------------------------
 
-export default function SettingsView() {
+interface SettingsViewProps {
+  notificationsLogic: UseNotificationsManagementReturn;
+}
+
+export default function SettingsView({ notificationsLogic }: SettingsViewProps) {
   const theme = useTheme();
   const { t } = useTranslate();
   const router = useRouter();
-  const settings = useSettingsContext();
   const { logout } = useAuthContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentTab, setCurrentTab] = useState('account');
   const [showPassword, setShowPassword] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [notificationSettings, setNotificationSettings] = useState({
-    NewsAndUpdates: true,
-    OffersAndPromotions: false,
-    AllRemindersAndActivity: true,
-    ActiveOnly: false,
-    ImportantRemindersOnly: true,
-  });
   const [hasChanges, setHasChanges] = useState(false);
+
+  // Extract notification logic from props
+  const {
+    notificationSettings,
+    isLoadingSettings: isLoadingNotifications,
+    isSavingSettings: isSavingNotifications,
+    hasSettingsChanges,
+    handleNotificationSettingChange,
+    handleSaveSettings,
+    handleCancelSettings,
+  } = notificationsLogic;
   const [accountData, setAccountData] = useState({
     firstName: 'Leen',
     lastName: 'Al Mutairi',
@@ -88,14 +96,6 @@ export default function SettingsView() {
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);
-  };
-
-  const handleNotificationChange = (setting: keyof typeof notificationSettings) => {
-    setNotificationSettings((prev) => ({
-      ...prev,
-      [setting]: !prev[setting],
-    }));
-    setHasChanges(true);
   };
 
   const handleAccountChange = (field: keyof typeof accountData, value: any) => {
@@ -134,29 +134,30 @@ export default function SettingsView() {
     fileInputRef.current?.click();
   };
 
-  const handleSave = () => {
-    setHasChanges(false);
+  const handleSave = async () => {
+    if (currentTab === 'notifications') {
+      await handleSaveSettings();
+    } else {
+      setHasChanges(false);
+    }
   };
 
   const handleCancel = () => {
-    // Reset to original values
-    setNotificationSettings({
-      NewsAndUpdates: true,
-      OffersAndPromotions: false,
-      AllRemindersAndActivity: true,
-      ActiveOnly: false,
-      ImportantRemindersOnly: true,
-    });
-    setAccountData({
-      firstName: 'Leen',
-      lastName: 'Al Mutairi',
-      phoneNumber: '+966 50 123 4567',
-      email: 'leen.mutairi@example.com',
-      dateOfBirth: new Date('1999-12-20'),
-      password: '1111111111',
-    });
-    setProfileImage(null);
-    setHasChanges(false);
+    if (currentTab === 'notifications') {
+      handleCancelSettings();
+    } else {
+      // Reset account data to original values
+      setAccountData({
+        firstName: 'Leen',
+        lastName: 'Al Mutairi',
+        phoneNumber: '+966 50 123 4567',
+        email: 'leen.mutairi@example.com',
+        dateOfBirth: new Date('1999-12-20'),
+        password: '••••••••••',
+      });
+      setProfileImage(null);
+      setHasChanges(false);
+    }
   };
 
   const handleDeleteAccount = async () => {
@@ -422,100 +423,83 @@ export default function SettingsView() {
     </Card>
   );
 
-  const renderLanguageTab = (
-    <Card sx={{ p: 3 }}>
-      <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
-        {t('SETTINGS.LANGUAGE')}
-      </Typography>
-      <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-        {t('SETTINGS.LANGUAGE_DESCRIPTION')}
-      </Typography>
-
-      <Stack spacing={2}>
-        <Box>
-          <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
-            {t('SETTINGS.LANGUAGE_DIRECTION')}:{' '}
-            {settings.themeDirection === 'rtl'
-              ? t('SETTINGS.LANGUAGE_DIRECTION_RTL')
-              : t('SETTINGS.LANGUAGE_DIRECTION_LTR')}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {t('SETTINGS.LANGUAGE_DIRECTION_DESCRIPTION')}
-          </Typography>
-        </Box>
-      </Stack>
-    </Card>
-  );
-
   const renderNotificationsTab = (
     <Card sx={{ p: 3 }}>
       <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
         {t('SETTINGS.NOTIFICATIONS')}
       </Typography>
 
-      <Stack spacing={2}>
-        {[
-          {
-            key: 'NewsAndUpdates' as keyof typeof notificationSettings,
-            titleKey: 'SETTINGS.NEWS_UPDATES',
-            descriptionKey: 'SETTINGS.NEWS_UPDATES_DESCRIPTION',
-          },
-          {
-            key: 'OffersAndPromotions' as keyof typeof notificationSettings,
-            titleKey: 'SETTINGS.OFFERS_PROMOTIONS',
-            descriptionKey: 'SETTINGS.OFFERS_PROMOTIONS_DESCRIPTION',
-          },
-          {
-            key: 'AllRemindersAndActivity' as keyof typeof notificationSettings,
-            titleKey: 'SETTINGS.ALL_REMINDERS',
-            descriptionKey: 'SETTINGS.ALL_REMINDERS_DESCRIPTION',
-          },
-          {
-            key: 'ActiveOnly' as keyof typeof notificationSettings,
-            titleKey: 'SETTINGS.ACTIVE_ONLY',
-            descriptionKey: 'SETTINGS.ACTIVE_ONLY_DESCRIPTION',
-          },
-          {
-            key: 'ImportantRemindersOnly' as keyof typeof notificationSettings,
-            titleKey: 'SETTINGS.IMPORTANT_REMINDERS',
-            descriptionKey: 'SETTINGS.IMPORTANT_REMINDERS_DESCRIPTION',
-          },
-        ].map((item, index) => (
-          <Box key={item.key}>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-              sx={{ py: 2 }}
-            >
-              <Box sx={{ flex: 1 }}>
-                <Typography variant="subtitle2" sx={{ mb: 0.5, fontWeight: 600 }}>
-                  {t(item.titleKey)}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {t(item.descriptionKey)}
-                </Typography>
-              </Box>
-              <Switch
-                checked={notificationSettings[item.key]}
-                onChange={() => handleNotificationChange(item.key)}
-                sx={{
-                  '& .MuiSwitch-switchBase.Mui-checked': {
-                    color: 'primary.main',
-                    '&:hover': {
-                      backgroundColor: alpha(theme.palette.primary.main, 0.08),
+      {isLoadingNotifications ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Loading notification settings...
+          </Typography>
+        </Box>
+      ) : (
+        <Stack spacing={2}>
+          {[
+            {
+              key: 'NewsAndUpdates' as keyof typeof notificationSettings,
+              titleKey: 'SETTINGS.NEWS_UPDATES',
+              descriptionKey: 'SETTINGS.NEWS_UPDATES_DESCRIPTION',
+            },
+            {
+              key: 'OffersAndPromotions' as keyof typeof notificationSettings,
+              titleKey: 'SETTINGS.OFFERS_PROMOTIONS',
+              descriptionKey: 'SETTINGS.OFFERS_PROMOTIONS_DESCRIPTION',
+            },
+            {
+              key: 'AllRemindersAndActivity' as keyof typeof notificationSettings,
+              titleKey: 'SETTINGS.ALL_REMINDERS',
+              descriptionKey: 'SETTINGS.ALL_REMINDERS_DESCRIPTION',
+            },
+            {
+              key: 'ActiveOnly' as keyof typeof notificationSettings,
+              titleKey: 'SETTINGS.ACTIVE_ONLY',
+              descriptionKey: 'SETTINGS.ACTIVE_ONLY_DESCRIPTION',
+            },
+            {
+              key: 'ImportantRemindersOnly' as keyof typeof notificationSettings,
+              titleKey: 'SETTINGS.IMPORTANT_REMINDERS',
+              descriptionKey: 'SETTINGS.IMPORTANT_REMINDERS_DESCRIPTION',
+            },
+          ].map((item, index) => (
+            <Box key={item.key}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                sx={{ py: 2 }}
+              >
+                <Box sx={{ flex: 1 }}>
+                  <Typography variant="subtitle2" sx={{ mb: 0.5, fontWeight: 600 }}>
+                    {t(item.titleKey)}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                    {t(item.descriptionKey)}
+                  </Typography>
+                </Box>
+                <Switch
+                  checked={notificationSettings[item.key]}
+                  onChange={() => handleNotificationSettingChange(item.key)}
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: 'primary.main',
+                      '&:hover': {
+                        backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                      },
                     },
-                  },
-                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                    backgroundColor: 'primary.main',
-                  },
-                }}
-              />
-            </Stack>
-            {index < 4 && <Divider />}
-          </Box>
-        ))}
-      </Stack>
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: 'primary.main',
+                    },
+                  }}
+                />
+              </Stack>
+              {index < 4 && <Divider />}
+            </Box>
+          ))}
+        </Stack>
+      )}
     </Card>
   );
 
@@ -537,10 +521,14 @@ export default function SettingsView() {
       <SharedHeader
         header={t('SETTINGS.TITLE') || 'Settings'}
         subheader="Customize until match to your workflows"
-        buttonText={t('SETTINGS.SAVE') || 'Save'}
+        buttonText={isSavingNotifications ? t('MESSAGE.SAVING') : t('SETTINGS.SAVE') || 'Save'}
         seconButtonText={t('SETTINGS.CANCEL') || 'Cancel'}
         onButtonClick={handleSave}
         onSecondButtonClick={handleCancel}
+        buttonDisabled={
+          isSavingNotifications ||
+          (currentTab === 'notifications' ? !hasSettingsChanges : !hasChanges)
+        }
       />
 
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', lg: 'row' }, gap: 3 }}>

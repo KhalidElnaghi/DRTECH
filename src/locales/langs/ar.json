@@ -355,7 +355,11 @@
     "APPOINTMENT_RESCHEDULED_SUCCESSFULLY": "تم إعادة تعيين الموعد بنجاح",
     "PATIENT_DELETED_SUCCESSFULLY": "تم حذف المريض بنجاح",
     "PATIENT_CREATED_SUCCESSFULLY": "تم إنشاء المريض بنجاح",
-    "PATIENT_UPDATED_SUCCESSFULLY": "تم تحديث المريض بنجاح"
+    "PATIENT_UPDATED_SUCCESSFULLY": "تم تحديث المريض بنجاح",
+    "NOTIFICATION_SETTINGS_SAVED_SUCCESSFULLY": "تم حفظ إعدادات الإشعارات بنجاح",
+    "FAILED_TO_LOAD_SETTINGS": "فشل في تحميل إعدادات الإشعارات",
+    "FAILED_TO_SAVE_SETTINGS": "فشل في حفظ إعدادات الإشعارات",
+    "SAVING": "جاري الحفظ..."
   },
   "PLACEHOLDER": {
     "CANCELLATION_REASON": "أدخل سبب إلغاء هذا الموعد..."

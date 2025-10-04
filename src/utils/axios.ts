@@ -166,5 +166,6 @@ export const endpoints = {
   },
   settings: {
     deleteAccount: '/settings/account',
+    pushNotifications: '/settings/push-notifications',
   },
 };

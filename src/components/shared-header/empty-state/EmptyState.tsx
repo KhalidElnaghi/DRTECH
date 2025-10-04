@@ -9,6 +9,7 @@ interface IProps {
   onButtonClick: () => void;
   seconButtonText?: string;
   onSecondButtonClick?: () => void;
+  buttonDisabled?: boolean;
 }
 
 export default function SharedHeader({
@@ -18,6 +19,7 @@ export default function SharedHeader({
   onButtonClick,
   seconButtonText,
   onSecondButtonClick,
+  buttonDisabled = false,
 }: IProps) {
   const { t } = useTranslate();
   return (
@@ -64,6 +66,7 @@ export default function SharedHeader({
           variant="contained"
           size="large"
           onClick={onButtonClick}
+          disabled={buttonDisabled}
           sx={{
             bgcolor: 'primary.main',
             color: 'white',
@@ -72,6 +75,10 @@ export default function SharedHeader({
             fontSize: { xs: '12px', lg: '16px' },
             '&:hover': {
               bgcolor: 'primary.dark',
+            },
+            '&:disabled': {
+              bgcolor: 'action.disabled',
+              color: 'action.disabled',
             },
           }}
         >

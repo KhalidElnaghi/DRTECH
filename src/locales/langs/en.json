@@ -347,7 +347,11 @@
     "APPOINTMENT_RESCHEDULED_SUCCESSFULLY": "Appointment rescheduled successfully",
     "PATIENT_DELETED_SUCCESSFULLY": "Patient deleted successfully",
     "PATIENT_CREATED_SUCCESSFULLY": "Patient created successfully",
-    "PATIENT_UPDATED_SUCCESSFULLY": "Patient updated successfully"
+    "PATIENT_UPDATED_SUCCESSFULLY": "Patient updated successfully",
+    "NOTIFICATION_SETTINGS_SAVED_SUCCESSFULLY": "Notification settings saved successfully",
+    "FAILED_TO_LOAD_SETTINGS": "Failed to load notification settings",
+    "FAILED_TO_SAVE_SETTINGS": "Failed to save notification settings",
+    "SAVING": "Saving..."
   },
   "PLACEHOLDER": {
     "CANCELLATION_REASON": "Enter the reason for cancelling this appointment..."
