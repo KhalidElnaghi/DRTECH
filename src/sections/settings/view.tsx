@@ -1,9 +1,9 @@
 'use client';
 
 import { m } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { useRouter } from 'next/navigation';
+import { useRef, useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -14,6 +14,10 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import { alpha, useTheme } from '@mui/material/styles';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -23,9 +27,10 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useAccountData } from 'src/hooks/use-account-data';
 import { UseNotificationsManagementReturn } from 'src/hooks/use-notifications-management';
 
-import { useTranslate } from 'src/locales';
+import { useLanguageChange } from 'src/hooks/use-language-change';
+import { useLocales, useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks/use-auth-context';
-import { deleteAccountClient, updateAccountData, uploadPhoto } from 'src/api/settings';
+import { uploadPhoto, updateAccountData, deleteAccountClient } from 'src/api/settings';
 
 import Iconify from 'src/components/iconify';
 import { varHover } from 'src/components/animate';
@@ -40,11 +45,11 @@ const TABS = [
     labelKey: 'SETTINGS.ACCOUNT',
     icon: 'solar:user-id-bold-duotone',
   },
-  // {
-  //   value: 'language',
-  //   labelKey: 'SETTINGS.LANGUAGE',
-  //   icon: 'solar:translate-bold-duotone',
-  // },
+  {
+    value: 'language',
+    labelKey: 'SETTINGS.LANGUAGE',
+    icon: 'solar:translate-bold-duotone',
+  },
   {
     value: 'notifications',
     labelKey: 'SETTINGS.PUSH_NOTIFICATIONS',
@@ -61,6 +66,8 @@ interface SettingsViewProps {
 export default function SettingsView({ notificationsLogic }: SettingsViewProps) {
   const theme = useTheme();
   const { t } = useTranslate();
+  const { allLangs, currentLang } = useLocales();
+  const { changeLanguage } = useLanguageChange();
   const router = useRouter();
   const { logout } = useAuthContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -69,6 +76,7 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
   const [hasChanges, setHasChanges] = useState(false);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isSavingAccount, setIsSavingAccount] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState(currentLang.value);
 
   // Fetch account data from API
   const { accountData, isLoading: isLoadingAccount, error: accountError } = useAccountData();
@@ -113,6 +121,11 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
     }
   }, [accountData]);
 
+  // Update selected language when current language changes
+  useEffect(() => {
+    setSelectedLanguage(currentLang.value);
+  }, [currentLang.value]);
+
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);
   };
@@ -122,6 +135,11 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
       ...prev,
       [field]: value,
     }));
+    setHasChanges(true);
+  };
+
+  const handleLanguageChange = (newLanguage: string) => {
+    setSelectedLanguage(newLanguage);
     setHasChanges(true);
   };
 
@@ -231,13 +249,25 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
       } finally {
         setIsSavingAccount(false);
       }
+    } else if (currentTab === 'language') {
+      try {
+        // Change the language using the language change hook
+        changeLanguage(selectedLanguage);
+        enqueueSnackbar('Language updated successfully', { variant: 'success' });
+        setHasChanges(false);
+      } catch (error: any) {
+        console.error('Language change error:', error);
+        enqueueSnackbar('Failed to change language. Please try again.', {
+          variant: 'error',
+        });
+      }
     }
   };
 
   const handleCancel = () => {
     if (currentTab === 'notifications') {
       handleCancelSettings();
-    } else {
+    } else if (currentTab === 'account') {
       // Reset account data to original API values
       if (accountData) {
         setLocalAccountData({
@@ -249,6 +279,10 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
         });
         setProfileImage(accountData.ProfileTempImagePath || null);
       }
+      setHasChanges(false);
+    } else if (currentTab === 'language') {
+      // Reset language to current language
+      setSelectedLanguage(currentLang.value);
       setHasChanges(false);
     }
   };
@@ -538,6 +572,87 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
     </Card>
   );
 
+  const renderLanguageTab = (
+    <Card sx={{ p: 3 }}>
+      <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
+        {t('SETTINGS.LANGUAGE_REGION')}
+      </Typography>
+
+      <Stack spacing={4}>
+        {/* Language Section */}
+        <Box>
+          <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 600 }}>
+            {t('SETTINGS.LANGUAGE')}
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 3, color: 'text.secondary' }}>
+            {t('SETTINGS.LANGUAGE_DESCRIPTION')}
+          </Typography>
+
+          <FormControl fullWidth size="small">
+            <InputLabel id="language-select-label">{t('SETTINGS.SELECT_LANGUAGE')}</InputLabel>
+            <Select
+              labelId="language-select-label"
+              value={selectedLanguage}
+              label={t('SETTINGS.SELECT_LANGUAGE')}
+              onChange={(e) => handleLanguageChange(e.target.value)}
+              sx={{
+                '& .MuiSelect-select': {
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                },
+              }}
+            >
+              {allLangs.map((lang) => (
+                <MenuItem key={lang.value} value={lang.value}>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Iconify
+                      icon={lang.icon}
+                      sx={{
+                        borderRadius: 0.65,
+                        width: 24,
+                        height: 24,
+                      }}
+                    />
+                    <Typography variant="body2">
+                      {t(`LABEL.${lang.label}`) || lang.label}
+                    </Typography>
+                  </Stack>
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+
+        {/* Region Section - Placeholder for future implementation */}
+        {/* <Box>
+          <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 600 }}>
+            {t('SETTINGS.REGION')}
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 3, color: 'text.secondary' }}>
+            {t('SETTINGS.REGION_DESCRIPTION')}
+          </Typography>
+
+          <FormControl fullWidth size="small" disabled>
+            <InputLabel id="region-select-label">{t('SETTINGS.SELECT_REGION')}</InputLabel>
+            <Select
+              labelId="region-select-label"
+              value=""
+              label={t('SETTINGS.SELECT_REGION')}
+              disabled
+            >
+              <MenuItem value="">
+                <Typography variant="body2" sx={{ color: 'text.disabled' }}>
+                  {t('SETTINGS.COMING_SOON')}
+                </Typography>
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </Box> */}
+      </Stack>
+    </Card>
+  );
+
   const renderNotificationsTab = (
     <Card sx={{ p: 3 }}>
       <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
@@ -622,8 +737,8 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
     switch (currentTab) {
       case 'account':
         return renderAccountTab;
-      // case 'language':
-      //   return renderLanguageTab;
+      case 'language':
+        return renderLanguageTab;
       case 'notifications':
         return renderNotificationsTab;
       default:
@@ -644,11 +759,12 @@ export default function SettingsView({ notificationsLogic }: SettingsViewProps) 
         seconButtonText={t('SETTINGS.CANCEL') || 'Cancel'}
         onButtonClick={handleSave}
         onSecondButtonClick={handleCancel}
-        buttonDisabled={
-          isSavingNotifications ||
-          isSavingAccount ||
-          (currentTab === 'notifications' ? !hasSettingsChanges : !hasChanges)
-        }
+        buttonDisabled={(() => {
+          if (isSavingNotifications || isSavingAccount) return true;
+          if (currentTab === 'notifications') return !hasSettingsChanges;
+          if (currentTab === 'language') return selectedLanguage === currentLang.value;
+          return !hasChanges;
+        })()}
       />
 
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', lg: 'row' }, gap: 3 }}>

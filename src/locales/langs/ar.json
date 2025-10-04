@@ -309,7 +309,14 @@
     "IMPORTANT_REMINDERS_DESCRIPTION": "أخبرني فقط بجميع التذكيرات التي تم إجراؤها",
     "CANCEL": "إلغاء",
     "SAVE": "حفظ",
-    "ACCOUNT_DELETED_SUCCESS": "تم حذف الحساب بنجاح"
+    "ACCOUNT_DELETED_SUCCESS": "تم حذف الحساب بنجاح",
+    "LANGUAGE_REGION": "اللغة والمنطقة",
+    "LANGUAGE_DESCRIPTION": "تغيير اللغة المستخدمة في واجهة المستخدم",
+    "SELECT_LANGUAGE": "اختر اللغة",
+    "REGION": "المنطقة",
+    "REGION_DESCRIPTION": "اختر منطقتك للمحتوى والميزات المحلية",
+    "SELECT_REGION": "اختر المنطقة",
+    "COMING_SOON": "قريباً"
   },
   "TABLE": {
     "DENSE": "تكديس",

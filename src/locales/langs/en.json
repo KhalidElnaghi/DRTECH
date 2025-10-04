@@ -300,7 +300,13 @@
     "IMPORTANT_REMINDERS_DESCRIPTION": "Notify me only of all reminders that have been made",
     "CANCEL": "Cancel",
     "SAVE": "Save",
-    "ACCOUNT_DELETED_SUCCESS": "Account deleted successfully"
+    "ACCOUNT_DELETED_SUCCESS": "Account deleted successfully",
+    "LANGUAGE_REGION": "Language & Region",
+    "SELECT_LANGUAGE": "Select Language",
+    "REGION": "Region",
+    "REGION_DESCRIPTION": "Choose your region for localized content and features",
+    "SELECT_REGION": "Select Region",
+    "COMING_SOON": "Coming Soon"
   },
   "TABLE": {
     "DENSE": "Dense",
